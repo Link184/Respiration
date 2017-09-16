@@ -2,10 +2,6 @@ package com.link184.sample.firebase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-/**
- * Created by Alchimy on 9/10/2017.
- */
-
 @IgnoreExtraProperties
 public class SamplePrivateModel {
     public int age;

@@ -8,10 +8,6 @@ import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import io.reactivex.Notification;
 
-/**
- * Created by eugeniu on 7/21/17.
- */
-
 public class GeneralRepository<M> extends FirebaseRepository<M> {
     private ValueEventListener valueListener;
 

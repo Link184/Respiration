@@ -5,10 +5,6 @@ import android.app.Application;
 import com.link184.sample.firebase.dagger.AppComponent;
 import com.link184.sample.firebase.dagger.DaggerAppComponent;
 
-/**
- * Created by Alchimy on 9/10/2017.
- */
-
 public class SampleApplication extends Application {
     private AppComponent appComponent;
     @Override

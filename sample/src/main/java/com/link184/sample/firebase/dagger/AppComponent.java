@@ -6,10 +6,6 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
-/**
- * Created by Alchimy on 9/10/2017.
- */
-
 @Singleton
 @Component(modules = {FirebaseModule.class})
 public interface AppComponent {

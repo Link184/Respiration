@@ -11,10 +11,6 @@ import io.reactivex.Notification;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-/**
- * Created by eugeniu on 7/21/17.
- */
-
 abstract class FirebaseRepository<T> {
     protected final String TAG = getClass().getSimpleName();
 

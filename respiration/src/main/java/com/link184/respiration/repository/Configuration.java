@@ -1,9 +1,5 @@
 package com.link184.respiration.repository;
 
-/**
- * Created by Alchimy on 9/10/2017.
- */
-
 public class Configuration<T> {
     private String databaseChildren;
     private Class<T> dataSnapshotType;

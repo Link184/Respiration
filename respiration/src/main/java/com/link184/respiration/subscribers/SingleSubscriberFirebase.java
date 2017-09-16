@@ -4,10 +4,6 @@ import io.reactivex.Notification;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
 
-/**
- * Created by erza on 9/16/17.
- */
-
 public abstract class SingleSubscriberFirebase<T> extends DisposableObserver<Notification<T>> {
 
     public abstract void onSuccess(T dataSnapShot);

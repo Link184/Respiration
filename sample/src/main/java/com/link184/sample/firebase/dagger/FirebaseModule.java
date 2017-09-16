@@ -11,10 +11,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * Created by Alchimy on 9/10/2017.
- */
-
 @Module
 public class FirebaseModule {
     public static final String SAMPLE_PRIVATE_CHILD = "private";
