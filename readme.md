@@ -12,13 +12,12 @@ Gradle
 --------
 You can download a jar from GitHub's [releases page][1].
 
-Or use Gradle:
+Gradle:
 
 ```gradle
 
 dependencies {
-  compile 'com.github.bumptech.glide:glide:4.1.1'
-  annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
+
 }
 ```
 
