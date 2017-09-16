@@ -15,10 +15,24 @@ You can download a jar from GitHub's [releases page][1].
 Gradle:
 
 ```gradle
-
-dependencies {
-
+repositories {
+        jcenter()
 }
+ 
+dependencies {
+    compile 'com.link184:Respiration:0.1.0'
+}
+```
+
+Maven:
+
+```maven
+<dependency>
+  <groupId>com.link184</groupId>
+  <artifactId>Respiration</artifactId>
+  <version>0.1.0</version>
+  <type>pom</type>
+</dependency>
 ```
 
 ProGuard
@@ -48,16 +62,16 @@ GeneralRepository samplePrivateRepository = new GeneralRepository.Builder<>(Samp
                 .setAccessPrivate(true) // Data are available only for authenticated users.
                 .setPersistence(true) // Set firebase db to be available offline
                 .build();
-
+ 
 // Attach a subscriber to handle all data changes from firebase. SubscriberFirebase is a rxJava 
-DisposableObserver so you can dispose or reatach it anytime.
+// DisposableObserver so you can dispose or reatach it anytime.
 samplePrivateRepository.subscribe(new SubscriberFirebase<SamplePrivateModel>() {
             @Override
             public void onSuccess(SamplePublicModel samplePublicModel) {
                 nameContainer.setVisibility(View.VISIBLE);
                 Log.d(TAG, "Found my name" + samplePublicModel.getName());
             }
-
+ 
             //Optional override
             @Override
             public void onFailure(Throwable error) {
@@ -76,7 +90,7 @@ Don't forget to subscribe/unsubscribe according to android lifecycle.
         SubscriberFirebase subscriber = new SubscriberFirebase<Model>() { ... };
         privateRepository.subscribe(subscriber);
     }
-
+ 
     @Override
     protected void onPause() {
         subscriber.dispose();
@@ -92,7 +106,7 @@ path may include user id then you must reset database references path.
 Just call samplePrivateRepository.resetRepository(), here is a example:
 ```
 samplePrivateRepository.getFirebaseAuth()
-                .signInWithEmailAndPassword("sample@sample.sample", "password")
+        .signInWithEmailAndPassword("sample@sample.sample", "password")
         .addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 privateRepository.resetRepository(FirebaseModule.SAMPLE_PRIVATE_CHILD,
