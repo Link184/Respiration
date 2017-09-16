@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Sample</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="age">Age</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="save">Save</string>
+    <string name="temperature">Temperature: %d</string>
+    <string name="humidity">Humidity: %d</string>
+</resources>

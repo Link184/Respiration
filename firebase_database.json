@@ -1,0 +1,13 @@
+{
+  "private" : {
+    "xzWEgoQ9ujNV4tGd8s5G79pZBav1" : {
+      "age" : 27,
+      "name" : "xdfsds",
+      "surname" : "Simple surname"
+    }
+  },
+  "public" : {
+    "humidity" : 66,
+    "temperature" : 24
+  }
+}
