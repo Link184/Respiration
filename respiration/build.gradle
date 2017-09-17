@@ -31,14 +31,14 @@ ext {
 
     publishedGroupId = 'com.link184'
     libraryName = 'Respiration'
-    artifact = 'Respiration'
+    artifact = 'respiration'
 
     libraryDescription = 'Simple way to subscribe to firebase database by rxJava patterns.'
 
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.1.0'
+    libraryVersion = '0.1.2'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
