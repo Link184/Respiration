@@ -10,7 +10,7 @@ casts or HashMaps inside a business logic.
 
 Gradle
 --------
-You can download a jar from GitHub's [releases page][1].
+You can download a jar from GitHub's [releases page][3].
 
 Gradle:
 
@@ -127,3 +127,4 @@ See the [LICENSE][1] file for details.
 
 [1]: https://github.com/Link184/Respiration/blob/master/LICENSE
 [2]: https://github.com/Link184/Respiration/blob/master/firebase_database.json
+[3]: https://github.com/Link184/Respiration/releases
