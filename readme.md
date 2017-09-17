@@ -16,7 +16,7 @@ Gradle:
 
 ```gradle
 repositories {
-        jcenter()
+    jcenter()
 }
  
 dependencies {
@@ -58,10 +58,10 @@ Simple use cases with Respiration's  will look something like this:
 // Init a repository:
 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 GeneralRepository samplePrivateRepository = new GeneralRepository.Builder<>(SamplePrivateModel.class,
-                SAMPLE_PRIVATE_CHILD, currentUser != null ? currentUser.getUid() : null)
-                .setAccessPrivate(true) // Data are available only for authenticated users.
-                .setPersistence(true) // Set firebase db to be available offline
-                .build();
+            SAMPLE_PRIVATE_CHILD, currentUser != null ? currentUser.getUid() : null)
+            .setAccessPrivate(true) // Data are available only for authenticated users.
+            .setPersistence(true) // Set firebase db to be available offline
+            .build();
  
 // Attach a subscriber to handle all data changes from firebase. SubscriberFirebase is a rxJava 
 // DisposableObserver so you can dispose or reatach it anytime.
