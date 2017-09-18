@@ -20,7 +20,7 @@ repositories {
 }
  
 dependencies {
-    compile 'com.link184:Respiration:0.1.2'
+    compile 'com.link184:respiration:0.1.2'
 }
 ```
 
