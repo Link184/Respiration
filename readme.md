@@ -29,7 +29,7 @@ Maven:
 ```maven
 <dependency>
   <groupId>com.link184</groupId>
-  <artifactId>Respiration</artifactId>
+  <artifactId>respiration</artifactId>
   <version>0.1.2</version>
   <type>pom</type>
 </dependency>
