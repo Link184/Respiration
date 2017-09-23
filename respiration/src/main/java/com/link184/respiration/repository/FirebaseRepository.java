@@ -8,6 +8,7 @@ import com.link184.respiration.BuildConfig;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import io.reactivex.Notification;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
@@ -33,8 +34,10 @@ abstract class FirebaseRepository<T> {
         }
         databaseReference = database.getReference(repositoryConfig.getDatabaseChildren());
         dataSnapshotClass = repositoryConfig.getDataSnapshotType();
-        if (accessPrivate && firebaseAuth == null) {
+        if (firebaseAuth == null) {
             firebaseAuth = FirebaseAuth.getInstance();
+        }
+        if (accessPrivate) {
             initAuthStateListener();
         } else {
             initRepository();
@@ -51,6 +54,10 @@ abstract class FirebaseRepository<T> {
         if (dataSnapshot != null) {
             subscriber.onNext(Notification.createOnNext(dataSnapshot));
         }
+    }
+
+    public Observable<Notification<T>> asObservable() {
+        return publishSubject;
     }
 
     public boolean isUserAuthenticated() {

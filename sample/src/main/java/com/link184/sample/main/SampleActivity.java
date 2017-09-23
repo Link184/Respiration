@@ -5,12 +5,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.link184.respiration.repository.GeneralRepository;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;
 import com.link184.sample.firebase.SamplePublicModel;
+import com.link184.sample.firebase.dagger.FirebaseModule;
 import com.link184.sample.main.fragments.FragmentState;
 
 import javax.inject.Inject;
@@ -27,9 +29,8 @@ public class SampleActivity extends AppCompatActivity {
     @Inject
     GeneralRepository<SamplePublicModel> publicRepository;
 
-
     private SubscriberFirebase<SamplePublicModel> publicRepositorySubscriber;
-    private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
+    private FirebaseAuth.AuthStateListener authStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +43,13 @@ public class SampleActivity extends AppCompatActivity {
 
         SamplePageAdapter pagerAdapter = new SamplePageAdapter(getSupportFragmentManager());
 
-        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);
-        if (privateRepository.isUserAuthenticated()) {
-            viewPager.setCurrentItem(0);
+        if (publicRepository.isUserAuthenticated()) {
+            viewPager.setCurrentItem(FragmentState.PROFILE.ordinal());
+        } else {
+            viewPager.setCurrentItem(FragmentState.AUTHENTICATION.ordinal());
         }
+        viewPager.setOnTouchListener((v, event) -> true);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -81,52 +84,28 @@ public class SampleActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure: ", error);
             }
         };
+        publicRepository.subscribe(publicRepositorySubscriber);
 
-        privateRepositorySubscriber = new SubscriberFirebase<SamplePrivateModel>() {
-            @Override
-            public void onSuccess(SamplePrivateModel samplePrivateModel) {
-
-            }
-
-            @Override
-            public void onFailure(Throwable error) {
-                Log.e(TAG, "onFailure: ", error);
-
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                privateRepository.resetRepository(FirebaseModule.SAMPLE_PRIVATE_CHILD,
+                        firebaseAuth.getCurrentUser().getUid());
+                navigateTo(FragmentState.PROFILE);
+            } else {
+                navigateTo(FragmentState.AUTHENTICATION);
             }
         };
-
-        privateRepository.subscribe(privateRepositorySubscriber);
-        publicRepository.subscribe(publicRepositorySubscriber);
+        publicRepository.getFirebaseAuth().addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onPause() {
-        privateRepositorySubscriber.dispose();
         publicRepositorySubscriber.dispose();
+        publicRepository.getFirebaseAuth().removeAuthStateListener(authStateListener);
         super.onPause();
     }
 
-//    @OnClick(R.id.btnSave)
-//    void saveClicked(View v) {
-//        SamplePrivateModel samplePrivateModel = new SamplePrivateModel(name.getText().toString(),
-//                surname.getText().toString(), Integer.parseInt(age.getText().toString()));
-//        privateRepository.setValue(samplePrivateModel);
-//    }
-//
-//    @OnClick(R.id.btnLogin)
-//    void loginClicked(View v) {
-//        privateRepository.getFirebaseAuth()
-//                .signInWithEmailAndPassword("sample@sample.sample", "123123")
-//        .addOnCompleteListener(this, task -> {
-//            if (task.isSuccessful()) {
-//                privateRepository.resetRepository(FirebaseModule.SAMPLE_PRIVATE_CHILD,
-//                        privateRepository.getFirebaseAuth().getCurrentUser().getUid());
-//            }
-//        });
-//    }
-//
-//    @OnClick(R.id.btnLogout)
-//    void logoutClicked(View v) {
-//        privateRepository.getFirebaseAuth().signOut();
-//    }
+    public void navigateTo(FragmentState fragmentState) {
+        viewPager.setCurrentItem(fragmentState.ordinal());
+    }
 }

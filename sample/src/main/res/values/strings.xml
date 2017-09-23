@@ -5,7 +5,6 @@
     <string name="age">Age</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
-    <string name="save">Save</string>
     <string name="temperature">Temperature: %d</string>
     <string name="humidity">Humidity: %d</string>
     <string name="frag1_txt">fragment 1</string>
@@ -19,6 +18,5 @@
     <string name="btn_login">Login</string>
     <string name="btn_signin">Signin</string>
     <string name="btn_logout">Logout</string>
-
-
+    <string name="btn_update">Update</string>
 </resources>

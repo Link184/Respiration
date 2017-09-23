@@ -25,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name" />
-
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -39,10 +38,16 @@
             android:hint="@string/surname" />
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_update"/>
 
         <Button
             android:id="@+id/btnLogout"
@@ -50,9 +55,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:layout_alignParentBottom="true"
             android:text="@string/btn_logout" />
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

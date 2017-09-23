@@ -13,7 +13,7 @@ public abstract class SubscriberFirebase<T> extends DisposableObserver<Notificat
     }
 
     @Override
-    public final void onNext(@NonNull Notification<T> tNotification) {
+    public void onNext(@NonNull Notification<T> tNotification) {
         if (tNotification.isOnNext()) {
             onSuccess(tNotification.getValue());
         }

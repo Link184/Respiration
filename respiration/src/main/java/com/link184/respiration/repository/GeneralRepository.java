@@ -18,6 +18,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
     @Override
     protected final void initRepository() {
         if (!accessPrivate || isUserAuthenticated()) {
+            dataSnapshot = null;
             valueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

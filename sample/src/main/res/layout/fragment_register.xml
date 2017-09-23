@@ -12,8 +12,8 @@
             android:id="@+id/accountInputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/account_txt"
-            />
+            android:inputType="textEmailAddress"
+            android:hint="@string/account_txt" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password_txt"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -37,23 +37,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/confirm_pass"
-            android:inputType="textPassword"
-             />
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
+    <Button
+        android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btnLRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/btn_register" />
-    </LinearLayout>
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/btn_register" />
 
 </LinearLayout>
