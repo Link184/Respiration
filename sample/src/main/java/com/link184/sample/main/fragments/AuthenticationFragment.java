@@ -1,4 +1,4 @@
-package com.link184.sample.fragments;
+package com.link184.sample.main.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,21 +18,24 @@ import butterknife.OnClick;
  * Created by erza on 9/22/17.
  */
 
-public class RegistrationFragment extends Fragment {
-    @BindView(R.id.accountInputText) EditText account;
-    @BindView(R.id.passwordInput) EditText password;
-    @BindView(R.id.confirmAccountInputText) EditText confirm;
+public class AuthenticationFragment extends Fragment {
+    @BindView(R.id.loginInputText)
+    EditText login;
+    @BindView(R.id.passwordInputText)
+    EditText password;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        View view = inflater.inflate(R.layout.fragment_authentication, container, false);
         ButterKnife.bind(this, view);
         return view;
     }
 
-    @OnClick(R.id.btnLRegister)
-    void registerClick(View view){
-
+    @OnClick(R.id.btnLogin)
+    void loginClick(View view) {
     }
+
+
 }

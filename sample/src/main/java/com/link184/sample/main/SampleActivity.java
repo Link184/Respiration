@@ -10,12 +10,12 @@ import com.link184.respiration.repository.GeneralRepository;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
-import com.link184.sample.adapters.SamplePageAdapter;
 import com.link184.sample.firebase.SamplePrivateModel;
 import com.link184.sample.firebase.SamplePublicModel;
-import com.link184.sample.fragments.AuthenticationFragment;
-import com.link184.sample.fragments.ProfileFragment;
-import com.link184.sample.fragments.RegistrationFragment;
+import com.link184.sample.main.fragments.AuthenticationFragment;
+import com.link184.sample.main.fragments.ProfileFragment;
+import com.link184.sample.main.fragments.RegistrationFragment;
+import com.link184.sample.main.fragments.SamplePageAdapter;
 
 import javax.inject.Inject;
 
@@ -50,7 +50,9 @@ public class SampleActivity extends AppCompatActivity {
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(0);
+        if (privateRepository.isUserAuthenticated()) {
+            viewPager.setCurrentItem(0);
+        }
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

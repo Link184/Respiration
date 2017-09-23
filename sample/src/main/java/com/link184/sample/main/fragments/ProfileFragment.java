@@ -1,4 +1,4 @@
-package com.link184.sample.fragments;
+package com.link184.sample.main.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

@@ -1,4 +1,4 @@
-package com.link184.sample.adapters;
+package com.link184.sample.main.fragments;
 
 
 
