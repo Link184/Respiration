@@ -1,7 +1,6 @@
 package com.link184.sample.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,10 +11,7 @@ import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;
 import com.link184.sample.firebase.SamplePublicModel;
-import com.link184.sample.main.fragments.AuthenticationFragment;
-import com.link184.sample.main.fragments.ProfileFragment;
-import com.link184.sample.main.fragments.RegistrationFragment;
-import com.link184.sample.main.fragments.SamplePageAdapter;
+import com.link184.sample.main.fragments.FragmentState;
 
 import javax.inject.Inject;
 
@@ -34,8 +30,6 @@ public class SampleActivity extends AppCompatActivity {
 
     private SubscriberFirebase<SamplePublicModel> publicRepositorySubscriber;
     private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
-    private Fragment[] fragments = {new AuthenticationFragment(), new ProfileFragment(),
-            new RegistrationFragment()};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +40,7 @@ public class SampleActivity extends AppCompatActivity {
 
         ((SampleApplication) getApplication()).getAppComponent().inject(this);
 
-        SamplePageAdapter pagerAdapter = new SamplePageAdapter(getSupportFragmentManager(), fragments);
+        SamplePageAdapter pagerAdapter = new SamplePageAdapter(getSupportFragmentManager());
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(pagerAdapter);
@@ -61,7 +55,7 @@ public class SampleActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                getSupportActionBar().setTitle(fragments[position].getClass().getSimpleName());
+                getSupportActionBar().setTitle(FragmentState.values()[position].getName());
 
             }
 
