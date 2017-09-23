@@ -8,4 +8,17 @@
     <string name="save">Save</string>
     <string name="temperature">Temperature: %d</string>
     <string name="humidity">Humidity: %d</string>
+    <string name="frag1_txt">fragment 1</string>
+    <string name="frag2_txt">fragment 2</string>
+    <string name="frag3_txt">fragment 3</string>
+    <string name="login_txt">Login</string>
+    <string name="password_txt">Password</string>
+    <string name="account_txt">Account</string>
+    <string name="confirm_pass">Confirm Password</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_signin">Signin</string>
+    <string name="btn_logout">Logout</string>
+
+
 </resources>
