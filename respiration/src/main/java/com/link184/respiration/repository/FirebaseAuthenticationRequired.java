@@ -1,7 +1,7 @@
 package com.link184.respiration.repository;
 
-class FirebaseAuthenticationRequired extends Throwable {
-    FirebaseAuthenticationRequired() {
+public class FirebaseAuthenticationRequired extends Throwable {
+    public FirebaseAuthenticationRequired() {
         super("Must be signed in firebase.");
     }
 }

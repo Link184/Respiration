@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.subscribers.SingleSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
+import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
+import com.link184.sample.firebase.repositories.ListRepository;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,6 +40,9 @@ public class ProfileFragment extends Fragment {
     @Inject
     GeneralRepository<SamplePrivateModel> privateRepository;
     private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
+    @Inject
+    ListRepository listRepository;
+    private SingleSubscriberFirebase<List<SampleFriendModel>> listRepositorySubscriber;
 
     @Nullable
     @Override
@@ -64,6 +72,16 @@ public class ProfileFragment extends Fragment {
         };
 
         privateRepository.subscribe(privateRepositorySubscriber);
+
+        listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>() {
+            @Override
+            public void onSuccess(List<SampleFriendModel> dataSnapShot) {
+                for (SampleFriendModel friend : dataSnapShot) {
+                    Log.e(TAG, "onSuccess: " + friend.toString());
+                }
+            }
+        };
+        listRepository.subscribeToList(listRepositorySubscriber);
     }
 
     @Override

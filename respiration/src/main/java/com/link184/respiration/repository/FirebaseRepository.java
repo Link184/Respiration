@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
+import com.google.firebase.database.ValueEventListener;
 import com.link184.respiration.BuildConfig;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 
@@ -12,22 +13,23 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-abstract class FirebaseRepository<T> {
+public abstract class FirebaseRepository<T> {
     protected final String TAG = getClass().getSimpleName();
 
     protected static FirebaseDatabase database;
     protected static FirebaseAuth firebaseAuth;
     protected DatabaseReference databaseReference;
+    protected ValueEventListener valueListener;
     protected T dataSnapshot;
     protected Class<T> dataSnapshotClass;
     protected PublishSubject<Notification<T>> publishSubject;
     protected boolean accessPrivate;
 
-    FirebaseRepository(boolean persistence, boolean accessPrivate, Configuration<T> repositoryConfig) {
-        this.accessPrivate = accessPrivate;
+    protected FirebaseRepository(Configuration<T> repositoryConfig) {
+        this.accessPrivate = repositoryConfig.isAccessPrivate();
         if (database == null) {
             database = FirebaseDatabase.getInstance();
-            database.setPersistenceEnabled(persistence);
+            database.setPersistenceEnabled(repositoryConfig.isPersistence());
             if (BuildConfig.DEBUG) {
                 database.setLogLevel(Logger.Level.DEBUG);
             }

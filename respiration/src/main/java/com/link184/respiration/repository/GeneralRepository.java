@@ -9,10 +9,8 @@ import com.link184.respiration.subscribers.SubscriberFirebase;
 import io.reactivex.Notification;
 
 public class GeneralRepository<M> extends FirebaseRepository<M> {
-    private ValueEventListener valueListener;
-
-    protected GeneralRepository(boolean persistence, boolean accessPrivate, Configuration<M> repositoryConfig) {
-        super(persistence, accessPrivate, repositoryConfig);
+    protected GeneralRepository(Configuration<M> repositoryConfig) {
+        super(repositoryConfig);
     }
 
     @Override
@@ -80,25 +78,30 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
 
     public static class Builder<M> {
         private Configuration<M> configuration;
-        private boolean persistence;
-        private boolean accessPrivate;
 
         /**
          * Simplified form, easier to use for public repositories.
-         * @param dataSnapshotType just a firebase model Class. Sorry, but don't know how to take
+         * @param dataSnapshotType just a firebase model Class. Because of erasing is impossible take
          *                         java class type form generic in runtime. So we are forced to ask
          *                         model type explicitly in constructor alongside generic type.
-         * @param databaseChildren enumerate all children to build a {@link DatabaseReference} object.
          */
-        public Builder(Class<M> dataSnapshotType, String... databaseChildren) {
-            configuration = new Configuration<>(dataSnapshotType, databaseChildren);
+        public Builder(Class<M> dataSnapshotType) {
+            configuration = new Configuration<>(dataSnapshotType);
         }
 
         /**
          * Firebase data persistence.
          */
         public Builder<M> setPersistence(boolean persistence) {
-            this.persistence = persistence;
+            configuration.setPersistence(persistence);
+            return this;
+        }
+
+        /**
+         * @param databaseChildren enumerate all children to build a {@link DatabaseReference} object.
+         */
+        public Builder<M> setChildren(String... databaseChildren) {
+            configuration.setDatabaseChildren(databaseChildren);
             return this;
         }
 
@@ -109,12 +112,12 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
          * after successful authentication with right uid in path.
          */
         public Builder<M> setAccessPrivate(boolean accessPrivate) {
-            this.accessPrivate = accessPrivate;
+            configuration.setAccessPrivate(accessPrivate);
             return this;
         }
 
         public GeneralRepository<M> build() {
-            return new GeneralRepository<>(persistence, accessPrivate, configuration);
+            return new GeneralRepository<>(configuration);
         }
     }
 }
