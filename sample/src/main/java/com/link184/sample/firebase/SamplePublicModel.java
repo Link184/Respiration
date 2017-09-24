@@ -7,6 +7,7 @@ public class SamplePublicModel {
     private int temperature;
     private int humidity;
 
+    //Required empty constructor
     public SamplePublicModel() {
     }
 

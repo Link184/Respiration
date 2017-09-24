@@ -2,15 +2,13 @@ package com.link184.sample.firebase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.Map;
-
 @IgnoreExtraProperties
 public class SamplePrivateModel {
     public int age;
     public String name;
     public String surname;
-    public Map<String, String> friends;
 
+    //Required empty constructor
     public SamplePrivateModel() {
     }
 
@@ -42,13 +40,5 @@ public class SamplePrivateModel {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public Map<String, String> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Map<String, String> friends) {
-        this.friends = friends;
     }
 }

@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.ListRepository;
+import com.link184.respiration.subscribers.SingleSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
+import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -35,6 +40,10 @@ public class ProfileFragment extends Fragment {
     @Inject
     GeneralRepository<SamplePrivateModel> privateRepository;
     private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
+    @Inject
+    ListRepository<SampleFriendModel> listRepository;
+    private SingleSubscriberFirebase<List<SampleFriendModel>> listRepositorySubscriber;
+    private SubscriberFirebase<SampleFriendModel> friendSubscriber;
 
     @Nullable
     @Override
@@ -64,11 +73,30 @@ public class ProfileFragment extends Fragment {
         };
 
         privateRepository.subscribe(privateRepositorySubscriber);
+
+        listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>() {
+            @Override
+            public void onSuccess(List<SampleFriendModel> dataSnapShot) {
+                for (SampleFriendModel friend : dataSnapShot) {
+                    Log.e(TAG, "onSuccess: " + friend.toString());
+                }
+            }
+        };
+        listRepository.subscribeToList(listRepositorySubscriber);
+
+        friendSubscriber = new SubscriberFirebase<SampleFriendModel>() {
+            @Override
+            public void onSuccess(SampleFriendModel dataSnapShot) {
+                Log.e(TAG, "onSuccess: " + dataSnapShot.toString());
+            }
+        };
+        listRepository.subscribeToItem("john", friendSubscriber);
     }
 
     @Override
     public void onDestroyView() {
         privateRepositorySubscriber.dispose();
+        friendSubscriber.dispose();
         super.onDestroyView();
     }
 
