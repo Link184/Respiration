@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
-//apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 25
@@ -38,7 +37,7 @@ ext {
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.1.2'
+    libraryVersion = '0.1.3'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
