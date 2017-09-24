@@ -1,14 +1,10 @@
-package com.link184.sample.firebase.repositories;
+package com.link184.respiration.repository;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.link184.respiration.repository.Configuration;
-import com.link184.respiration.repository.FirebaseAuthenticationRequired;
-import com.link184.respiration.repository.FirebaseRepository;
 import com.link184.respiration.subscribers.SubscriberFirebase;
-import com.link184.sample.firebase.SampleFriendModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,25 +17,30 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
+import io.reactivex.subjects.PublishSubject;
 
 /**
  * Created by erza on 9/23/17.
  */
 
-public class ListRepository extends FirebaseRepository<Map<String, SampleFriendModel>> {
-    protected ListRepository(Configuration<Map<String, SampleFriendModel>> configuration) {
+public class ListRepository<T> extends FirebaseRepository<T> {
+    private Map<String, T> dataSnapshot;
+    private PublishSubject<Notification<Map<String, T>>> publishSubject;
+
+    protected ListRepository(Configuration<T> configuration) {
         super(configuration);
+        this.publishSubject = PublishSubject.create();
     }
 
     @Override
     protected void initRepository() {
         if (!accessPrivate || isUserAuthenticated()) {
-            dataSnapshot = new HashMap<>();
+            this.dataSnapshot = new HashMap<>();
             valueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                        ListRepository.this.dataSnapshot.put(ds.getKey(), ds.getValue(SampleFriendModel.class));
+                        ListRepository.this.dataSnapshot.put(ds.getKey(), ds.getValue(dataSnapshotClass));
                     }
                     publishSubject.onNext(Notification.createOnNext(ListRepository.this.dataSnapshot));
                 }
@@ -67,11 +68,11 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
      * Subscription to specific item.
      * @param itemId firebase object key to subscribe on.
      */
-    public void subscribeToItem(String itemId, SubscriberFirebase<SampleFriendModel> subscriber) {
+    public void subscribeToItem(String itemId, SubscriberFirebase<T> subscriber) {
         publishSubject
-                .flatMap(new Function<Notification<Map<String, SampleFriendModel>>, ObservableSource<Notification<SampleFriendModel>>>() {
+                .flatMap(new Function<Notification<Map<String, T>>, ObservableSource<Notification<T>>>() {
                     @Override
-                    public ObservableSource<Notification<SampleFriendModel>> apply(@NonNull Notification<Map<String, SampleFriendModel>> mapNotification) throws Exception {
+                    public ObservableSource<Notification<T>> apply(@NonNull Notification<Map<String, T>> mapNotification) throws Exception {
                         return Observable.create(e -> e.onNext(Notification.createOnNext(mapNotification.getValue().get(itemId))));
                     }
                 })
@@ -81,21 +82,21 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
         }
     }
 
-    public void subscribeToList(SubscriberFirebase<List<SampleFriendModel>> subscriberFirebase) {
+    public void subscribeToList(SubscriberFirebase<List<T>> subscriberFirebase) {
         publishSubject.map(this::mapToList)
                 .subscribe(subscriberFirebase);
     }
 
-    private Notification<List<SampleFriendModel>> mapToList(Notification<Map<String, SampleFriendModel>> sourceMap) {
-        List<SampleFriendModel> resultList = new ArrayList<>();
-        for (Map.Entry<String, SampleFriendModel> entry : sourceMap.getValue().entrySet()) {
+    private Notification<List<T>> mapToList(Notification<Map<String, T>> sourceMap) {
+        List<T> resultList = new ArrayList<>();
+        for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
             resultList.add(entry.getValue());
         }
         return Notification.createOnNext(resultList);
     }
 
     @Override
-    protected final void setValue(Map<String, SampleFriendModel> newValue) {
+    protected final void setValue(T newValue) {
         //ignored
     }
 
@@ -108,7 +109,7 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
      * Get value directly from cache without subscription.
      * @param itemId firebase object key.
      */
-    public SampleFriendModel getValue(String itemId) {
+    public T getValue(String itemId) {
         return dataSnapshot.get(itemId);
     }
 
@@ -122,14 +123,14 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
         return new TreeMap<>(dataSnapshot).lastEntry().getKey();
     }
 
-    public void setValue(String itemId, SampleFriendModel newValue) {
+    public void setValue(String itemId, T newValue) {
         databaseReference.child(itemId).setValue(newValue);
     }
 
     /**
      * Get items directly form cache without subscription. Use carefully, response may be null.
      */
-    public List<SampleFriendModel> getItems() {
+    public List<T> getItems() {
         return dataSnapshot != null ? new ArrayList<>(dataSnapshot.values()) : new ArrayList<>();
     }
 
@@ -138,20 +139,22 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
         databaseReference.child(itemId).removeValue();
     }
 
-    public static class Builder {
-        private Configuration<Map<String, SampleFriendModel>> configuration;
+    public static class Builder<M> {
+        private Configuration<M> configuration;
 
         /**
-         * Simplified form, easier to use for public repositories.
+         * @param dataSnapshotType just a firebase model Class. Because of erasing is impossible take
+         *                         java class type form generic in runtime. So we are forced to ask
+         *                         model type explicitly in constructor alongside generic type.
          */
-        public Builder() {
-            configuration = new Configuration<>(null);
+        public Builder(Class<M> dataSnapshotType) {
+            configuration = new Configuration<>(dataSnapshotType);
         }
 
         /**
          * Firebase data persistence.
          */
-        public ListRepository.Builder setPersistence(boolean persistence) {
+        public ListRepository.Builder<M> setPersistence(boolean persistence) {
             configuration.setPersistence(persistence);
             return this;
         }
@@ -159,7 +162,7 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
         /**
          * @param databaseChildren enumerate all children to build a {@link DatabaseReference} object.
          */
-        public ListRepository.Builder setChildren(String... databaseChildren) {
+        public ListRepository.Builder<M> setChildren(String... databaseChildren) {
             configuration.setDatabaseChildren(databaseChildren);
             return this;
         }
@@ -170,13 +173,13 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
          * authenticated user with uid in database reference path, just call resetRepository() method
          * after successful authentication with right uid in path.
          */
-        public ListRepository.Builder setAccessPrivate(boolean accessPrivate) {
+        public ListRepository.Builder<M> setAccessPrivate(boolean accessPrivate) {
             configuration.setAccessPrivate(accessPrivate);
             return this;
         }
 
-        public ListRepository build() {
-            return new ListRepository(configuration);
+        public ListRepository<M> build() {
+            return new ListRepository<>(configuration);
         }
     }
 }

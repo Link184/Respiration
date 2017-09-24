@@ -13,7 +13,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-public abstract class FirebaseRepository<T> {
+abstract class FirebaseRepository<T> {
     protected final String TAG = getClass().getSimpleName();
 
     protected static FirebaseDatabase database;
@@ -25,7 +25,7 @@ public abstract class FirebaseRepository<T> {
     protected PublishSubject<Notification<T>> publishSubject;
     protected boolean accessPrivate;
 
-    protected FirebaseRepository(Configuration<T> repositoryConfig) {
+    FirebaseRepository(Configuration<T> repositoryConfig) {
         this.accessPrivate = repositoryConfig.isAccessPrivate();
         if (database == null) {
             database = FirebaseDatabase.getInstance();

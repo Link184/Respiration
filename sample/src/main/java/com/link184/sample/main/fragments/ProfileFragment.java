@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.ListRepository;
 import com.link184.respiration.subscribers.SingleSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.R;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
-import com.link184.sample.firebase.repositories.ListRepository;
 
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class ProfileFragment extends Fragment {
     GeneralRepository<SamplePrivateModel> privateRepository;
     private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
     @Inject
-    ListRepository listRepository;
+    ListRepository<SampleFriendModel> listRepository;
     private SingleSubscriberFirebase<List<SampleFriendModel>> listRepositorySubscriber;
     private SubscriberFirebase<SampleFriendModel> friendSubscriber;
 

@@ -80,7 +80,6 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
         private Configuration<M> configuration;
 
         /**
-         * Simplified form, easier to use for public repositories.
          * @param dataSnapshotType just a firebase model Class. Because of erasing is impossible take
          *                         java class type form generic in runtime. So we are forced to ask
          *                         model type explicitly in constructor alongside generic type.
