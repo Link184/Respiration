@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
@@ -62,6 +63,10 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
         }
     }
 
+    /**
+     * Subscription to specific item.
+     * @param itemId firebase object key to subscribe on.
+     */
     public void subscribeToItem(String itemId, SubscriberFirebase<SampleFriendModel> subscriber) {
         publishSubject
                 .flatMap(new Function<Notification<Map<String, SampleFriendModel>>, ObservableSource<Notification<SampleFriendModel>>>() {
@@ -90,13 +95,47 @@ public class ListRepository extends FirebaseRepository<Map<String, SampleFriendM
     }
 
     @Override
-    protected void setValue(Map<String, SampleFriendModel> newValue) {
-
+    protected final void setValue(Map<String, SampleFriendModel> newValue) {
+        //ignored
     }
 
     @Override
-    protected void removeValue() {
+    protected final void removeValue() {
+        //ignored
+    }
 
+    /**
+     * Get value directly from cache without subscription.
+     * @param itemId firebase object key.
+     */
+    public SampleFriendModel getValue(String itemId) {
+        return dataSnapshot.get(itemId);
+    }
+
+    /**
+     * Get key of last element directly form cache.
+     */
+    public String getLastKey() {
+        if (dataSnapshot.isEmpty()) {
+            return "";
+        }
+        return new TreeMap<>(dataSnapshot).lastEntry().getKey();
+    }
+
+    public void setValue(String itemId, SampleFriendModel newValue) {
+        databaseReference.child(itemId).setValue(newValue);
+    }
+
+    /**
+     * Get items directly form cache without subscription. Use carefully, response may be null.
+     */
+    public List<SampleFriendModel> getItems() {
+        return dataSnapshot != null ? new ArrayList<>(dataSnapshot.values()) : new ArrayList<>();
+    }
+
+    public void removeValue(String itemId) {
+        dataSnapshot.remove(itemId);
+        databaseReference.child(itemId).removeValue();
     }
 
     public static class Builder {

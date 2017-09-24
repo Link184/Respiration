@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     @Inject
     ListRepository listRepository;
     private SingleSubscriberFirebase<List<SampleFriendModel>> listRepositorySubscriber;
+    private SubscriberFirebase<SampleFriendModel> friendSubscriber;
 
     @Nullable
     @Override
@@ -82,11 +83,20 @@ public class ProfileFragment extends Fragment {
             }
         };
         listRepository.subscribeToList(listRepositorySubscriber);
+
+        friendSubscriber = new SubscriberFirebase<SampleFriendModel>() {
+            @Override
+            public void onSuccess(SampleFriendModel dataSnapShot) {
+                Log.e(TAG, "onSuccess: " + dataSnapShot.toString());
+            }
+        };
+        listRepository.subscribeToItem("john", friendSubscriber);
     }
 
     @Override
     public void onDestroyView() {
         privateRepositorySubscriber.dispose();
+        friendSubscriber.dispose();
         super.onDestroyView();
     }
 
