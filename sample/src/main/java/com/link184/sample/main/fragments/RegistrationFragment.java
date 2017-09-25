@@ -3,6 +3,7 @@ package com.link184.sample.main.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,21 @@ public class RegistrationFragment extends Fragment {
 
     @OnClick(R.id.btnRegister)
     void registerClick(View view) {
-        publicRepository.getFirebaseAuth().createUserWithEmailAndPassword(
-                account.getText().toString(), password.getText().toString());
+        if (!password.getText().toString().isEmpty()
+                && password.length() >= 6
+                && !confirm.getText().toString().isEmpty()
+                && confirm.length() >= 6
+                && !account.getText().toString().isEmpty()
+                && password.getText().toString().equals(confirm.getText().toString())) {
+
+            publicRepository.getFirebaseAuth().createUserWithEmailAndPassword(
+                    account.getText().toString(), password.getText().toString());
+            Log.d("ok", "registerClick: lucreaza");
+
+        }else {
+            account.setError("Invalid Account");
+            password.setError("Invalid Password");
+            confirm.setError("Invalid Password Confirmation");
+        }
     }
 }
