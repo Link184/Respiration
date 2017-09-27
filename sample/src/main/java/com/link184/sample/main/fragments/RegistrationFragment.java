@@ -3,7 +3,6 @@ package com.link184.sample.main.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,21 +51,36 @@ public class RegistrationFragment extends Fragment {
 
     @OnClick(R.id.btnRegister)
     void registerClick(View view) {
-        if (!password.getText().toString().isEmpty()
-                && password.length() >= 6
-                && !confirm.getText().toString().isEmpty()
-                && confirm.length() >= 6
-                && !account.getText().toString().isEmpty()
-                && password.getText().toString().equals(confirm.getText().toString())) {
-
+        if (validateEditTexts()) {
             publicRepository.getFirebaseAuth().createUserWithEmailAndPassword(
                     account.getText().toString(), password.getText().toString());
-            Log.d("ok", "registerClick: lucreaza");
+        }
+    }
 
-        }else {
-            account.setError("Invalid Account");
+    private boolean validateEditTexts() {
+        boolean valid = true;
+        if (password.getText().toString().isEmpty()
+                && password.length() < 6) {
             password.setError("Invalid Password");
+            valid = false;
+        }
+
+        if (confirm.getText().toString().isEmpty()
+                && confirm.length() < 6) {
+            valid = false;
             confirm.setError("Invalid Password Confirmation");
         }
+
+        if (account.getText().toString().isEmpty()) {
+            valid = false;
+            account.setError("Invalid Account");
+        }
+
+        if (!password.getText().toString().equals(confirm.getText().toString())) {
+            password.setError("Invalid Password");
+            confirm.setError("Invalid Password Confirmation");
+            valid = false;
+        }
+        return valid;
     }
 }
