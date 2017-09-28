@@ -14,10 +14,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-/**
- * Created by erza on 9/24/17.
- */
-
 public class ProfilePresenter {
     private final String TAG = getClass().getSimpleName();
     private ProfileView view;

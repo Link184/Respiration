@@ -6,10 +6,6 @@ import com.link184.sample.firebase.SamplePublicModel;
 
 import javax.inject.Inject;
 
-/**
- * Created by erza on 9/28/17.
- */
-
 public class RegistrationPresenter {
     private RegistrationView view;
 

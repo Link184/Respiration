@@ -16,10 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by erza on 9/22/17.
- */
-
 public class AuthenticationFragment extends Fragment implements AuthenticationView{
     @BindView(R.id.loginInputText) EditText login;
     @BindView(R.id.passwordInputText) EditText password;

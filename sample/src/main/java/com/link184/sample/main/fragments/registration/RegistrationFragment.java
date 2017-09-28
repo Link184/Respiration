@@ -14,10 +14,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by erza on 9/22/17.
- */
-
 public class RegistrationFragment extends Fragment implements RegistrationView{
     @BindView(R.id.accountInputText) EditText account;
     @BindView(R.id.passwordInput) EditText password;

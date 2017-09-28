@@ -9,10 +9,6 @@ import com.link184.sample.firebase.SamplePrivateModel;
 
 import javax.inject.Inject;
 
-/**
- * Created by erza on 9/28/17.
- */
-
 public class AuthenticationPresenter {
     private AuthenticationView view;
 

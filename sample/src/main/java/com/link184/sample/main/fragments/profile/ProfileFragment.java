@@ -15,10 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by erza on 9/22/17.
- */
-
 public class ProfileFragment extends Fragment implements ProfileView{
     @BindView(R.id.ageInputText) EditText age;
     @BindView(R.id.nameInputText) EditText name;

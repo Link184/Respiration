@@ -2,10 +2,6 @@ package com.link184.sample.firebase;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-/**
- * Created by erza on 9/24/17.
- */
-
 @IgnoreExtraProperties
 public class SampleFriendModel {
     public String name;
