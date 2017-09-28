@@ -83,8 +83,12 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     }
 
     public void subscribeToList(SubscriberFirebase<List<T>> subscriberFirebase) {
-        publishSubject.map(this::mapToList)
-                .subscribe(subscriberFirebase);
+        if (dataSnapshot != null) {
+            publishSubject.map(this::mapToList)
+                    .subscribe(subscriberFirebase);
+        } else {
+            subscriberFirebase.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+        }
     }
 
     private Notification<List<T>> mapToList(Notification<Map<String, T>> sourceMap) {
