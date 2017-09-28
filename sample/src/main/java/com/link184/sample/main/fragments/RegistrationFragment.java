@@ -51,7 +51,36 @@ public class RegistrationFragment extends Fragment {
 
     @OnClick(R.id.btnRegister)
     void registerClick(View view) {
-        publicRepository.getFirebaseAuth().createUserWithEmailAndPassword(
-                account.getText().toString(), password.getText().toString());
+        if (validateEditTexts()) {
+            publicRepository.getFirebaseAuth().createUserWithEmailAndPassword(
+                    account.getText().toString(), password.getText().toString());
+        }
+    }
+
+    private boolean validateEditTexts() {
+        boolean valid = true;
+        if (password.getText().toString().isEmpty()
+                && password.length() < 6) {
+            password.setError("Invalid Password");
+            valid = false;
+        }
+
+        if (confirm.getText().toString().isEmpty()
+                && confirm.length() < 6) {
+            valid = false;
+            confirm.setError("Invalid Password Confirmation");
+        }
+
+        if (account.getText().toString().isEmpty()) {
+            valid = false;
+            account.setError("Invalid Account");
+        }
+
+        if (!password.getText().toString().equals(confirm.getText().toString())) {
+            password.setError("Invalid Password");
+            confirm.setError("Invalid Password Confirmation");
+            valid = false;
+        }
+        return valid;
     }
 }
