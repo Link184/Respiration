@@ -20,7 +20,7 @@ repositories {
 }
  
 dependencies {
-    compile 'com.link184:respiration:0.1.3'
+    compile 'com.link184:respiration:0.1.4'
 }
 ```
 
@@ -30,7 +30,7 @@ Maven:
 <dependency>
   <groupId>com.link184</groupId>
   <artifactId>respiration</artifactId>
-  <version>0.1.3</version>
+  <version>0.1.4</version>
   <type>pom</type>
 </dependency>
 ```
@@ -80,6 +80,41 @@ samplePrivateRepository.subscribe(new SubscriberFirebase<SamplePrivateModel>() {
                 Log.e(TAG, "Fail! ", error);
             }
         });
+```
+
+What about firebase arrays
+-----
+With ListRepository you can easily wrap firebase Map<String, T> to List<T>
+```
+FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        return new ListRepository.Builder<>(SampleFriendModel.class)
+                .setChildren(SAMPLE_FRIENDS_CHILD, currentUser != null ? currentUser.getUid() : null)
+                .setAccessPrivate(true)
+                .setPersistence(true)
+                .build();
+  
+listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>() {
+            @Override
+            public void onSuccess(List<SampleFriendModel> dataSnapShot) {
+                for (SampleFriendModel friend : dataSnapShot) {
+                    Log.e(TAG, "onSuccess: " + friend.toString());
+                }
+            }
+        };
+listRepository.subscribeToList(listRepositorySubscriber);
+//Also you can subscribe to specific item from list
+listRepository.subscribeToItem("someKey", listRepositorySubscriber);
+```
+
+Unleash all reactive power
+----
+If you need more specific behavior you can easily extend a respiration repository or just call 
+asObservable() method.
+```
+myRepository.asObservale()
+        .map(this::mapToRealmObject)
+        .filter(FilterUtils::removeOutdatedSamples)
+        .subscribe(...);
 ```
 
 Don't forget to subscribe/unsubscribe according to android lifecycle.
