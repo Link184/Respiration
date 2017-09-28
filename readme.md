@@ -87,7 +87,7 @@ What about firebase arrays
 With ListRepository you can easily wrap firebase Map<String, T> to List<T>
 ```
 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-ListRepository<SampleFriendModel> = listRepositorySubscriber =  new ListRepository.Builder<>(SampleFriendModel.class)
+ListRepository<SampleFriendModel> listRepository = new ListRepository.Builder<>(SampleFriendModel.class)
                 .setChildren(SAMPLE_FRIENDS_CHILD, currentUser != null ? currentUser.getUid() : null)
                 .setAccessPrivate(true)
                 .setPersistence(true)
