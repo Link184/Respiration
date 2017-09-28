@@ -2,8 +2,8 @@ package com.link184.sample.firebase.dagger;
 
 import com.link184.sample.main.SampleActivity;
 import com.link184.sample.main.fragments.AuthenticationFragment;
-import com.link184.sample.main.fragments.RegistrationFragment;
 import com.link184.sample.main.fragments.profile.ProfilePresenter;
+import com.link184.sample.main.fragments.registration.RegistrationPresenter;
 
 import javax.inject.Singleton;
 
@@ -15,5 +15,5 @@ public interface AppComponent {
     void inject(SampleActivity activity);
     void inject(ProfilePresenter profilePresenter);
     void inject(AuthenticationFragment authenticationFragment);
-    void inject(RegistrationFragment registrationFragment);
+    void inject(RegistrationPresenter registrationPresenter);
 }
