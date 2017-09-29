@@ -37,7 +37,7 @@ ext {
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.1.5'
+    libraryVersion = '0.2.0'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
