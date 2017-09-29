@@ -99,9 +99,12 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         return Notification.createOnNext(resultList);
     }
 
+    /**
+     * Add new value to the list with firebase auto id.
+     */
     @Override
     protected final void setValue(T newValue) {
-        //ignored
+        databaseReference.push().setValue(newValue);
     }
 
     @Override
