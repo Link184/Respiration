@@ -35,14 +35,20 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     @Override
     protected void initRepository() {
         if (!accessPrivate || isUserAuthenticated()) {
-            this.dataSnapshot = new HashMap<>();
+            this.dataSnapshot = null;
             valueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ds: dataSnapshot.getChildren()) {
-                        ListRepository.this.dataSnapshot.put(ds.getKey(), ds.getValue(dataSnapshotClass));
+                    if (dataSnapshot.exists()) {
+                        ListRepository.this.dataSnapshot = new HashMap<>();
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            ListRepository.this.dataSnapshot.put(ds.getKey(), ds.getValue(dataSnapshotClass));
+                        }
+                        publishSubject.onNext(Notification.createOnNext(ListRepository.this.dataSnapshot));
+                    } else {
+                        ListRepository.this.dataSnapshot = null;
+                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
                     }
-                    publishSubject.onNext(Notification.createOnNext(ListRepository.this.dataSnapshot));
                 }
 
                 @Override
@@ -66,6 +72,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
 
     /**
      * Subscription to specific item.
+     *
      * @param itemId firebase object key to subscribe on.
      */
     public void subscribeToItem(String itemId, SubscriberFirebase<T> subscriber) {
@@ -83,9 +90,10 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     }
 
     public void subscribeToList(SubscriberFirebase<List<T>> subscriberFirebase) {
+        publishSubject.map(this::mapToList)
+                .subscribe(subscriberFirebase);
         if (dataSnapshot != null) {
-            publishSubject.map(this::mapToList)
-                    .subscribe(subscriberFirebase);
+            subscriberFirebase.onNext(mapToList(Notification.createOnNext(dataSnapshot)));
         } else {
             subscriberFirebase.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
         }
@@ -103,7 +111,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      * Add new value to the list with firebase auto id.
      */
     @Override
-    protected final void setValue(T newValue) {
+    public final void setValue(T newValue) {
         databaseReference.push().setValue(newValue);
     }
 
@@ -114,6 +122,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
 
     /**
      * Get value directly from cache without subscription.
+     *
      * @param itemId firebase object key.
      */
     public T getValue(String itemId) {
