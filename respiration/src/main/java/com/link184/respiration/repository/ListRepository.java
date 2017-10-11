@@ -155,6 +155,16 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         databaseReference.child(itemId).removeValue();
     }
 
+    public void resetRepository(String... databaseChildren) {
+        removeListener();
+        StringBuilder sb = new StringBuilder();
+        for (String child : databaseChildren) {
+            sb.append(child).append("/");
+        }
+        databaseReference = database.getReference(sb.toString());
+        initRepository();
+    }
+
     public static class Builder<M> {
         private Configuration<M> configuration;
 

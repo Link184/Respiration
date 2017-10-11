@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        minSdkVersion 1
+        minSdkVersion 14
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -36,7 +36,7 @@ ext {
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.2.2'
+    libraryVersion = '0.2.3'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
