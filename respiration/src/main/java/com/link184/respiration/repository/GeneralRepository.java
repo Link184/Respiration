@@ -1,5 +1,6 @@
 package com.link184.respiration.repository;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -69,6 +70,10 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
 
     public void setValue(M newValue) {
         databaseReference.setValue(newValue);
+    }
+
+    public void setValue(M newValue, OnCompleteListener onCompleteListener) {
+        databaseReference.setValue(newValue, onCompleteListener);
     }
 
     public void removeValue() {
