@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.link184.respiration.repository.GeneralRepository;
 import com.link184.respiration.repository.ListRepository;
+import com.link184.respiration.subscribers.ListSubscriberFirebase;
 import com.link184.respiration.subscribers.SingleSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.SampleApplication;
@@ -49,13 +50,30 @@ public class ProfilePresenter {
 
         listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>() {
             @Override
+            public void onFailure(Throwable error) {
+                Log.e(TAG, "onFailure:1 ", error);
+            }
+
+            @Override
             public void onSuccess(List<SampleFriendModel> dataSnapShot) {
                 for (SampleFriendModel friend : dataSnapShot) {
-                    Log.e(TAG, "onSuccess: " + friend.toString());
+                    Log.e(TAG, "onSuccess:1 " + friend.toString());
                 }
             }
         };
         listRepository.subscribeToList(listRepositorySubscriber);
+
+        listRepository.subscribe(new ListSubscriberFirebase<SampleFriendModel>() {
+            @Override
+            public void onSuccess(String key, SampleFriendModel value) {
+                Log.e(TAG, "onSuccess:2 " + key + " " + value.toString());
+            }
+
+            @Override
+            public void onFailure(Throwable error) {
+                Log.e(TAG, "onFailure:2 ", error);
+            }
+        });
 
         friendSubscriber = new SubscriberFirebase<SampleFriendModel>() {
             @Override

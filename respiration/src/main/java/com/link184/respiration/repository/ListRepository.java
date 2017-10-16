@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.link184.respiration.subscribers.ListSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import java.util.ArrayList;
@@ -70,6 +71,15 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         }
     }
 
+    public void subscribe(ListSubscriberFirebase<T> subscriber) {
+        publishSubject.subscribe(subscriber);
+        if (dataSnapshot != null) {
+            subscriber.onNext(Notification.createOnNext(dataSnapshot));
+        } else {
+            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+        }
+    }
+
     /**
      * Subscription to specific item.
      *
@@ -89,13 +99,13 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         }
     }
 
-    public void subscribeToList(SubscriberFirebase<List<T>> subscriberFirebase) {
+    public void subscribeToList(SubscriberFirebase<List<T>> subscriber) {
         publishSubject.map(this::mapToList)
-                .subscribe(subscriberFirebase);
+                .subscribe(subscriber);
         if (dataSnapshot != null) {
-            subscriberFirebase.onNext(mapToList(Notification.createOnNext(dataSnapshot)));
+            subscriber.onNext(mapToList(Notification.createOnNext(dataSnapshot)));
         } else {
-            subscriberFirebase.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
         }
     }
 

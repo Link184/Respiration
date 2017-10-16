@@ -20,7 +20,7 @@ repositories {
 }
  
 dependencies {
-    compile 'com.link184:respiration:0.2.5'
+    compile 'com.link184:respiration:0.2.6'
 }
 ```
 
@@ -30,7 +30,7 @@ Maven:
 <dependency>
   <groupId>com.link184</groupId>
   <artifactId>respiration</artifactId>
-  <version>0.2.5</version>
+  <version>0.2.6</version>
   <type>pom</type>
 </dependency>
 ```
@@ -97,13 +97,21 @@ listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>
             @Override
             public void onSuccess(List<SampleFriendModel> dataSnapShot) {
                 for (SampleFriendModel friend : dataSnapShot) {
-                    Log.e(TAG, "onSuccess: " + friend.toString());
+                    Log.d(TAG, "onSuccess: " + friend.toString());
                 }
             }
         };
+
 listRepository.subscribeToList(listRepositorySubscriber);
 //Also you can subscribe to specific item from list
 listRepository.subscribeToItem("someKey", listRepositorySubscriber);
+// Or you can get all elements consecutively
+listRepository.subscribe(new ListSubscriberFirebase<SampleFriendModel>() {
+            @Override
+            public void onSuccess(String key, SampleFriendModel value) {
+                Log.e(TAG, "onSuccess: " + key + " " + value.toString());
+            }
+        });
 ```
 
 Unleash all reactive power
