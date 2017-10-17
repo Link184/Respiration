@@ -48,7 +48,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
                         publishSubject.onNext(Notification.createOnNext(ListRepository.this.dataSnapshot));
                     } else {
                         ListRepository.this.dataSnapshot = null;
-                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
                     }
                 }
 
@@ -76,7 +76,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         if (dataSnapshot != null) {
             subscriber.onNext(Notification.createOnNext(dataSnapshot));
         } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
         }
     }
 
@@ -105,16 +105,19 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         if (dataSnapshot != null) {
             subscriber.onNext(mapToList(Notification.createOnNext(dataSnapshot)));
         } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data snapshot.")));
+            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
         }
     }
 
     private Notification<List<T>> mapToList(Notification<Map<String, T>> sourceMap) {
         List<T> resultList = new ArrayList<>();
-        for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
-            resultList.add(entry.getValue());
+        if (sourceMap.getValue() != null) {
+            for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
+                resultList.add(entry.getValue());
+            }
+            return Notification.createOnNext(resultList);
         }
-        return Notification.createOnNext(resultList);
+        return Notification.createOnError(new NullFirebaseDataSnapshot());
     }
 
     /**

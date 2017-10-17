@@ -24,7 +24,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
                     if (GeneralRepository.this.dataSnapshot != null) {
                         publishSubject.onNext(Notification.createOnNext(GeneralRepository.this.dataSnapshot));
                     } else {
-                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Null data from firebase.")));
+                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
                     }
                 }
 
@@ -53,7 +53,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
         if (dataSnapshot != null) {
             subscriber.onNext(Notification.createOnNext(dataSnapshot));
         } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot("Data is null.")));
+            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
         }
     }
 
