@@ -9,7 +9,7 @@ import java.util.Map;
 public abstract class ListSubscriberFirebase<T> extends SubscriberFirebase<Map<String, T>> {
 
     @Override
-    public final void onSuccess(Map<String, T> dataSnapShot) {
+    public void onSuccess(Map<String, T> dataSnapShot) {
         for (Map.Entry<String, T> entry: dataSnapShot.entrySet()) {
             onSuccess(entry.getKey(), entry.getValue());
         }
