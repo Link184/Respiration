@@ -123,13 +123,17 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     /**
      * Add new value to the list with firebase auto id.
      */
-    @Override
-    public final void setValue(T newValue) {
+    public void addValue(T newValue) {
         databaseReference.push().setValue(newValue);
     }
 
-    public final void setValue(T newValue, com.google.firebase.database.DatabaseReference.CompletionListener onCompleteListener) {
+    public final void addValue(T newValue, com.google.firebase.database.DatabaseReference.CompletionListener onCompleteListener) {
         databaseReference.push().setValue(newValue, onCompleteListener);
+    }
+
+    @Override
+    protected final void setValue(T newValue) {
+
     }
 
     @Override
