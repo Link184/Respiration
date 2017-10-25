@@ -178,6 +178,10 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         initRepository();
     }
 
+    public Observable<Notification<Map<String, T>>> asListObservable() {
+        return publishSubject;
+    }
+
     public static class Builder<M> {
         private Configuration<M> configuration;
 
