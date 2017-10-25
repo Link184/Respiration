@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.link184.respiration.subscribers.ListSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.utils.RespirationUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,25 +101,16 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     }
 
     public void subscribeToList(SubscriberFirebase<List<T>> subscriber) {
-        publishSubject.map(this::mapToList)
+        publishSubject.map(RespirationUtils::mapToList)
                 .subscribe(subscriber);
         if (dataSnapshot != null) {
-            subscriber.onNext(mapToList(Notification.createOnNext(dataSnapshot)));
+            subscriber.onNext(RespirationUtils.mapToList(Notification.createOnNext(dataSnapshot)));
         } else {
             subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
         }
     }
 
-    private Notification<List<T>> mapToList(Notification<Map<String, T>> sourceMap) {
-        List<T> resultList = new ArrayList<>();
-        if (sourceMap.getValue() != null) {
-            for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
-                resultList.add(entry.getValue());
-            }
-            return Notification.createOnNext(resultList);
-        }
-        return Notification.createOnError(new NullFirebaseDataSnapshot());
-    }
+
 
     /**
      * Add new value to the list with firebase auto id.
