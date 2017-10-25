@@ -11,9 +11,9 @@ public abstract class ListSubscriberFirebase<T> extends SubscriberFirebase<Map<S
     @Override
     public void onSuccess(Map<String, T> dataSnapShot) {
         for (Map.Entry<String, T> entry: dataSnapShot.entrySet()) {
-            onSuccess(entry.getKey(), entry.getValue());
+            onReceive(entry.getKey(), entry.getValue());
         }
     }
 
-    public abstract void onSuccess(String key, T value);
+    public abstract void onReceive(String key, T value);
 }

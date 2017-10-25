@@ -26,8 +26,8 @@ import io.reactivex.subjects.PublishSubject;
  */
 
 public class ListRepository<T> extends FirebaseRepository<T> {
-    private Map<String, T> dataSnapshot;
-    private PublishSubject<Notification<Map<String, T>>> publishSubject;
+    protected Map<String, T> dataSnapshot;
+    protected PublishSubject<Notification<Map<String, T>>> publishSubject;
 
     protected ListRepository(Configuration<T> configuration) {
         super(configuration);

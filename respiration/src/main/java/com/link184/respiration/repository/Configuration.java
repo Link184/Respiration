@@ -6,31 +6,31 @@ public class Configuration<T> {
     private String databaseChildren;
     private Class<T> dataSnapshotType;
 
-    Configuration(Class<T> dataSnapshotType) {
+    public Configuration(Class<T> dataSnapshotType) {
         this.dataSnapshotType = dataSnapshotType;
     }
 
-    boolean isPersistence() {
+    public boolean isPersistence() {
         return persistence;
     }
 
-    void setPersistence(boolean persistence) {
+    public void setPersistence(boolean persistence) {
         this.persistence = persistence;
     }
 
-    boolean isAccessPrivate() {
+    public boolean isAccessPrivate() {
         return accessPrivate;
     }
 
-    void setAccessPrivate(boolean accessPrivate) {
+    public void setAccessPrivate(boolean accessPrivate) {
         this.accessPrivate = accessPrivate;
     }
 
-    String getDatabaseChildren() {
+    public String getDatabaseChildren() {
         return databaseChildren;
     }
 
-    void setDatabaseChildren(String... databaseChildren) {
+    public void setDatabaseChildren(String... databaseChildren) {
         StringBuilder sb = new StringBuilder();
         for (String child : databaseChildren) {
             if (child != null) {
@@ -40,7 +40,7 @@ public class Configuration<T> {
         this.databaseChildren = sb.toString();
     }
 
-    Class<T> getDataSnapshotType() {
+    public Class<T> getDataSnapshotType() {
         return dataSnapshotType;
     }
 

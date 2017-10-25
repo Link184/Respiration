@@ -65,7 +65,7 @@ public class ProfilePresenter {
 
         listRepository.subscribe(new ListSubscriberFirebase<SampleFriendModel>() {
             @Override
-            public void onSuccess(String key, SampleFriendModel value) {
+            public void onReceive(String key, SampleFriendModel value) {
                 Log.e(TAG, "onSuccess:2 " + key + " " + value.toString());
             }
 
