@@ -35,6 +35,13 @@ Maven:
 </dependency>
 ```
 
+**Note** Dont forget to add play services dependency
+```
+classpath 'com.google.gms:google-services:{version}'
+...
+apply plugin: 'com.google.gms.google-services'
+```
+
 ProGuard
 --------
 By using this library is assumed that you put all your models as exceptions into proguard rules.
