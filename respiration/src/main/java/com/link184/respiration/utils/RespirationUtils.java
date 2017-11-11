@@ -20,4 +20,8 @@ public class RespirationUtils {
         }
         return Notification.createOnError(new NullFirebaseDataSnapshot());
     }
+
+    public static <T> T unwrapNotification(Notification<T> source) {
+        return source.getValue();
+    }
 }
