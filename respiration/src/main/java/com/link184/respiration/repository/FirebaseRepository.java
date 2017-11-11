@@ -1,5 +1,7 @@
 package com.link184.respiration.repository;
 
+import android.support.annotation.Nullable;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -10,8 +12,7 @@ import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 abstract class FirebaseRepository<T> {
     protected final String TAG = getClass().getSimpleName();
@@ -20,9 +21,8 @@ abstract class FirebaseRepository<T> {
     protected static FirebaseAuth firebaseAuth;
     protected DatabaseReference databaseReference;
     protected ValueEventListener valueListener;
-    protected T dataSnapshot;
     protected Class<T> dataSnapshotClass;
-    protected PublishSubject<Notification<T>> publishSubject;
+    protected BehaviorSubject<Notification<T>> behaviorSubject;
     protected boolean accessPrivate;
 
     FirebaseRepository(Configuration<T> repositoryConfig) {
@@ -44,7 +44,7 @@ abstract class FirebaseRepository<T> {
         } else {
             initRepository();
         }
-        publishSubject = PublishSubject.create();
+        behaviorSubject = BehaviorSubject.create();
     }
 
     private void initAuthStateListener() {
@@ -52,14 +52,11 @@ abstract class FirebaseRepository<T> {
     }
 
     public void subscribe(SubscriberFirebase<T> subscriber) {
-        publishSubject.subscribe(subscriber);
-        if (dataSnapshot != null) {
-            subscriber.onNext(Notification.createOnNext(dataSnapshot));
-        }
+        behaviorSubject.subscribe(subscriber);
     }
 
     public Observable<Notification<T>> asObservable() {
-        return publishSubject;
+        return behaviorSubject;
     }
 
     public boolean isUserAuthenticated() {
@@ -78,10 +75,9 @@ abstract class FirebaseRepository<T> {
     /**
      * Return last cached value.
      */
-    public Single<Notification<T>> getValue() {
-        return dataSnapshot != null
-                ? publishSubject.last(Notification.createOnNext(dataSnapshot))
-                : publishSubject.lastOrError();
+    @Nullable
+    public T getValue() {
+        return behaviorSubject.getValue().getValue();
     }
 
     public FirebaseAuth getFirebaseAuth() {

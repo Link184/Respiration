@@ -16,28 +16,25 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
     @Override
     protected final void initRepository() {
         if (!accessPrivate || isUserAuthenticated()) {
-            dataSnapshot = null;
             valueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    GeneralRepository.this.dataSnapshot = dataSnapshot.getValue(dataSnapshotClass);
-                    if (GeneralRepository.this.dataSnapshot != null) {
-                        publishSubject.onNext(Notification.createOnNext(GeneralRepository.this.dataSnapshot));
+                    if (dataSnapshot.getValue(dataSnapshotClass) != null) {
+                        behaviorSubject.onNext(Notification.createOnNext(dataSnapshot.getValue(dataSnapshotClass)));
                     } else {
-                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
+                        behaviorSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    publishSubject.onNext(Notification.createOnError(databaseError.toException()));
+                    behaviorSubject.onNext(Notification.createOnError(databaseError.toException()));
                 }
             };
             databaseReference.addValueEventListener(valueListener);
         } else {
             removeListener();
-            dataSnapshot = null;
-            publishSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
+            behaviorSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
         }
     }
 
@@ -49,12 +46,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
 
     @Override
     public void subscribe(SubscriberFirebase<M> subscriber) {
-        publishSubject.subscribe(subscriber);
-        if (dataSnapshot != null) {
-            subscriber.onNext(Notification.createOnNext(dataSnapshot));
-        } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
-        }
+        behaviorSubject.subscribe(subscriber);
     }
 
     public void resetRepository(String... databaseChildren) {
@@ -76,7 +68,6 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
     }
 
     public void removeValue() {
-        dataSnapshot = null;
         databaseReference.removeValue();
     }
 

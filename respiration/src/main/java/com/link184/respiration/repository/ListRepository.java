@@ -1,5 +1,7 @@
 package com.link184.respiration.repository;
 
+import android.support.annotation.Nullable;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,50 +21,46 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
-import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by erza on 9/23/17.
  */
 
 public class ListRepository<T> extends FirebaseRepository<T> {
-    protected Map<String, T> dataSnapshot;
-    protected PublishSubject<Notification<Map<String, T>>> publishSubject;
+    protected BehaviorSubject<Notification<Map<String, T>>> behaviorSubject;
 
     protected ListRepository(Configuration<T> configuration) {
         super(configuration);
-        this.publishSubject = PublishSubject.create();
+        this.behaviorSubject = BehaviorSubject.create();
     }
 
     @Override
     protected void initRepository() {
         if (!accessPrivate || isUserAuthenticated()) {
-            this.dataSnapshot = null;
             valueListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        ListRepository.this.dataSnapshot = new HashMap<>();
+                        Map<String, T> itemMap = new HashMap<>();
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            ListRepository.this.dataSnapshot.put(ds.getKey(), ds.getValue(dataSnapshotClass));
+                            itemMap.put(ds.getKey(), ds.getValue(dataSnapshotClass));
                         }
-                        publishSubject.onNext(Notification.createOnNext(ListRepository.this.dataSnapshot));
+                        behaviorSubject.onNext(Notification.createOnNext(itemMap));
                     } else {
-                        ListRepository.this.dataSnapshot = null;
-                        publishSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
+                        behaviorSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    publishSubject.onNext(Notification.createOnError(databaseError.toException()));
+                    behaviorSubject.onNext(Notification.createOnError(databaseError.toException()));
                 }
             };
             databaseReference.addValueEventListener(valueListener);
         } else {
             removeListener();
-            dataSnapshot = null;
-            publishSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
+            behaviorSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
         }
     }
 
@@ -73,12 +71,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     }
 
     public void subscribe(ListSubscriberFirebase<T> subscriber) {
-        publishSubject.subscribe(subscriber);
-        if (dataSnapshot != null) {
-            subscriber.onNext(Notification.createOnNext(dataSnapshot));
-        } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
-        }
+        behaviorSubject.subscribe(subscriber);
     }
 
     /**
@@ -87,7 +80,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      * @param itemId firebase object key to subscribe on.
      */
     public void subscribeToItem(String itemId, SubscriberFirebase<T> subscriber) {
-        publishSubject
+        behaviorSubject
                 .flatMap(new Function<Notification<Map<String, T>>, ObservableSource<Notification<T>>>() {
                     @Override
                     public ObservableSource<Notification<T>> apply(@NonNull Notification<Map<String, T>> mapNotification) throws Exception {
@@ -95,19 +88,11 @@ public class ListRepository<T> extends FirebaseRepository<T> {
                     }
                 })
                 .subscribe(subscriber);
-        if (dataSnapshot != null && dataSnapshot.containsKey(itemId)) {
-            subscriber.onNext(Notification.createOnNext(dataSnapshot.get(itemId)));
-        }
     }
 
     public void subscribeToList(SubscriberFirebase<List<T>> subscriber) {
-        publishSubject.map(RespirationUtils::mapToList)
+        behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(subscriber);
-        if (dataSnapshot != null) {
-            subscriber.onNext(RespirationUtils.mapToList(Notification.createOnNext(dataSnapshot)));
-        } else {
-            subscriber.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
-        }
     }
 
 
@@ -138,18 +123,20 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      *
      * @param itemId firebase object key.
      */
+    @Nullable
     public T getValue(String itemId) {
-        return dataSnapshot.get(itemId);
+        return behaviorSubject.getValue().getValue().get(itemId);
     }
 
     /**
      * Get key of last element directly form cache.
      */
     public String getLastKey() {
-        if (dataSnapshot.isEmpty()) {
+        Map<String, T> lastItem = behaviorSubject.getValue().getValue();
+        if (lastItem.isEmpty()) {
             return "";
         }
-        return new TreeMap<>(dataSnapshot).lastEntry().getKey();
+        return new TreeMap<>(lastItem).lastEntry().getKey();
     }
 
     public void setValue(String itemId, T newValue) {
@@ -160,11 +147,11 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      * Get items directly form cache without subscription. Use carefully, response may be null.
      */
     public List<T> getItems() {
-        return dataSnapshot != null ? new ArrayList<>(dataSnapshot.values()) : new ArrayList<>();
+        Map<String, T> lastItem = behaviorSubject.getValue().getValue();
+        return lastItem != null ? new ArrayList<>(lastItem.values()) : new ArrayList<>();
     }
 
     public void removeValue(String itemId) {
-        dataSnapshot.remove(itemId);
         databaseReference.child(itemId).removeValue();
     }
 
@@ -179,7 +166,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
     }
 
     public Observable<Notification<Map<String, T>>> asListObservable() {
-        return publishSubject;
+        return behaviorSubject;
     }
 
     public static class Builder<M> {
