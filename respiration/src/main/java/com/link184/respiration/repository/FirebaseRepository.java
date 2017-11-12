@@ -12,6 +12,9 @@ import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 
 abstract class FirebaseRepository<T> {
@@ -53,6 +56,22 @@ abstract class FirebaseRepository<T> {
 
     public void subscribe(SubscriberFirebase<T> subscriber) {
         behaviorSubject.subscribe(subscriber);
+    }
+
+    public void subscribe(Consumer<? super T> onNext) {
+        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()));
+    }
+
+    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError) {
+        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError);
+    }
+
+    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete) {
+        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete);
+    }
+
+    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
+        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete, onSubscribe);
     }
 
     public Observable<Notification<T>> asObservable() {

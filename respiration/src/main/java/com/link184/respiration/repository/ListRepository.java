@@ -20,6 +20,9 @@ import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.subjects.BehaviorSubject;
 
@@ -95,7 +98,25 @@ public class ListRepository<T> extends FirebaseRepository<T> {
                 .subscribe(subscriber);
     }
 
+    public void subscribeToList(Consumer<? super List<T>> onNext) {
+        behaviorSubject.map(RespirationUtils::mapToList)
+                .subscribe(tNotification -> onNext.accept(tNotification.getValue()));
+    }
 
+    public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError) {
+        behaviorSubject.map(RespirationUtils::mapToList)
+                .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError);
+    }
+
+    public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError, Action onComplete) {
+        behaviorSubject.map(RespirationUtils::mapToList)
+                .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete);
+    }
+
+    public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
+        behaviorSubject.map(RespirationUtils::mapToList)
+                .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete, onSubscribe);
+    }
 
     /**
      * Add new value to the list with firebase auto id.
