@@ -2,6 +2,7 @@ package com.link184.respiration.utils;
 
 
 import com.link184.respiration.repository.NullFirebaseDataSnapshot;
+import com.link184.respiration.utils.mapper.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,27 @@ public class RespirationUtils {
         return Notification.createOnError(new NullFirebaseDataSnapshot());
     }
 
-    public static <T> T unwrapNotification(Notification<T> source) {
-        return source.getValue();
+    /**
+     * Map from {@link Notification<List<S>>} to {@link Notification<List<R>>}
+     */
+    public static <S, R> Notification<List<R>> mapList(Notification<List<S>> sourceList, Mapper<S, R> mapper) {
+        return Notification.createOnNext(mapList(sourceList.getValue(), mapper));
+    }
+    /**
+     * Map from {@link List<S>} to {@link List<R>}
+     */
+    public static <S, R> List<R> mapList(List<S> sourceList, Mapper<S, R> mapper) {
+        List<R> resultList = new ArrayList<>();
+        for (S source : sourceList) {
+            resultList.add(mapItem(source, mapper));
+        }
+        return resultList;
+    }
+
+    /**
+     * Map from {@link <S> to <R>}
+     */
+    public static <S, R> R mapItem(S sourceItem, Mapper<S, R> mapper) {
+        return mapper.transform(sourceItem);
     }
 }
