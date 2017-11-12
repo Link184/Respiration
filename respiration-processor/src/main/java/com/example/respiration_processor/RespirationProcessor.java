@@ -22,6 +22,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
@@ -29,6 +30,7 @@ public class RespirationProcessor extends AbstractProcessor {
     private Filer filer;
     private Messager messager;
     private Elements elements;
+    private Types types;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -36,6 +38,7 @@ public class RespirationProcessor extends AbstractProcessor {
         filer = processingEnv.getFiler();
         messager = processingEnv.getMessager();
         elements = processingEnv.getElementUtils();
+        types = processingEnv.getTypeUtils();
     }
 
     @Override
