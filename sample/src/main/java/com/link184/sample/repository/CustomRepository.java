@@ -9,7 +9,7 @@ import com.link184.sample.firebase.SamplePrivateModel;
  * Created by jora on 11/12/17.
  */
 
-@RespirationRepository
+@RespirationRepository(dataSnapshotType = SamplePrivateModel.class)
 public class CustomRepository extends GeneralRepository<SamplePrivateModel>{
     public CustomRepository(Configuration<SamplePrivateModel> repositoryConfig) {
         super(repositoryConfig);

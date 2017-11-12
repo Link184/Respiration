@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface RespirationRepository {
+    Class dataSnapshotType();
+
     boolean persistance() default true;
 
     String[] children() default "";
