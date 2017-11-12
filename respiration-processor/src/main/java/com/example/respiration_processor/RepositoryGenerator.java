@@ -2,6 +2,7 @@ package com.example.respiration_processor;
 
 import com.link184.respiration_annotation.RespirationRepository;
 import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -14,96 +15,79 @@ import java.util.Map;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * Created by jora on 11/12/17.
  */
 
-public class RepositoryGenerator {
+class RepositoryGenerator {
 
-    public List<JavaFile> generateRepository(Map<TypeElement, String> repositoriesWithPackages) {
+    List<JavaFile> generateRepository(Map<TypeElement, String> repositoriesWithPackages) {
         List<JavaFile> javaFiles = new ArrayList<>();
 
         for (Map.Entry<TypeElement, String> entry : repositoriesWithPackages.entrySet()) {
             String repositoryName = entry.getKey().getSimpleName().toString();
             String packageName = entry.getValue();
-
             RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
+
             TypeSpec.Builder repositoryClass = TypeSpec
-                    .classBuilder(ClassName.get(packageName, repositoryName + "Impl"))
-                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    .addTypeVariable(TypeVariableName.get("?", annotation.dataSnapshotType()))
+                    .classBuilder(ClassName.get(packageName, repositoryName + "Builder"))
+                    .addModifiers(Modifier.PUBLIC)
+                    .addTypeVariable(extractModelClass(annotation))
                     .addMethod(generateMethodCreate(entry));
 
             javaFiles.add(JavaFile.builder(packageName, repositoryClass.build())
                     .build());
-//            MethodSpec intentMethod = MethodSpec
-//                    .methodBuilder(METHOD_PREFIX + repositoryName)
-//                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-//                    .returns(classIntent)
-//                    .addParameter(classContext, "context")
-//                    .addStatement("return new $T($L, $L)", classIntent, "context", activityClass + ".class")
-//                    .build();
-
-//            repositoryClass.addMethod(intentMethod);
         }
         return javaFiles;
     }
 
     private MethodSpec generateMethodCreate(Map.Entry<TypeElement, String> entry) {
+        ClassName configurationClass = ClassName.get("com.link184.respiration.repository", "Configuration");
+
+        RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
+        TypeName modelTypeName = extractTypeName(annotation);
         return MethodSpec
                 .methodBuilder("create")
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.get(entry.getKey().asType()))
-                .addStatement("return new $T()", entry.getKey())
+                .addStatement("$T<$T> configuration = new $T<>($T.class)",
+                        configurationClass, modelTypeName, configurationClass, modelTypeName)
+                .addStatement("configuration.setPersistence($L)", annotation.isAccessPrivate())
+                .addStatement("configuration.setDatabaseChildren($L)", generateChildrenArray(annotation))
+                .addStatement("configuration.setAccessPrivate($L)", annotation.isAccessPrivate())
+                .addStatement("return new $T($N)", entry.getKey(), "configuration")
                 .build();
     }
 
-    private void generateConfiguration() {
-//        TypeSpec.classBuilder()
+    private TypeVariableName extractModelClass(RespirationRepository annotation) {
+        return TypeVariableName.get("T", extractTypeName(annotation));
     }
 
-//    public static class Builder<M> {
-//        private Configuration<M> configuration;
-//
-//        /**
-//         * @param dataSnapshotType just a firebase model Class. Because of erasing is impossible take
-//         *                         java class type form generic in runtime. So we are forced to ask
-//         *                         model type explicitly in constructor alongside generic type.
-//         */
-//        public Builder(Class<M> dataSnapshotType) {
-//            configuration = new Configuration<>(dataSnapshotType);
-//        }
-//
-//        /**
-//         * Firebase data persistence.
-//         */
-//        public Builder<M> setPersistence(boolean persistence) {
-//            configuration.setPersistence(persistence);
-//            return this;
-//        }
-//
-//        /**
-//         * @param databaseChildren enumerate all children to build a {@link DatabaseReference} object.
-//         */
-//        public Builder<M> setChildren(String... databaseChildren) {
-//            configuration.setDatabaseChildren(databaseChildren);
-//            return this;
-//        }
-//
-//        /**
-//         * Set true if the data is private for non logged in users. That logic will handle all
-//         * authentication cases. Be careful when repository is already built with no
-//         * authenticated user with uid in database reference path, just call resetRepository() method
-//         * after successful authentication with right uid in path.
-//         */
-//        public Builder<M> setAccessPrivate(boolean accessPrivate) {
-//            configuration.setAccessPrivate(accessPrivate);
-//            return this;
-//        }
-//
-//        public GeneralRepository<M> build() {
-//            return new GeneralRepository<>(configuration);
-//        }
-//    }
+    private TypeName extractTypeName(RespirationRepository annotation) {
+        TypeMirror classModel = null;
+        try {
+            annotation.dataSnapshotType();
+        } catch (MirroredTypeException mte) {
+            classModel = mte.getTypeMirror();
+        }
+        return TypeName.get(classModel);
+    }
+
+    private CodeBlock generateChildrenArray(RespirationRepository annotation) {
+        String[] children = annotation.children();
+        CodeBlock.Builder builder = CodeBlock.builder();
+        builder.add("new $T{", String[].class);
+        for (int i = 0; i < children.length; i++) {
+            if (i < children.length - 1) {
+                builder.add("$S,", children[i]);
+            } else {
+                builder.add("$S", children[i]);
+            }
+        }
+        builder.add("$N", "}");
+        return builder.build();
+    }
 }
