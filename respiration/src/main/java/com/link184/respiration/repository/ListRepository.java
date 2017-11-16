@@ -165,6 +165,10 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         databaseReference.child(itemId).setValue(newValue);
     }
 
+    public void setValue(String itemId, T newValue, DatabaseReference.CompletionListener completionListener) {
+        databaseReference.child(itemId).setValue(newValue, completionListener);
+    }
+
     /**
      * Get items directly form cache without subscription. Use carefully, response may be empty.
      */
