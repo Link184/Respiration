@@ -2,6 +2,7 @@ package com.link184.respiration.repository;
 
 import android.support.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -178,6 +179,10 @@ public class ListRepository<T> extends FirebaseRepository<T> {
 
     public void removeValue(String itemId) {
         databaseReference.child(itemId).removeValue();
+    }
+
+    public void removeValue(String itemId, @NonNull OnCompleteListener<Void> onCompeteListener) {
+        databaseReference.child(itemId).removeValue().addOnCompleteListener(onCompeteListener);
     }
 
     public void resetRepository(String... databaseChildren) {

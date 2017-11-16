@@ -13,11 +13,15 @@ import io.reactivex.Notification;
 public class RespirationUtils {
     public static <T> Notification<List<T>> mapToList(Notification<Map<String, T>> sourceMap) {
         List<T> resultList = new ArrayList<>();
-        if (sourceMap.getValue() != null) {
-            for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
-                resultList.add(entry.getValue());
+        if (sourceMap.isOnNext()) {
+            if (sourceMap.getValue() != null) {
+                for (Map.Entry<String, T> entry : sourceMap.getValue().entrySet()) {
+                    resultList.add(entry.getValue());
+                }
+                return Notification.createOnNext(resultList);
             }
-            return Notification.createOnNext(resultList);
+        } else if (sourceMap.isOnError()) {
+            return Notification.createOnError(sourceMap.getError());
         }
         return Notification.createOnError(new NullFirebaseDataSnapshot());
     }
@@ -26,7 +30,12 @@ public class RespirationUtils {
      * Map from {@link Notification<List<S>>} to {@link Notification<List<R>>}
      */
     public static <S, R> Notification<List<R>> mapList(Notification<List<S>> sourceList, Mapper<S, R> mapper) {
-        return Notification.createOnNext(mapList(sourceList.getValue(), mapper));
+        if (sourceList.isOnNext()) {
+            return Notification.createOnNext(mapList(sourceList.getValue(), mapper));
+        } else if (sourceList.isOnError()){
+            return Notification.createOnError(sourceList.getError());
+        }
+        return Notification.createOnError(new NullFirebaseDataSnapshot());
     }
     /**
      * Map from {@link List<S>} to {@link List<R>}
