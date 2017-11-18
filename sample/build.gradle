@@ -46,7 +46,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':respiration')
-    annotationProcessor project(':respiration-processor')
+    annotationProcessor project(':respiration-compiler')
 }
 
 apply plugin: 'com.google.gms.google-services'
