@@ -3,6 +3,7 @@ package com.example.respiration_processor;
 import com.link184.respiration_annotation.RespirationRepository;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -30,13 +31,13 @@ class RepositoryGenerator {
         for (Map.Entry<TypeElement, String> entry : repositoriesWithPackages.entrySet()) {
             String repositoryName = entry.getKey().getSimpleName().toString();
             String packageName = entry.getValue();
-            RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
 
             TypeSpec.Builder repositoryClass = TypeSpec
                     .classBuilder(ClassName.get(packageName, repositoryName + "Builder"))
                     .addModifiers(Modifier.PUBLIC)
-                    .addTypeVariable(extractModelClass(annotation))
-                    .addMethod(generateMethodCreate(entry));
+                    .addField(generateRepositoryInstance(entry))
+                    .addMethod(generateMethodCreate(entry))
+                    .addMethod(generateMethodSingleInit(entry));
 
             javaFiles.add(JavaFile.builder(packageName, repositoryClass.build())
                     .build());
@@ -44,14 +45,41 @@ class RepositoryGenerator {
         return javaFiles;
     }
 
+    private FieldSpec generateRepositoryInstance(Map.Entry<TypeElement, String> entry) {
+        return FieldSpec
+                .builder(TypeName.get(entry.getKey().asType()), "INSTANCE", Modifier.PRIVATE, Modifier.STATIC)
+                .build();
+    }
+
+//    private FieldSpec generateConfigInstance(Map.Entry<TypeElement, String> entry) {
+//        ClassName configurationClass = ClassName.get("com.link184.respiration.repository", "Configuration");
+//
+//        return FieldSpec
+//                .builder(configurationClass, "configuration", Modifier.PRIVATE)
+//                .initializer("new $T<>($T.class)", configurationClass, TypeName.get(entry.getKey().asType()))
+//                .build();
+//    }
+
     private MethodSpec generateMethodCreate(Map.Entry<TypeElement, String> entry) {
+        return MethodSpec
+                .methodBuilder("create")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(TypeName.get(entry.getKey().asType()))
+                .beginControlFlow("if ($L == null)", "INSTANCE")
+                .addStatement("$L = $L", "INSTANCE", "createInstance()")
+                .endControlFlow()
+                .addStatement("return $N", "INSTANCE")
+                .build();
+    }
+
+    private MethodSpec generateMethodSingleInit(Map.Entry<TypeElement, String> entry) {
         ClassName configurationClass = ClassName.get("com.link184.respiration.repository", "Configuration");
 
         RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
         TypeName modelTypeName = extractTypeName(annotation);
         return MethodSpec
-                .methodBuilder("create")
-                .addModifiers(Modifier.PUBLIC)
+                .methodBuilder("createInstance")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.get(entry.getKey().asType()))
                 .addStatement("$T<$T> configuration = new $T<>($T.class)",
                         configurationClass, modelTypeName, configurationClass, modelTypeName)

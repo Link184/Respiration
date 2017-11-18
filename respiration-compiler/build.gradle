@@ -1,0 +1,36 @@
+apply plugin: 'java-library'
+
+
+ext {
+    bintrayRepo = 'Respiration'
+    bintrayName = 'Compiler'
+
+    publishedGroupId = 'com.link184'
+    libraryName = 'RespirationCompiler'
+    artifact = 'respiration_compiler'
+
+    libraryDescription = 'Simple way to subscribe to firebase database by rxJava patterns.'
+
+    siteUrl = 'https://github.com/Link184/Respiration'
+    gitUrl = 'https://github.com/Link184/Respiration.git'
+
+    libraryVersion = '0.0.1'
+
+    developerId = 'link184'
+    developerName = 'Eugeniu Tufar'
+    developerEmail = 'eugeniu.tufar@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.auto.service:auto-service:+'
+    compile 'com.squareup:javapoet:1.9.0'
+    implementation project(':respiration-annotation')
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
