@@ -35,7 +35,7 @@ ext {
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.4.5'
+    libraryVersion = '0.4.6'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
@@ -48,18 +48,18 @@ ext {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':respiration-annotation')
+    api project(':respiration-annotations')
 
     // Rx
-    provided 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    provided 'io.reactivex.rxjava2:rxjava:2.1.6'
+    api 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    api 'io.reactivex.rxjava2:rxjava:2.1.6'
 
     // "Firebase"
-    provided 'com.google.firebase:firebase-core:11.6.0'
-    provided 'com.google.firebase:firebase-auth:11.6.0'
-    provided 'com.google.firebase:firebase-storage:11.6.0'
-    provided 'com.google.firebase:firebase-database:11.6.0'
-    provided 'com.google.android.gms:play-services-auth:11.6.0'
+    api 'com.google.firebase:firebase-core:11.6.0'
+    api 'com.google.firebase:firebase-auth:11.6.0'
+    api 'com.google.firebase:firebase-storage:11.6.0'
+    api 'com.google.firebase:firebase-database:11.6.0'
+    api 'com.google.android.gms:play-services-auth:11.6.0'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'

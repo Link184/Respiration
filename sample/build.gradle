@@ -1,5 +1,15 @@
 apply plugin: 'com.android.application'
 
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:3.1.0'
+    }
+}
+
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.0"

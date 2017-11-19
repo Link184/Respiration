@@ -1,1 +1,1 @@
-include ':respiration', ':sample', ':respiration-annotation', ':respiration-compiler'
+include ':respiration', ':sample', ':respiration-annotations', ':respiration-compiler'
