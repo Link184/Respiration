@@ -1,6 +1,5 @@
-package com.example.respiration_processor;
+package com.link184.respiration;
 
-import com.link184.respiration_annotation.RespirationRepository;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;

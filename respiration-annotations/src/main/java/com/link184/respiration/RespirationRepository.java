@@ -1,4 +1,4 @@
-package com.link184.respiration_annotation;
+package com.link184.respiration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,7 +1,6 @@
-package com.example.respiration_processor;
+package com.link184.respiration;
 
 import com.google.auto.service.AutoService;
-import com.link184.respiration_annotation.RespirationRepository;
 import com.squareup.javapoet.JavaFile;
 
 import java.io.IOException;

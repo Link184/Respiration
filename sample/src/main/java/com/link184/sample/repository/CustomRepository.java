@@ -1,8 +1,8 @@
 package com.link184.sample.repository;
 
+import com.link184.respiration.RespirationRepository;
 import com.link184.respiration.repository.Configuration;
 import com.link184.respiration.repository.GeneralRepository;
-import com.link184.respiration_annotation.RespirationRepository;
 import com.link184.sample.firebase.SamplePrivateModel;
 
 /**
