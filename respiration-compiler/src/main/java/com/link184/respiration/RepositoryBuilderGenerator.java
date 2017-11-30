@@ -22,7 +22,7 @@ import javax.lang.model.type.TypeMirror;
  * Created by jora on 11/12/17.
  */
 
-class RepositoryGenerator {
+class RepositoryBuilderGenerator {
 
     List<JavaFile> generateRepository(Map<TypeElement, String> repositoriesWithPackages) {
         List<JavaFile> javaFiles = new ArrayList<>();

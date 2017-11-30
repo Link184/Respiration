@@ -17,6 +17,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
@@ -45,24 +46,46 @@ public class RespirationProcessor extends AbstractProcessor {
         Map<TypeElement, String> repositoriesWithPackages = new HashMap<>();
         for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
 
-            messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration repository: " + element.getSimpleName());
-            if (element.getKind() != ElementKind.CLASS) {
-                messager.printMessage(Diagnostic.Kind.NOTE, "RespirationRepository annotation cant be applied to class.");
-                return true;
+//            if (element.getKind() != ElementKind.CLASS) {
+//                messager.printMessage(Diagnostic.Kind.NOTE, "RespirationRepository annotation cant be applied to class.");
+//                return true;
+//            }
+            if (element.getKind() == ElementKind.CLASS) {
+                messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration repository: " + element.getSimpleName());
+                TypeElement typeElement = (TypeElement) element;
+                repositoriesWithPackages.put(
+                        typeElement, elements.getPackageOf(typeElement).getQualifiedName().toString());
+                RepositoryBuilderGenerator repositoryBuilderGenerator = new RepositoryBuilderGenerator();
+                List<JavaFile> javaFiles = repositoryBuilderGenerator.generateRepository(repositoriesWithPackages);
+                javaFiles.forEach(javaFile -> {
+                    try {
+                        javaFile.writeTo(filer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
+        }
 
-            TypeElement typeElement = (TypeElement) element;
-            repositoriesWithPackages.put(
-                    typeElement, elements.getPackageOf(typeElement).getQualifiedName().toString());
-            RepositoryGenerator repositoryGenerator = new RepositoryGenerator();
-            List<JavaFile> javaFiles = repositoryGenerator.generateRepository(repositoriesWithPackages);
-            javaFiles.forEach(javaFile -> {
-                try {
-                    javaFile.writeTo(filer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+        for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationModule.class)) {
+            if (true) {
+                messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration module: " + element.getSimpleName());
+                TypeElement typeElement = (TypeElement) element;
+                repositoriesWithPackages.put(
+                        typeElement, elements.getPackageOf(typeElement).getQualifiedName().toString());
+//                for (Element element1: elements.getAllMembers(typeElement)) {
+//                    messager.printMessage(Diagnostic.Kind.NOTE, element1.getSimpleName().toString());
+//                }
+                RespirationModuleGenerator repositoryBuilderGenerator = new RespirationModuleGenerator(messager);
+                List<JavaFile> javaFiles = repositoryBuilderGenerator.generateModule(repositoriesWithPackages);
+                javaFiles.forEach(javaFile -> {
+                    try {
+                        javaFile.writeTo(filer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
 
         return false;
@@ -72,6 +95,7 @@ public class RespirationProcessor extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> types = new HashSet<>();
         types.add(RespirationRepository.class.getCanonicalName());
+        types.add(RespirationModule.class.getCanonicalName());
         return types;
     }
 
