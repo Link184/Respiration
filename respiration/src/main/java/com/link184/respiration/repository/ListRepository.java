@@ -135,9 +135,12 @@ public class ListRepository<T> extends FirebaseRepository<T> {
 
     }
 
+    /**
+     * Remove all node.
+     */
     @Override
-    protected final void removeValue() {
-        //ignored
+    public void removeValue() {
+        databaseReference.removeValue();
     }
 
     /**

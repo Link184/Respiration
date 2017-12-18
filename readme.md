@@ -20,7 +20,7 @@ repositories {
 }
  
 dependencies {
-    compile 'com.link184:respiration:0.4.2'
+    compile 'com.link184:respiration:0.5.0'
 }
 ```
 
@@ -30,7 +30,7 @@ Maven:
 <dependency>
   <groupId>com.link184</groupId>
   <artifactId>respiration</artifactId>
-  <version>0.4.2</version>
+  <version>0.5.0</version>
   <type>pom</type>
 </dependency>
 ```
