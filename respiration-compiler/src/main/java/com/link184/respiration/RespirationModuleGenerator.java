@@ -21,7 +21,7 @@ import javax.lang.model.element.TypeElement;
  */
 
 public class RespirationModuleGenerator {
-    private static final String CLASS_NAME_SUFFIX = "Builder";
+    private static final String CLASS_NAME_PREFIX = "Respiration";
 
     List<JavaFile> generateModule(Map<TypeElement, String> repositoriesWithPackages) {
         List<JavaFile> javaFiles = new ArrayList<>();
@@ -31,7 +31,7 @@ public class RespirationModuleGenerator {
             String packageName = entry.getValue();
 
             TypeSpec.Builder repositoryClass = TypeSpec
-                    .classBuilder(ClassName.get(packageName, repositoryName + CLASS_NAME_SUFFIX))
+                    .classBuilder(ClassName.get(packageName, CLASS_NAME_PREFIX + repositoryName))
                     .addModifiers(Modifier.PUBLIC)
                     .addMethods(generateGetters(entry));
 

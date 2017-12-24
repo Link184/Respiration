@@ -68,17 +68,19 @@ class RepositoryBuilderGenerator {
 
         RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
         TypeName modelTypeName = GenerationUtils.extractTypeName(annotation);
-        return MethodSpec
+        MethodSpec.Builder createMethod = MethodSpec
                 .methodBuilder(METHOD_CREATE_INSTANCE)
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .returns(TypeName.get(entry.getKey().asType()))
                 .addStatement("$T<$T> configuration = new $T<>($T.class)",
                         configurationClass, modelTypeName, configurationClass, modelTypeName)
                 .addStatement("configuration.setPersistence($L)", annotation.isAccessPrivate())
-                .addStatement("configuration.setDatabaseChildren($L)", GenerationUtils.generateChildrenArray(annotation))
-                .addStatement("configuration.setAccessPrivate($L)", annotation.isAccessPrivate())
-                .addStatement("return new $T($N)", entry.getKey(), "configuration")
-                .build();
+                .addStatement("configuration.setAccessPrivate($L)", annotation.isAccessPrivate());
+        if (annotation.children().length > 0 && !annotation.children()[0].isEmpty()) {
+            createMethod.addStatement("configuration.setDatabaseChildren($L)", GenerationUtils.generateChildrenArray(annotation));
+        }
+        createMethod.addStatement("return new $T($N)", entry.getKey(), "configuration");
+        return createMethod.build();
     }
 
     private TypeVariableName extractModelClass(RespirationRepository annotation) {

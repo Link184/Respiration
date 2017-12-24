@@ -45,7 +45,7 @@ public class RespirationProcessor extends AbstractProcessor {
         for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
             Map<Element, String> repositoriesWithPackages = new HashMap<>();
             if (element.getKind() == ElementKind.FIELD) {
-                messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration fields: " + element.getSimpleName());
+                messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration field: " + element.getSimpleName());
                 repositoriesWithPackages.put(
                         element, elements.getPackageOf(element).getQualifiedName().toString());
                 RepositoryClassGenerator repositoryClassGenerator= new RepositoryClassGenerator();
