@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 public @interface RespirationRepository {
     Class<?> dataSnapshotType();
 
-    boolean persistance() default false;
+    boolean persistence() default false;
 
     String[] children() default "";
 

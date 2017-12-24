@@ -17,7 +17,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
@@ -43,13 +42,26 @@ public class RespirationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Map<TypeElement, String> repositoriesWithPackages = new HashMap<>();
         for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
+            Map<Element, String> repositoriesWithPackages = new HashMap<>();
+            if (element.getKind() == ElementKind.FIELD) {
+                messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration fields: " + element.getSimpleName());
+                repositoriesWithPackages.put(
+                        element, elements.getPackageOf(element).getQualifiedName().toString());
+                RepositoryClassGenerator repositoryClassGenerator= new RepositoryClassGenerator();
+                JavaFile javaFile = repositoryClassGenerator.generateRepositories(repositoriesWithPackages);
+                if (javaFile != null) {
+                    try {
+                        javaFile.writeTo(filer);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
 
-//            if (element.getKind() != ElementKind.CLASS) {
-//                messager.printMessage(Diagnostic.Kind.NOTE, "RespirationRepository annotation cant be applied to class.");
-//                return true;
-//            }
+        for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
+            Map<TypeElement, String> repositoriesWithPackages = new HashMap<>();
             if (element.getKind() == ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration repository: " + element.getSimpleName());
                 TypeElement typeElement = (TypeElement) element;
@@ -68,16 +80,15 @@ public class RespirationProcessor extends AbstractProcessor {
         }
 
         for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationModule.class)) {
-            if (true) {
+            Map<TypeElement, String> repositoriesWithPackages = new HashMap<>();
+
+            if (element.getKind() == ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration module: " + element.getSimpleName());
                 TypeElement typeElement = (TypeElement) element;
                 repositoriesWithPackages.put(
                         typeElement, elements.getPackageOf(typeElement).getQualifiedName().toString());
-//                for (Element element1: elements.getAllMembers(typeElement)) {
-//                    messager.printMessage(Diagnostic.Kind.NOTE, element1.getSimpleName().toString());
-//                }
-                RespirationModuleGenerator repositoryBuilderGenerator = new RespirationModuleGenerator(messager);
-                List<JavaFile> javaFiles = repositoryBuilderGenerator.generateModule(repositoriesWithPackages);
+                RespirationModuleGenerator respirationModuleGenerator = new RespirationModuleGenerator();
+                List<JavaFile> javaFiles = respirationModuleGenerator.generateModule(repositoriesWithPackages);
                 javaFiles.forEach(javaFile -> {
                     try {
                         javaFile.writeTo(filer);
