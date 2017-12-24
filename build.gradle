@@ -32,6 +32,25 @@ subprojects {
     }
 }
 
+project.ext {
+    bintrayRepo = 'Respiration'
+
+    libraryDescription = 'Simple way to subscribe to firebase database by rxJava patterns.'
+
+    siteUrl = 'https://github.com/Link184/Respiration'
+    gitUrl = 'https://github.com/Link184/Respiration.git'
+
+    libraryVersion = '0.5.1'
+
+    developerId = 'link184'
+    developerName = 'Eugeniu Tufar'
+    developerEmail = 'eugeniu.tufar@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
