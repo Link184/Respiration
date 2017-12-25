@@ -18,6 +18,9 @@ dependencies {
     api 'com.squareup:javapoet:1.9.0'
 }
 
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
 publishing {
     publications {
         releasePublication(MavenPublication) {
@@ -41,9 +44,6 @@ publishing {
         }
     }
 }
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
 
 apply from: '../installv1.gradle'
 apply from: '../bintrayv1.gradle'
