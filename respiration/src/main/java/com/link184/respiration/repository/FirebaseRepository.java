@@ -53,8 +53,8 @@ abstract class FirebaseRepository<T> {
     private void initAuthStateListener(Configuration<T> configuration) {
         firebaseAuth.addAuthStateListener(firebaseAuth1 -> {
             initRepository();
-            if (configuration.isChildrenSensitive() && firebaseAuth1.getCurrentUser() != null) {
-                resetRepository(configuration.getDatabaseChildren(firebaseAuth1.getCurrentUser().getUid()));
+            if (configuration.isChildrenSensitive()) {
+                resetRepository(configuration.getDatabaseChildren(firebaseAuth1.getCurrentUser()));
             }
         });
     }

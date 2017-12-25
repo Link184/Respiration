@@ -2,10 +2,6 @@
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
-    ext {
-        libraryVersion = '0.4.9'
-    }
-
     repositories {
         jcenter()
         google()
@@ -40,7 +36,7 @@ project.ext {
     siteUrl = 'https://github.com/Link184/Respiration'
     gitUrl = 'https://github.com/Link184/Respiration.git'
 
-    libraryVersion = '0.5.2'
+    libraryVersion = '0.5.3'
 
     developerId = 'link184'
     developerName = 'Eugeniu Tufar'
