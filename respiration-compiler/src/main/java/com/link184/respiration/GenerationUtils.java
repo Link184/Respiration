@@ -26,6 +26,20 @@ public class GenerationUtils {
         return builder.build();
     }
 
+    static CodeBlock generateChildrenArrayForAnnotations(RespirationRepository annotation) {
+        String[] children = annotation.children();
+        CodeBlock.Builder builder = CodeBlock.builder();
+        builder.add("$N", "{");
+        for (int i = 0; i < children.length; i++) {
+            if (i < children.length - 1) {
+                builder.add("$S,", children[i]);
+            } else {
+                builder.add("$S", children[i]);
+            }
+        }
+        builder.add("$N", "}");
+        return builder.build();
+    }
 
     static TypeName extractTypeName(RespirationRepository annotation) {
         TypeMirror classModel = null;

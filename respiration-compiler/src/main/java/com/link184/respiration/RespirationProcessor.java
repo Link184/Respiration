@@ -87,7 +87,7 @@ public class RespirationProcessor extends AbstractProcessor {
                 TypeElement typeElement = (TypeElement) element;
                 repositoriesWithPackages.put(
                         typeElement, elements.getPackageOf(typeElement).getQualifiedName().toString());
-                RespirationModuleGenerator respirationModuleGenerator = new RespirationModuleGenerator();
+                RepositoryModuleGenerator respirationModuleGenerator = new RepositoryModuleGenerator();
                 List<JavaFile> javaFiles = respirationModuleGenerator.generateModule(repositoriesWithPackages);
                 javaFiles.forEach(javaFile -> {
                     try {

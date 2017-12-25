@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.FIELD})
 public @interface RespirationRepository {
+    String USER_ID = "user_id";
+
     Class<?> dataSnapshotType();
 
     boolean persistence() default false;

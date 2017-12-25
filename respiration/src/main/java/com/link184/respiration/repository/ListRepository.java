@@ -192,6 +192,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         databaseReference.child(itemId).removeValue().addOnCompleteListener(onCompeteListener);
     }
 
+    @Override
     public void resetRepository(String... databaseChildren) {
         removeListener();
         StringBuilder sb = new StringBuilder();

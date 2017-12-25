@@ -2,7 +2,6 @@ package com.link184.sample.main.fragments.profile;
 
 import android.util.Log;
 
-import com.link184.respiration.repository.GeneralRepository;
 import com.link184.respiration.repository.ListRepository;
 import com.link184.respiration.subscribers.ListSubscriberFirebase;
 import com.link184.respiration.subscribers.SingleSubscriberFirebase;
@@ -10,6 +9,8 @@ import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
+import com.link184.sample.modules.RespirationCustomModule;
+import com.link184.sample.modules.SamplePrivateRepository;
 
 import java.util.List;
 
@@ -20,8 +21,9 @@ public class ProfilePresenter {
     private ProfileView view;
     private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
 
-    @Inject
-    GeneralRepository<SamplePrivateModel> privateRepository;
+//    @Inject
+//    GeneralRepository<SamplePrivateModel> privateRepository;
+    SamplePrivateRepository privateRepository = RespirationCustomModule.getSamplePrivateRepository();
     @Inject
     ListRepository<SampleFriendModel> listRepository;
 

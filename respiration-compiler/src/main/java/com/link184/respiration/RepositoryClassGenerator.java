@@ -53,7 +53,7 @@ public class RepositoryClassGenerator {
                 .addMember("persistence", "$L", annotation.persistence())
                 .addMember("isAccessPrivate", "$L", annotation.isAccessPrivate());
         if (annotation.children().length > 0 && !annotation.children()[0].isEmpty()) {
-            annotationBuilder.addMember("children", "$L", GenerationUtils.generateChildrenArray(annotation));
+            annotationBuilder.addMember("children", "$L", GenerationUtils.generateChildrenArrayForAnnotations(annotation));
         }
         return annotationBuilder.build();
     }

@@ -39,8 +39,8 @@ ext {
 
 
 dependencies {
-    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
-
+//    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
+    debugApi project(':respiration-annotations')
     // Rx
     api 'io.reactivex.rxjava2:rxandroid:2.0.1'
     api 'io.reactivex.rxjava2:rxjava:2.1.6'

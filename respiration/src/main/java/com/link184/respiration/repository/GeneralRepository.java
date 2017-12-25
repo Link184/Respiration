@@ -49,6 +49,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
         behaviorSubject.subscribe(subscriber);
     }
 
+    @Override
     public void resetRepository(String... databaseChildren) {
         removeListener();
         StringBuilder sb = new StringBuilder();

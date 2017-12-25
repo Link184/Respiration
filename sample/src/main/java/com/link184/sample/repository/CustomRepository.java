@@ -12,7 +12,7 @@ import com.link184.sample.firebase.SamplePrivateModel;
  */
 
 @RespirationRepository(dataSnapshotType = SamplePrivateModel.class,
-        children = {"children1", "child2", "child3"})
+        children = {"children1", "child2", RespirationRepository.USER_ID, "child3"})
 public class CustomRepository extends GeneralRepository<SamplePrivateModel> {
     public CustomRepository(Configuration<SamplePrivateModel> repositoryConfig) {
         super(repositoryConfig);

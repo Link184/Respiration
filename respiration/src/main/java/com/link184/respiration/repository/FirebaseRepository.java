@@ -43,15 +43,20 @@ abstract class FirebaseRepository<T> {
             firebaseAuth = FirebaseAuth.getInstance();
         }
         if (accessPrivate) {
-            initAuthStateListener();
+            initAuthStateListener(repositoryConfig);
         } else {
             initRepository();
         }
         behaviorSubject = BehaviorSubject.create();
     }
 
-    private void initAuthStateListener() {
-        firebaseAuth.addAuthStateListener(firebaseAuth1 -> initRepository());
+    private void initAuthStateListener(Configuration<T> configuration) {
+        firebaseAuth.addAuthStateListener(firebaseAuth1 -> {
+            initRepository();
+            if (configuration.isChildrenSensitive() && firebaseAuth1.getCurrentUser() != null) {
+                resetRepository(configuration.getDatabaseChildren(firebaseAuth1.getCurrentUser().getUid()));
+            }
+        });
     }
 
     public void subscribe(SubscriberFirebase<T> subscriber) {
@@ -90,6 +95,8 @@ abstract class FirebaseRepository<T> {
     }
 
     protected abstract void initRepository();
+
+    public abstract void resetRepository(String... databaseChildren);
 
     /**
      * Return last cached value.
