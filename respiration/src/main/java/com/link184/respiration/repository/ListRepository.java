@@ -203,6 +203,9 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         initRepository();
     }
 
+    /**
+     * Use this method instead of {@link super.asObservable()}
+     */
     public Observable<Notification<Map<String, T>>> asListObservable() {
         return behaviorSubject;
     }

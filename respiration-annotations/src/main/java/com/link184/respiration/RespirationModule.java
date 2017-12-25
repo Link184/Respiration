@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
  * Created by jora on 11/25/17.
  */
 
+/**
+ * Use to annotate classes which store {@link RespirationRepository} fields.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface RespirationModule {

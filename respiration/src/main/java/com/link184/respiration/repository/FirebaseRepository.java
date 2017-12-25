@@ -79,14 +79,23 @@ abstract class FirebaseRepository<T> {
         behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete, onSubscribe);
     }
 
+    /**
+     * Unleash all reactive power.
+     */
     public Observable<Notification<T>> asObservable() {
         return behaviorSubject;
     }
 
+    /**
+     * @return true if user is authenticated to firebase.
+     */
     public boolean isUserAuthenticated() {
         return firebaseAuth.getCurrentUser() != null;
     }
 
+    /**
+     * @return firebase user id.
+     */
     public String getUserId() {
         if (isUserAuthenticated()) {
             return firebaseAuth.getCurrentUser().getUid();
@@ -96,6 +105,10 @@ abstract class FirebaseRepository<T> {
 
     protected abstract void initRepository();
 
+    /**
+     * Reset firebase database reference children.
+     * @param databaseChildren new children to replace the old ones.
+     */
     public abstract void resetRepository(String... databaseChildren);
 
     /**
@@ -106,6 +119,9 @@ abstract class FirebaseRepository<T> {
         return behaviorSubject.getValue().getValue();
     }
 
+    /**
+     * @return {@link FirebaseAuth}
+     */
     public FirebaseAuth getFirebaseAuth() {
         return firebaseAuth;
     }
