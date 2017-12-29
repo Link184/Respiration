@@ -158,7 +158,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      */
     public String getLastKey() {
         Map<String, T> lastItem = behaviorSubject.getValue().getValue();
-        if (lastItem.isEmpty()) {
+        if (lastItem == null || lastItem.isEmpty()) {
             return "";
         }
         return new TreeMap<>(lastItem).lastEntry().getKey();
