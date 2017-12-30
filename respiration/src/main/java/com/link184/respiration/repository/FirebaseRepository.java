@@ -116,7 +116,10 @@ abstract class FirebaseRepository<T> {
      */
     @Nullable
     public T getValue() {
-        return behaviorSubject.getValue().getValue();
+        if (behaviorSubject.getValue() != null) {
+            return behaviorSubject.getValue().getValue();
+        }
+        return null;
     }
 
     /**

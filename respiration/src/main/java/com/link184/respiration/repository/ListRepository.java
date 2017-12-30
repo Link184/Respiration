@@ -176,12 +176,19 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      * Get items directly form cache without subscription. Use carefully, response may be empty.
      */
     public List<T> getItems() {
-        Map<String, T> lastItem = behaviorSubject.getValue().getValue();
-        return lastItem != null ? new ArrayList<>(lastItem.values()) : new ArrayList<>();
+        if (behaviorSubject.getValue() != null) {
+            Map<String, T> lastItem = behaviorSubject.getValue().getValue();
+            return lastItem != null ? new ArrayList<>(lastItem.values()) : new ArrayList<>();
+        }
+        return new ArrayList<>();
     }
 
+    @Nullable
     public Map<String, T> getItemsAsMap() {
-        return behaviorSubject.getValue().getValue();
+        if (behaviorSubject.getValue() != null) {
+            return behaviorSubject.getValue().getValue();
+        }
+        return null;
     }
 
     public void removeValue(String itemId) {

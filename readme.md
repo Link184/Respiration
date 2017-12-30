@@ -20,8 +20,8 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration:0.5.4'
-    annotationProcessor 'com.link184:respiration:0.5.4'
+    implementation 'com.link184:respiration:0.5.5'
+    annotationProcessor 'com.link184:respiration:0.5.5'
 }
 ```
 
