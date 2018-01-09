@@ -112,6 +112,22 @@ abstract class FirebaseRepository<T> {
     public abstract void resetRepository(String... databaseChildren);
 
     /**
+     * Method is called when new data is received form firebase.
+     * @param value new fresh data.
+     */
+    protected void onNewDataReceived(T value) {
+
+    }
+
+    /**
+     * Method is called when something went wrong. For example user is not authenticated and
+     * access private is set as true or when internet connection is missing.
+     */
+    protected void onErrorReceived(Throwable error) {
+
+    }
+
+    /**
      * Return last cached value.
      */
     @Nullable

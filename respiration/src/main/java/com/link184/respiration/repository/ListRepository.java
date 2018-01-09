@@ -50,22 +50,31 @@ public class ListRepository<T> extends FirebaseRepository<T> {
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             itemMap.put(ds.getKey(), ds.getValue(dataSnapshotClass));
                         }
-                        behaviorSubject.onNext(Notification.createOnNext(itemMap));
+                        onNewDataReceived(itemMap);
                     } else {
-                        behaviorSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
+                        onErrorReceived(new NullFirebaseDataSnapshot());
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    behaviorSubject.onNext(Notification.createOnError(databaseError.toException()));
+                    onErrorReceived(databaseError.toException());
                 }
             };
             databaseReference.addValueEventListener(valueListener);
         } else {
             removeListener();
-            behaviorSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
+            onErrorReceived(new FirebaseAuthenticationRequired());
         }
+    }
+
+    protected void onNewDataReceived(Map<String, T> value) {
+        behaviorSubject.onNext(Notification.createOnNext(value));
+    }
+
+    @Override
+    protected void onErrorReceived(Throwable error) {
+        behaviorSubject.onNext(Notification.createOnError(error));
     }
 
     private void removeListener() {

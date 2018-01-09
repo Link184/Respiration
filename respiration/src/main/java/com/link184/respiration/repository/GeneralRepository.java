@@ -20,22 +20,32 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue(dataSnapshotClass) != null) {
-                        behaviorSubject.onNext(Notification.createOnNext(dataSnapshot.getValue(dataSnapshotClass)));
+                        onNewDataReceived(dataSnapshot.getValue(dataSnapshotClass));
                     } else {
-                        behaviorSubject.onNext(Notification.createOnError(new NullFirebaseDataSnapshot()));
+                        onErrorReceived(new NullFirebaseDataSnapshot());
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    behaviorSubject.onNext(Notification.createOnError(databaseError.toException()));
+                    onErrorReceived(databaseError.toException());
                 }
             };
             databaseReference.addValueEventListener(valueListener);
         } else {
             removeListener();
-            behaviorSubject.onNext(Notification.createOnError(new FirebaseAuthenticationRequired()));
+            onErrorReceived(new FirebaseAuthenticationRequired());
         }
+    }
+
+    @Override
+    protected void onNewDataReceived(M value) {
+        behaviorSubject.onNext(Notification.createOnNext(value));
+    }
+
+    @Override
+    protected void onErrorReceived(Throwable error) {
+        behaviorSubject.onNext(Notification.createOnError(error));
     }
 
     private void removeListener() {
