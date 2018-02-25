@@ -9,6 +9,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName rootProject.libraryVersion
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -39,6 +40,9 @@ ext {
 
 
 dependencies {
+    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
+
 //    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
     debugApi project(':respiration-annotations')
     // Rx
