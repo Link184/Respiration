@@ -22,6 +22,9 @@ repositories {
 dependencies {
     implementation 'com.link184:respiration:0.5.6'
     annotationProcessor 'com.link184:respiration:0.5.6'
+    
+    //firebase and rxJava dependecies
+    ...
 }
 ```
 
