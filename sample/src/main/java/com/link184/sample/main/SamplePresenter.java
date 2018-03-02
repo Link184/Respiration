@@ -4,7 +4,7 @@ package com.link184.sample.main;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.firebase.GeneralRepository;
 import com.link184.respiration.subscribers.SubscriberFirebase;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;

@@ -2,7 +2,7 @@ package com.link184.sample.main.fragments.profile;
 
 import android.util.Log;
 
-import com.link184.respiration.repository.ListRepository;
+import com.link184.respiration.repository.firebase.ListRepository;
 import com.link184.respiration.subscribers.ListSubscriberFirebase;
 import com.link184.respiration.subscribers.SingleSubscriberFirebase;
 import com.link184.respiration.subscribers.SubscriberFirebase;

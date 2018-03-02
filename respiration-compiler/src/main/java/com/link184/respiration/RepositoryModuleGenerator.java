@@ -59,7 +59,6 @@ public class RepositoryModuleGenerator {
         TypeName modelType = GenerationUtils.extractTypeName(annotation);
         ClassName returnTypeClassName = ClassName.get(packageName,
                 capitalizedRepoName);
-//        ParameterizedTypeName returnType = ParameterizedTypeName.get(returnTypeClassName, modelType);
         return MethodSpec.methodBuilder("get" + capitalizedRepoName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(returnTypeClassName)

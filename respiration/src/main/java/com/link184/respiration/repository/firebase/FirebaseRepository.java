@@ -1,4 +1,4 @@
-package com.link184.respiration.repository;
+package com.link184.respiration.repository.firebase;
 
 import android.support.annotation.Nullable;
 
@@ -8,16 +8,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
 import com.link184.respiration.BuildConfig;
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.repository.base.Repository;
 
-import io.reactivex.Notification;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
 
-abstract class FirebaseRepository<T> {
+abstract class FirebaseRepository<T> extends Repository<T>{
     protected final String TAG = getClass().getSimpleName();
 
     protected static FirebaseDatabase database;
@@ -25,7 +20,6 @@ abstract class FirebaseRepository<T> {
     protected DatabaseReference databaseReference;
     protected ValueEventListener valueListener;
     protected Class<T> dataSnapshotClass;
-    protected BehaviorSubject<Notification<T>> behaviorSubject;
     protected boolean accessPrivate;
 
     FirebaseRepository(Configuration<T> repositoryConfig) {
@@ -59,33 +53,6 @@ abstract class FirebaseRepository<T> {
         });
     }
 
-    public void subscribe(SubscriberFirebase<T> subscriber) {
-        behaviorSubject.subscribe(subscriber);
-    }
-
-    public void subscribe(Consumer<? super T> onNext) {
-        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()));
-    }
-
-    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError) {
-        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError);
-    }
-
-    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete) {
-        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete);
-    }
-
-    public void subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
-        behaviorSubject.subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete, onSubscribe);
-    }
-
-    /**
-     * Unleash all reactive power.
-     */
-    public Observable<Notification<T>> asObservable() {
-        return behaviorSubject;
-    }
-
     /**
      * @return true if user is authenticated to firebase.
      */
@@ -103,29 +70,11 @@ abstract class FirebaseRepository<T> {
         return null;
     }
 
-    protected abstract void initRepository();
-
     /**
      * Reset firebase database reference children.
      * @param databaseChildren new children to replace the old ones.
      */
     public abstract void resetRepository(String... databaseChildren);
-
-    /**
-     * Method is called when new data is received form firebase.
-     * @param value new fresh data.
-     */
-    protected void onNewDataReceived(T value) {
-
-    }
-
-    /**
-     * Method is called when something went wrong. For example user is not authenticated and
-     * access private is set as true or when internet connection is missing.
-     */
-    protected void onErrorReceived(Throwable error) {
-
-    }
 
     /**
      * Return last cached value.
@@ -144,8 +93,4 @@ abstract class FirebaseRepository<T> {
     public FirebaseAuth getFirebaseAuth() {
         return firebaseAuth;
     }
-
-    protected abstract void setValue(T newValue);
-
-    protected abstract void removeValue();
 }

@@ -1,4 +1,4 @@
-package com.link184.respiration.repository;
+package com.link184.respiration.repository.firebase;
 
 public class FirebaseAuthenticationRequired extends Throwable {
     FirebaseAuthenticationRequired() {

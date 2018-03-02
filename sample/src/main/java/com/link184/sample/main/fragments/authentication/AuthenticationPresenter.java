@@ -3,7 +3,7 @@ package com.link184.sample.main.fragments.authentication;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.firebase.GeneralRepository;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;
 

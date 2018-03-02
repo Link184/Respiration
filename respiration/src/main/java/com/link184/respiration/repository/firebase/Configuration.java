@@ -1,4 +1,4 @@
-package com.link184.respiration.repository;
+package com.link184.respiration.repository.firebase;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.link184.respiration.RespirationRepository;

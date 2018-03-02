@@ -59,7 +59,7 @@ public class RepositoryClassGenerator {
     }
 
     private MethodSpec generateRepositoryConstructor(Element element) {
-        final ClassName configurationClass = ClassName.get("com.link184.respiration.repository", "Configuration");
+        final ClassName configurationClass = ClassName.get("com.link184.respiration.repository.firebase", "Configuration");
         final String configurationParameterName = "configuration";
         TypeName modelType = GenerationUtils.extractTypeName(element.getAnnotation(RespirationRepository.class));
         ParameterizedTypeName parametrizedConfigurationClass = ParameterizedTypeName.get(configurationClass, modelType);

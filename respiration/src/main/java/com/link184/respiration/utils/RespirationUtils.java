@@ -1,7 +1,7 @@
 package com.link184.respiration.utils;
 
 
-import com.link184.respiration.repository.NullFirebaseDataSnapshot;
+import com.link184.respiration.repository.firebase.NullFirebaseDataSnapshot;
 import com.link184.respiration.utils.mapper.Mapper;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.link184.respiration;
 
 import com.link184.respiration.models.TestModel;
-import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.firebase.GeneralRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

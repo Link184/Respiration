@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.link184.respiration.repository.base.Repository;
 import com.link184.respiration.utils.Preconditions;
 
 import java.io.File;
@@ -18,18 +19,19 @@ import java.io.InputStream;
  * Created by eugeniu on 3/2/18.
  */
 
-public abstract class LocalRepository {
+abstract class LocalRepository<T> extends Repository<T> {
     private final String DB_NAME = "respiration_db";
-    protected final String jsonDB;
+    protected final String rawStringJson;
 
     public LocalRepository(Context context, LocalConfiguration localConfiguration) {
         File file = new File(context.getFilesDir(), localConfiguration.getDbFileName());
         if (file.exists()) {
-            this.jsonDB = loadJsonFile(file);
+            this.rawStringJson = loadJsonFile(file);
         } else {
             File assetFile = loadFromAssets(context, localConfiguration.getAssetDbFilePath());
-            this.jsonDB = loadJsonFile(Preconditions.checkNotNull(assetFile));
+            this.rawStringJson = loadJsonFile(Preconditions.checkNotNull(assetFile));
         }
+        initRepository();
     }
 
     @Nullable

@@ -1,6 +1,6 @@
 package com.link184.sample.main.fragments.registration;
 
-import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.firebase.GeneralRepository;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePublicModel;
 

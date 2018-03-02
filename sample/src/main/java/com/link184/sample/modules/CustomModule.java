@@ -2,7 +2,7 @@ package com.link184.sample.modules;
 
 import com.link184.respiration.RespirationModule;
 import com.link184.respiration.RespirationRepository;
-import com.link184.respiration.repository.GeneralRepository;
+import com.link184.respiration.repository.firebase.GeneralRepository;
 import com.link184.sample.firebase.SamplePrivateModel;
 
 import java.util.Vector;

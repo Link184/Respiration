@@ -64,7 +64,7 @@ class RepositoryBuilderGenerator {
     }
 
     private MethodSpec generateMethodSingleInit(Map.Entry<TypeElement, String> entry) {
-        ClassName configurationClass = ClassName.get("com.link184.respiration.repository", "Configuration");
+        ClassName configurationClass = ClassName.get("com.link184.respiration.repository.firebase", "Configuration");
 
         RespirationRepository annotation = entry.getKey().getAnnotation(RespirationRepository.class);
         TypeName modelTypeName = GenerationUtils.extractTypeName(annotation);
