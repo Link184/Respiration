@@ -1,9 +1,16 @@
 package com.link184.respiration.repository.local;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import com.link184.respiration.utils.Preconditions;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,23 +18,44 @@ import java.io.InputStream;
  * Created by eugeniu on 3/2/18.
  */
 
-public class LocalRepository<T> {
+public abstract class LocalRepository {
     private final String DB_NAME = "respiration_db";
+    protected final String jsonDB;
 
-    /**
-     * Init repository from asset file.
-     * @param context android context
-     * @param filePath asset file path
-     */
-    public LocalRepository(Context context, String filePath) {
-        initDB(context, filePath);
+    public LocalRepository(Context context, LocalConfiguration localConfiguration) {
+        File file = new File(context.getFilesDir(), localConfiguration.getDbFileName());
+        if (file.exists()) {
+            this.jsonDB = loadJsonFile(file);
+        } else {
+            File assetFile = loadFromAssets(context, localConfiguration.getAssetDbFilePath());
+            this.jsonDB = loadJsonFile(Preconditions.checkNotNull(assetFile));
+        }
     }
 
-    private String initDB(Context context, String filePath) {
+    @Nullable
+    private String loadJsonFile(File file) {
+
+        Gson gson = new Gson();
+        try {
+            JsonReader reader = new JsonReader(new FileReader(file));
+            return gson.fromJson(reader, String.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Load json file template from assets and copy it to androids files dir.
+     * @param context android context
+     * @param filePath
+     * @return
+     */
+    @Nullable
+    public File loadFromAssets(Context context, String filePath) {
         try {
             InputStream inputStream = context.getAssets().open(filePath);
             File file = new File(context.getFilesDir(), DB_NAME);
-            file.delete();
             FileOutputStream outputStream = new FileOutputStream(file);
             byte[] buf = new byte[1024];
             int bytesRead;
@@ -36,7 +64,7 @@ public class LocalRepository<T> {
             }
             inputStream.close();
             outputStream.close();
-            return file.getAbsolutePath();
+            return file;
         } catch (IOException e) {
             e.printStackTrace();
         }
