@@ -1,7 +1,5 @@
 package com.link184.respiration.repository.firebase;
 
-import android.support.annotation.Nullable;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -10,8 +8,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.link184.respiration.BuildConfig;
 import com.link184.respiration.repository.base.Repository;
 
-import io.reactivex.subjects.BehaviorSubject;
-
 abstract class FirebaseRepository<T> extends Repository<T>{
     protected final String TAG = getClass().getSimpleName();
 
@@ -19,7 +15,6 @@ abstract class FirebaseRepository<T> extends Repository<T>{
     protected static FirebaseAuth firebaseAuth;
     protected DatabaseReference databaseReference;
     protected ValueEventListener valueListener;
-    protected Class<T> dataSnapshotClass;
     protected boolean accessPrivate;
 
     FirebaseRepository(Configuration<T> repositoryConfig) {
@@ -41,7 +36,6 @@ abstract class FirebaseRepository<T> extends Repository<T>{
         } else {
             initRepository();
         }
-        behaviorSubject = BehaviorSubject.create();
     }
 
     private void initAuthStateListener(Configuration<T> configuration) {
@@ -75,17 +69,6 @@ abstract class FirebaseRepository<T> extends Repository<T>{
      * @param databaseChildren new children to replace the old ones.
      */
     public abstract void resetRepository(String... databaseChildren);
-
-    /**
-     * Return last cached value.
-     */
-    @Nullable
-    public T getValue() {
-        if (behaviorSubject.getValue() != null) {
-            return behaviorSubject.getValue().getValue();
-        }
-        return null;
-    }
 
     /**
      * @return {@link FirebaseAuth}

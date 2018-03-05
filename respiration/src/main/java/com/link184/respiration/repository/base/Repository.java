@@ -1,5 +1,7 @@
 package com.link184.respiration.repository.base;
 
+import android.support.annotation.Nullable;
+
 import com.link184.respiration.subscribers.SubscriberFirebase;
 
 import io.reactivex.Notification;
@@ -14,7 +16,8 @@ import io.reactivex.subjects.BehaviorSubject;
  */
 
 public abstract class Repository<T> {
-    protected BehaviorSubject<Notification<T>> behaviorSubject;
+    protected BehaviorSubject<Notification<T>> behaviorSubject = BehaviorSubject.create();
+    protected Class<T> dataSnapshotClass;
 
     protected abstract void initRepository();
 
@@ -65,4 +68,15 @@ public abstract class Repository<T> {
     protected abstract void setValue(T newValue);
 
     protected abstract void removeValue();
+
+    /**
+     * Return last cached value.
+     */
+    @Nullable
+    public T getValue() {
+        if (behaviorSubject.getValue() != null) {
+            return behaviorSubject.getValue().getValue();
+        }
+        return null;
+    }
 }

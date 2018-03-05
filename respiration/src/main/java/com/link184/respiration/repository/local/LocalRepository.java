@@ -25,7 +25,7 @@ abstract class LocalRepository<T> extends Repository<T> {
     protected static JsonElement rawJsonElement;
     protected final String[] databaseChildren;
 
-    public LocalRepository(Context context, LocalConfiguration localConfiguration) {
+    LocalRepository(Context context, LocalConfiguration localConfiguration) {
         File file = new File(context.getFilesDir(), DB_NAME);
         if (rawJsonElement == null) {
             if (file.exists()) {
@@ -36,6 +36,7 @@ abstract class LocalRepository<T> extends Repository<T> {
             }
         }
         this.databaseChildren = Preconditions.checkNotNull(localConfiguration.getDatabaseChildren());
+        this.dataSnapshotClass = localConfiguration.getDataSnapshotType();
         initRepository();
     }
 
