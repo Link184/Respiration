@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.link184.respiration.repository.base.Repository;
 import com.link184.respiration.utils.Preconditions;
@@ -20,27 +21,30 @@ import java.io.InputStream;
  */
 
 abstract class LocalRepository<T> extends Repository<T> {
-    private final String DB_NAME = "respiration_db";
-    protected final String rawStringJson;
+    private static final String DB_NAME = "respiration_db";
+    protected static JsonElement rawJsonElement;
+    protected final String[] databaseChildren;
 
     public LocalRepository(Context context, LocalConfiguration localConfiguration) {
-        File file = new File(context.getFilesDir(), localConfiguration.getDbFileName());
-        if (file.exists()) {
-            this.rawStringJson = loadJsonFile(file);
-        } else {
-            File assetFile = loadFromAssets(context, localConfiguration.getAssetDbFilePath());
-            this.rawStringJson = loadJsonFile(Preconditions.checkNotNull(assetFile));
+        File file = new File(context.getFilesDir(), DB_NAME);
+        if (rawJsonElement == null) {
+            if (file.exists()) {
+                rawJsonElement = loadJsonFile(context);
+            } else {
+                loadFromAssets(context, localConfiguration.getAssetDbFilePath());
+                rawJsonElement = loadJsonFile(context);
+            }
         }
+        this.databaseChildren = Preconditions.checkNotNull(localConfiguration.getDatabaseChildren());
         initRepository();
     }
 
     @Nullable
-    private String loadJsonFile(File file) {
-
+    private JsonElement loadJsonFile(Context context) {
         Gson gson = new Gson();
         try {
-            JsonReader reader = new JsonReader(new FileReader(file));
-            return gson.fromJson(reader, String.class);
+            JsonReader reader = new JsonReader(new FileReader(new File(context.getFilesDir(), DB_NAME)));
+            return gson.toJsonTree(gson.fromJson(reader, Object.class));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -49,12 +53,13 @@ abstract class LocalRepository<T> extends Repository<T> {
 
     /**
      * Load json file template from assets and copy it to androids files dir.
-     * @param context android context
+     *
+     * @param context  android context
      * @param filePath
      * @return
      */
     @Nullable
-    public File loadFromAssets(Context context, String filePath) {
+    private JsonElement loadFromAssets(Context context, String filePath) {
         try {
             InputStream inputStream = context.getAssets().open(filePath);
             File file = new File(context.getFilesDir(), DB_NAME);
@@ -66,7 +71,7 @@ abstract class LocalRepository<T> extends Repository<T> {
             }
             inputStream.close();
             outputStream.close();
-            return file;
+            return loadJsonFile(context);
         } catch (IOException e) {
             e.printStackTrace();
         }

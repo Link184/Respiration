@@ -3,6 +3,7 @@ package com.link184.sample;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.link184.respiration.repository.local.GeneralLocalRepository;
 import com.link184.respiration.repository.local.LocalConfiguration;
 import com.link184.sample.main.SampleActivity;
 
@@ -26,6 +27,7 @@ public class LocalRepositoryTest {
         activityTestRule.getActivity().getResources().getAssets();
         LocalConfiguration localConfiguration = new LocalConfiguration();
         localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
-//        LocalRepository localRepository = new LocalRepository(activityTestRule.getActivity(), localConfiguration);
+        GeneralLocalRepository<String> generalLocalRepository =
+                new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
     }
 }
