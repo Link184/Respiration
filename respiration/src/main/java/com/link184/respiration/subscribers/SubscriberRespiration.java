@@ -4,7 +4,7 @@ import io.reactivex.Notification;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
 
-public abstract class SubscriberFirebase<T> extends DisposableObserver<Notification<T>> {
+public abstract class SubscriberRespiration<T> extends DisposableObserver<Notification<T>> {
 
     public abstract void onSuccess(T dataSnapShot);
 

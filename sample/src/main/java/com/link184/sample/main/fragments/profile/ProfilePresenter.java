@@ -3,9 +3,9 @@ package com.link184.sample.main.fragments.profile;
 import android.util.Log;
 
 import com.link184.respiration.repository.firebase.ListRepository;
-import com.link184.respiration.subscribers.ListSubscriberFirebase;
-import com.link184.respiration.subscribers.SingleSubscriberFirebase;
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.subscribers.ListSubscriberRespiration;
+import com.link184.respiration.subscribers.SingleSubscriberRespiration;
+import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class ProfilePresenter {
     private final String TAG = getClass().getSimpleName();
     private ProfileView view;
-    private SubscriberFirebase<SamplePrivateModel> privateRepositorySubscriber;
+    private SubscriberRespiration<SamplePrivateModel> privateRepositorySubscriber;
 
 //    @Inject
 //    GeneralRepository<SamplePrivateModel> privateRepository;
@@ -27,8 +27,8 @@ public class ProfilePresenter {
     @Inject
     ListRepository<SampleFriendModel> listRepository;
 
-    private SingleSubscriberFirebase<List<SampleFriendModel>> listRepositorySubscriber;
-    private SubscriberFirebase<SampleFriendModel> friendSubscriber;
+    private SingleSubscriberRespiration<List<SampleFriendModel>> listRepositorySubscriber;
+    private SubscriberRespiration<SampleFriendModel> friendSubscriber;
 
     ProfilePresenter(ProfileView view) {
         this.view = view;
@@ -37,7 +37,7 @@ public class ProfilePresenter {
     }
 
     void attachView() {
-        privateRepositorySubscriber = new SubscriberFirebase<SamplePrivateModel>() {
+        privateRepositorySubscriber = new SubscriberRespiration<SamplePrivateModel>() {
             @Override
             public void onSuccess(SamplePrivateModel samplePrivateModel) {
                 view.newDataReceived(samplePrivateModel);
@@ -50,7 +50,7 @@ public class ProfilePresenter {
         };
         privateRepository.subscribe(privateRepositorySubscriber);
 
-        listRepositorySubscriber = new SingleSubscriberFirebase<List<SampleFriendModel>>() {
+        listRepositorySubscriber = new SingleSubscriberRespiration<List<SampleFriendModel>>() {
             @Override
             public void onFailure(Throwable error) {
                 Log.e(TAG, "onFailure:1 ", error);
@@ -65,7 +65,7 @@ public class ProfilePresenter {
         };
         listRepository.subscribeToList(listRepositorySubscriber);
 
-        listRepository.subscribe(new ListSubscriberFirebase<SampleFriendModel>() {
+        listRepository.subscribe(new ListSubscriberRespiration<SampleFriendModel>() {
             @Override
             public void onReceive(String key, SampleFriendModel value) {
                 Log.e(TAG, "onSuccess:2 " + key + " " + value.toString());
@@ -77,7 +77,7 @@ public class ProfilePresenter {
             }
         });
 
-        friendSubscriber = new SubscriberFirebase<SampleFriendModel>() {
+        friendSubscriber = new SubscriberRespiration<SampleFriendModel>() {
             @Override
             public void onSuccess(SampleFriendModel dataSnapShot) {
                 Log.e(TAG, "onSuccess: " + dataSnapShot.toString());

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.link184.respiration.repository.firebase.GeneralRepository;
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;
 import com.link184.sample.firebase.SamplePublicModel;
@@ -22,7 +22,7 @@ public class SamplePresenter {
     GeneralRepository<SamplePrivateModel> privateRepository;
     @Inject
     GeneralRepository<SamplePublicModel> publicRepository;
-    private SubscriberFirebase<SamplePublicModel> publicRepositorySubscriber;
+    private SubscriberRespiration<SamplePublicModel> publicRepositorySubscriber;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     public SamplePresenter(SampleView view) {
@@ -31,7 +31,7 @@ public class SamplePresenter {
     }
 
     void attachView() {
-        publicRepositorySubscriber = new SubscriberFirebase<SamplePublicModel>() {
+        publicRepositorySubscriber = new SubscriberRespiration<SamplePublicModel>() {
             @Override
             public void onSuccess(SamplePublicModel samplePublicModel) {
 

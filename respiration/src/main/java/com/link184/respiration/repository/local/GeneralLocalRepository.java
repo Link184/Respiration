@@ -3,6 +3,7 @@ package com.link184.respiration.repository.local;
 import android.content.Context;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 
 import io.reactivex.Notification;
 
@@ -23,8 +24,11 @@ public class GeneralLocalRepository<M> extends LocalRepository<M> {
         for (String children: databaseChildren) {
             localElementRef = localElementRef.getAsJsonObject().get(children);
         }
-
-        behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(localElementRef, dataSnapshotClass)));
+        if (localElementRef != null && !localElementRef.isJsonNull()) {
+            behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(localElementRef, dataSnapshotClass)));
+        } else {
+            behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
+        }
     }
 
     @Override
@@ -34,7 +38,7 @@ public class GeneralLocalRepository<M> extends LocalRepository<M> {
     }
 
     @Override
-    protected void removeValue() {
-
+    public void removeValue() {
+        writeToFile(JsonNull.INSTANCE);
     }
 }

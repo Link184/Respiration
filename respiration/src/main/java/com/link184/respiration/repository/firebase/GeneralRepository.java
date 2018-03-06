@@ -4,7 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.subscribers.SubscriberRespiration;
 
 import io.reactivex.Notification;
 
@@ -55,7 +55,7 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
     }
 
     @Override
-    public void subscribe(SubscriberFirebase<M> subscriber) {
+    public void subscribe(SubscriberRespiration<M> subscriber) {
         behaviorSubject.subscribe(subscriber);
     }
 

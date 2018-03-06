@@ -1,6 +1,7 @@
 package com.link184.respiration.repository.local;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
@@ -26,7 +27,6 @@ import io.reactivex.Notification;
  */
 
 abstract class LocalRepository<T> extends Repository<T> {
-    private static final String DB_NAME = "respiration_db";
     protected final Gson gson;
     protected static JsonElement rawJsonElement;
     protected final String[] databaseChildren;
@@ -36,7 +36,7 @@ abstract class LocalRepository<T> extends Repository<T> {
     private final WriteHandler writeHandler;
 
     LocalRepository(Context context, LocalConfiguration localConfiguration) {
-        this.dbAndroidLocation = new File(context.getFilesDir(), DB_NAME);
+        this.dbAndroidLocation = new File(context.getFilesDir(), localConfiguration.getDbName());
         if (rawJsonElement == null) {
             if (dbAndroidLocation.exists()) {
                 rawJsonElement = loadJsonFile();
@@ -68,10 +68,6 @@ abstract class LocalRepository<T> extends Repository<T> {
 
     /**
      * Load json file template from assets and copy it to androids files dir.
-     *
-     * @param context  android context
-     * @param filePath
-     * @return
      */
     @Nullable
     private JsonElement loadFromAssets(Context context, String filePath) {
@@ -92,7 +88,7 @@ abstract class LocalRepository<T> extends Repository<T> {
         return null;
     }
 
-    public void writeToFile(JsonElement newContent) {
+    public void writeToFile(@NonNull JsonElement newContent) {
         writeHandler.post(() -> {
             writeLock.lock();
             JsonElement[] elementsToUpdate = new JsonElement[databaseChildren.length - 1];
@@ -117,7 +113,11 @@ abstract class LocalRepository<T> extends Repository<T> {
                 }
                 inputStream.close();
                 outputStream.close();
-                behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(newContent, dataSnapshotClass)));
+                if (!newContent.isJsonNull()) {
+                    behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(newContent, dataSnapshotClass)));
+                } else {
+                    behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
+                }
             } catch (IOException e) {
                 behaviorSubject.onNext(Notification.createOnError(e));
             }

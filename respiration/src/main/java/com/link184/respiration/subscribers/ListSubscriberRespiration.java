@@ -6,7 +6,7 @@ import java.util.Map;
  * Created by eugeniu on 10/16/17.
  */
 
-public abstract class ListSubscriberFirebase<T> extends SubscriberFirebase<Map<String, T>> {
+public abstract class ListSubscriberRespiration<T> extends SubscriberRespiration<Map<String, T>> {
 
     @Override
     public void onSuccess(Map<String, T> dataSnapShot) {

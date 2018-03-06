@@ -2,7 +2,7 @@ package com.link184.respiration.repository.base;
 
 import android.support.annotation.Nullable;
 
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.subscribers.SubscriberRespiration;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
@@ -21,7 +21,7 @@ public abstract class Repository<T> {
 
     protected abstract void initRepository();
 
-    public void subscribe(SubscriberFirebase<T> subscriber) {
+    public void subscribe(SubscriberRespiration<T> subscriber) {
         behaviorSubject.subscribe(subscriber);
     }
 

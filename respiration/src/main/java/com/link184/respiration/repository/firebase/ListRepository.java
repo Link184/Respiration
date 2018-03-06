@@ -7,8 +7,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.link184.respiration.subscribers.ListSubscriberFirebase;
-import com.link184.respiration.subscribers.SubscriberFirebase;
+import com.link184.respiration.subscribers.ListSubscriberRespiration;
+import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.respiration.utils.RespirationUtils;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         }
     }
 
-    public void subscribe(ListSubscriberFirebase<T> subscriber) {
+    public void subscribe(ListSubscriberRespiration<T> subscriber) {
         behaviorSubject.subscribe(subscriber);
     }
 
@@ -92,7 +92,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
      *
      * @param itemId firebase object key to subscribe on.
      */
-    public void subscribeToItem(String itemId, SubscriberFirebase<T> subscriber) {
+    public void subscribeToItem(String itemId, SubscriberRespiration<T> subscriber) {
         behaviorSubject
                 .flatMap(new Function<Notification<Map<String, T>>, ObservableSource<Notification<T>>>() {
                     @Override
@@ -103,7 +103,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
                 .subscribe(subscriber);
     }
 
-    public void subscribeToList(SubscriberFirebase<List<T>> subscriber) {
+    public void subscribeToList(SubscriberRespiration<List<T>> subscriber) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(subscriber);
     }
