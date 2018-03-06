@@ -15,6 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -45,9 +46,17 @@ public class LocalRepositoryTest {
         generalLocalRepository = new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
     }
 
+    private void resetRepositoryFormAssets() {
+        LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
+        localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
+        localConfiguration.setDatabaseChildren("userData", "user");
+        new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName()).delete();
+        generalLocalRepository = new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
+    }
+
     @Test
     public void localRepositoryTest() {
-
+        resetRepositoryFormAssets();
         TestObserver<User> userTestObserver = new TestObserver<User>() {
             @Override
             public void onNext(User user) {
@@ -72,6 +81,7 @@ public class LocalRepositoryTest {
 
     @Test
     public void dbWriteTest() throws InterruptedException {
+        resetRepositoryFormAssets();
         float testRandomHeight = new Random(System.nanoTime()).nextFloat();
         User user = generalLocalRepository.getValue();
         assertNotNull(user);
@@ -103,9 +113,9 @@ public class LocalRepositoryTest {
 
     @Test
     public void dbDeletionTest() throws InterruptedException, IOException {
+        resetRepositoryFormAssets();
         generalLocalRepository.removeValue();
         Thread.sleep(1_000);
-
 
         prepareRepository();
 

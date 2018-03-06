@@ -49,11 +49,14 @@ abstract class LocalRepository<T> extends Repository<T> {
         this.databaseChildren = Preconditions.checkNotNull(localConfiguration.getDatabaseChildren());
         this.dataSnapshotClass = localConfiguration.getDataSnapshotType();
         this.writeLock = new ReentrantReadWriteLock().writeLock();
-        this.writeHandler = new WriteHandler("IO_HANDLER");
+        this.writeHandler = new WriteHandler("RESPIRATION_IO_HANDLER");
 
         initRepository();
     }
 
+    /**
+     * Load database form android files dir.
+     */
     @Nullable
     private JsonElement loadJsonFile() {
         Gson gson = new Gson();
@@ -88,7 +91,11 @@ abstract class LocalRepository<T> extends Repository<T> {
         return null;
     }
 
-    public void writeToFile(@NonNull JsonElement newContent) {
+    /**
+     * Write db changes to android files dir.
+     * @param newContent new content which should be stored into db file.
+     */
+    protected void writeToFile(@NonNull JsonElement newContent) {
         writeHandler.post(() -> {
             writeLock.lock();
             JsonElement[] elementsToUpdate = new JsonElement[databaseChildren.length - 1];
