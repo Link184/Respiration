@@ -2,7 +2,7 @@ package com.link184.sample.main.fragments.profile;
 
 import android.util.Log;
 
-import com.link184.respiration.repository.firebase.ListRepository;
+import com.link184.respiration.repository.firebase.FirebaseListRepository;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.respiration.subscribers.SingleSubscriberRespiration;
 import com.link184.respiration.subscribers.SubscriberRespiration;
@@ -25,7 +25,7 @@ public class ProfilePresenter {
 //    GeneralRepository<SamplePrivateModel> privateRepository;
     SamplePrivateRepository privateRepository = RespirationCustomModule.getSamplePrivateRepository();
     @Inject
-    ListRepository<SampleFriendModel> listRepository;
+    FirebaseListRepository<SampleFriendModel> firebaseListRepository;
 
     private SingleSubscriberRespiration<List<SampleFriendModel>> listRepositorySubscriber;
     private SubscriberRespiration<SampleFriendModel> friendSubscriber;
@@ -63,9 +63,9 @@ public class ProfilePresenter {
                 }
             }
         };
-        listRepository.subscribeToList(listRepositorySubscriber);
+        firebaseListRepository.subscribeToList(listRepositorySubscriber);
 
-        listRepository.subscribe(new ListSubscriberRespiration<SampleFriendModel>() {
+        firebaseListRepository.subscribe(new ListSubscriberRespiration<SampleFriendModel>() {
             @Override
             public void onReceive(String key, SampleFriendModel value) {
                 Log.e(TAG, "onSuccess:2 " + key + " " + value.toString());
@@ -83,7 +83,7 @@ public class ProfilePresenter {
                 Log.e(TAG, "onSuccess: " + dataSnapShot.toString());
             }
         };
-        listRepository.subscribeToItem("john", friendSubscriber);
+        firebaseListRepository.subscribeToItem("john", friendSubscriber);
     }
 
     void detachView() {

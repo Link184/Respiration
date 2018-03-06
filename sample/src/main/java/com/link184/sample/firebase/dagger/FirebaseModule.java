@@ -2,8 +2,8 @@ package com.link184.sample.firebase.dagger;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.link184.respiration.repository.firebase.FirebaseListRepository;
 import com.link184.respiration.repository.firebase.GeneralRepository;
-import com.link184.respiration.repository.firebase.ListRepository;
 import com.link184.sample.firebase.SampleFriendModel;
 import com.link184.sample.firebase.SamplePrivateModel;
 import com.link184.sample.firebase.SamplePublicModel;
@@ -41,9 +41,9 @@ public class FirebaseModule {
 
     @Provides
     @Singleton
-    public ListRepository<SampleFriendModel> providesFriendsRepository() {
+    public FirebaseListRepository<SampleFriendModel> providesFriendsRepository() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        return new ListRepository.Builder<>(SampleFriendModel.class)
+        return new FirebaseListRepository.Builder<>(SampleFriendModel.class)
                 .setChildren(SAMPLE_FRIENDS_CHILD, currentUser != null ? currentUser.getUid() : null)
                 .setAccessPrivate(true)
                 .setPersistence(true)

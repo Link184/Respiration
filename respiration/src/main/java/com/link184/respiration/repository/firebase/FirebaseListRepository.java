@@ -31,10 +31,10 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by erza on 9/23/17.
  */
 
-public class ListRepository<T> extends FirebaseRepository<T> {
+public class FirebaseListRepository<T> extends FirebaseRepository<T> {
     protected BehaviorSubject<Notification<Map<String, T>>> behaviorSubject;
 
-    protected ListRepository(Configuration<T> configuration) {
+    protected FirebaseListRepository(Configuration<T> configuration) {
         super(configuration);
         this.behaviorSubject = BehaviorSubject.create();
     }
@@ -241,7 +241,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         /**
          * Firebase data persistence.
          */
-        public ListRepository.Builder<M> setPersistence(boolean persistence) {
+        public FirebaseListRepository.Builder<M> setPersistence(boolean persistence) {
             configuration.setPersistence(persistence);
             return this;
         }
@@ -249,7 +249,7 @@ public class ListRepository<T> extends FirebaseRepository<T> {
         /**
          * @param databaseChildren enumerate all children to build a {@link DatabaseReference} object.
          */
-        public ListRepository.Builder<M> setChildren(String... databaseChildren) {
+        public FirebaseListRepository.Builder<M> setChildren(String... databaseChildren) {
             configuration.setDatabaseChildren(databaseChildren);
             return this;
         }
@@ -260,13 +260,13 @@ public class ListRepository<T> extends FirebaseRepository<T> {
          * authenticated user with uid in database reference path, just call resetRepository() method
          * after successful authentication with right uid in path.
          */
-        public ListRepository.Builder<M> setAccessPrivate(boolean accessPrivate) {
+        public FirebaseListRepository.Builder<M> setAccessPrivate(boolean accessPrivate) {
             configuration.setAccessPrivate(accessPrivate);
             return this;
         }
 
-        public ListRepository<M> build() {
-            return new ListRepository<>(configuration);
+        public FirebaseListRepository<M> build() {
+            return new FirebaseListRepository<>(configuration);
         }
     }
 }
