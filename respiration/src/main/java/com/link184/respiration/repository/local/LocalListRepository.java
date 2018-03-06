@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.respiration.utils.IdGenerator;
 
 import java.util.ArrayList;
@@ -26,12 +27,13 @@ public class LocalListRepository<M> extends LocalRepository<M>{
     protected BehaviorSubject<Notification<Map<String, M>>> behaviorSubject;
     private JsonElement localElementRef;
 
-    LocalListRepository(Context context, LocalConfiguration localConfiguration) {
+    public LocalListRepository(Context context, LocalConfiguration localConfiguration) {
         super(context, localConfiguration);
     }
 
     @Override
     protected void initRepository() {
+        behaviorSubject = BehaviorSubject.create();
         localElementRef = rawJsonElement;
         for (String children: databaseChildren) {
             localElementRef = localElementRef.getAsJsonObject().get(children);
@@ -40,12 +42,21 @@ public class LocalListRepository<M> extends LocalRepository<M>{
             JsonObject asJsonObject = localElementRef.getAsJsonObject();
             Map<String, M> resultMap = new ConcurrentHashMap<>();
             for (Map.Entry<String, JsonElement> entry: asJsonObject.entrySet()) {
-                resultMap.put(entry.getKey(), gson.fromJson(entry.getValue(), dataSnapshotClass));
+                if (entry.getValue().isJsonObject()) {
+                    resultMap.put(entry.getKey(), gson.fromJson(entry.getValue(), dataSnapshotClass));
+                } else {
+                    behaviorSubject.onNext(Notification.createOnError(new NotListableRepository()));
+                    return;
+                }
             }
             behaviorSubject.onNext(Notification.createOnNext(resultMap));
         } else {
             behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
         }
+    }
+
+    public void subscribe(ListSubscriberRespiration<M> subscriber) {
+        behaviorSubject.subscribe(subscriber);
     }
 
     @Override

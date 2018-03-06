@@ -3,6 +3,9 @@ package com.link184.respiration.repository.local;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.File;
+import java.util.regex.Pattern;
+
 /**
  * Created by Ryzen on 3/2/2018.
  */
@@ -34,6 +37,8 @@ public class LocalConfiguration<T> {
     }
 
     public void setAssetDbFilePath(String assetDbFilePath) {
+        String[] split = assetDbFilePath.split(Pattern.quote(File.separator));
+        this.dbName = split[split.length - 1];
         this.assetDbFilePath = assetDbFilePath;
     }
 

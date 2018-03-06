@@ -24,6 +24,7 @@ import io.reactivex.observers.TestObserver;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Ryzen on 3/2/2018.
@@ -32,7 +33,7 @@ import static junit.framework.Assert.assertNull;
 @RunWith(AndroidJUnit4.class)
 public class LocalRepositoryTest {
     private final String TAG = getClass().getSimpleName();
-    private final String TEST_ASSET_DB_NAME = "test_db.json";
+    private final String TEST_ASSET_DB_NAME = "user_db.json";
 
     @Rule
     public ActivityTestRule<SampleActivity> activityTestRule = new ActivityTestRule<>(SampleActivity.class);
@@ -50,7 +51,11 @@ public class LocalRepositoryTest {
         LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
         localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
         localConfiguration.setDatabaseChildren("userData", "user");
-        new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName()).delete();
+        File dbFile = new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName());
+        if (dbFile.exists()) {
+            boolean deleted = dbFile.delete();
+            assertTrue("Failed to remove test db file", deleted);
+        }
         generalLocalRepository = new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
     }
 

@@ -1,0 +1,72 @@
+{
+  "user_workouts": {
+    "1": {
+      "1001": {
+        "created_timestamp": 1510847497093,
+        "description": "Every Monday a workout always NEW and FREE!",
+        "difficulty": 1,
+        "music_package_id": 8,
+        "structure": "e:44|r:15>e:91|r:10>e:0|s:30>e:47|r:15>e:92|r:10>e:0|s:30>e:44|r:15>e:93|r:10>e:44|r:10>e:0|s:30>e:107|r:15>e:88|r:15>e:91|r:10",
+        "title": "Monday Workout 17/31",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      },
+      "1002": {
+        "created_timestamp": 1508937600496,
+        "description": "",
+        "difficulty": 1,
+        "music_package_id": 7,
+        "structure": "e:44|r:10>e:45|r:10",
+        "title": "Name",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      },
+      "1003": {
+        "created_timestamp": 1510135769811,
+        "description": "Sss",
+        "difficulty": 2,
+        "music_package_id": 11,
+        "structure": "e:45|r:10>e:47|r:10",
+        "title": "Asdasdas",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      },
+      "1004": {
+        "created_timestamp": 1510847470819,
+        "description": "",
+        "difficulty": 2,
+        "music_package_id": 5,
+        "structure": "e:44|r:10>e:45|r:10>e:47|r:10",
+        "title": "Hgcf",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      },
+      "1005": {
+        "created_timestamp": 1511444401477,
+        "description": "Fcf",
+        "difficulty": 1,
+        "music_package_id": 11,
+        "structure": "e:45|r:10>e:47|r:10>e:49|r:10",
+        "title": "Ttgggf",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      },
+      "1006": {
+        "created_timestamp": 1514211980604,
+        "description": "",
+        "difficulty": 2,
+        "music_package_id": 11,
+        "structure": "e:91|r:10>e:0|s:30>e:91|r:10>e:0|s:30>e:91|r:10>e:0|s:30>e:86|r:10>e:0|s:30>e:86|r:10>e:0|s:30>e:86|r:10",
+        "title": "Bbbbbbb",
+        "type": 1,
+        "week": 0,
+        "year": 0
+      }
+    }
+  }
+}
