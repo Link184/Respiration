@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE, ElementType.FIELD})
-public @interface RespirationRepository {
+public @interface FirebaseRepository {
     /**
      * Use it as database reference children. If you got to use firebase userId as database reference
      * path you must always reset this path on each firebase auth state change. Or you can just use

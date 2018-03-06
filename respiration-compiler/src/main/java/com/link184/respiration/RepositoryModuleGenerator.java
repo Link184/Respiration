@@ -44,7 +44,7 @@ public class RepositoryModuleGenerator {
         List<MethodSpec> getters = new ArrayList<>();
         List<? extends Element> enclosedElements = entry.getKey().getEnclosedElements();
         for (Element element : enclosedElements) {
-            if (element.getAnnotation(RespirationRepository.class) != null) {
+            if (element.getAnnotation(FirebaseRepository.class) != null) {
                 getters.add(generateGetter(element, entry.getValue()));
             }
         }
@@ -55,7 +55,7 @@ public class RepositoryModuleGenerator {
         Name simpleName = element.getSimpleName();
         String capitalizedRepoName = simpleName.toString().substring(0, 1).toUpperCase()
                 + simpleName.toString().substring(1);
-        RespirationRepository annotation = element.getAnnotation(RespirationRepository.class);
+        FirebaseRepository annotation = element.getAnnotation(FirebaseRepository.class);
         TypeName modelType = GenerationUtils.extractTypeName(annotation);
         ClassName returnTypeClassName = ClassName.get(packageName,
                 capitalizedRepoName);

@@ -11,7 +11,7 @@ import javax.lang.model.type.TypeMirror;
  */
 
 public class GenerationUtils {
-    static CodeBlock generateChildrenArray(RespirationRepository annotation) {
+    static CodeBlock generateChildrenArray(FirebaseRepository annotation) {
         String[] children = annotation.children();
         CodeBlock.Builder builder = CodeBlock.builder();
         builder.add("new $T{", String[].class);
@@ -26,7 +26,7 @@ public class GenerationUtils {
         return builder.build();
     }
 
-    static CodeBlock generateChildrenArrayForAnnotations(RespirationRepository annotation) {
+    static CodeBlock generateChildrenArrayForAnnotations(FirebaseRepository annotation) {
         String[] children = annotation.children();
         CodeBlock.Builder builder = CodeBlock.builder();
         builder.add("$N", "{");
@@ -41,7 +41,7 @@ public class GenerationUtils {
         return builder.build();
     }
 
-    static TypeName extractTypeName(RespirationRepository annotation) {
+    static TypeName extractTypeName(FirebaseRepository annotation) {
         TypeMirror classModel = null;
         try {
             annotation.dataSnapshotType();

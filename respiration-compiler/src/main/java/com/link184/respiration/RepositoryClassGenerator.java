@@ -22,7 +22,7 @@ public class RepositoryClassGenerator {
 
     JavaFile generateRepositories(Map<Element, String> repositoriesWithPackages) {
         for (Map.Entry<Element, String> entry : repositoriesWithPackages.entrySet()) {
-            if (entry.getKey().getAnnotation(RespirationRepository.class) != null) {
+            if (entry.getKey().getAnnotation(FirebaseRepository.class) != null) {
                 return generateRepository(entry.getKey(), entry.getValue());
             }
         }
@@ -33,7 +33,7 @@ public class RepositoryClassGenerator {
         Name simpleName = element.getSimpleName();
         String capitalizedRepoName = simpleName.toString().substring(0, 1).toUpperCase()
                 + simpleName.toString().substring(1);
-        RespirationRepository annotation = element.getAnnotation(RespirationRepository.class);
+        FirebaseRepository annotation = element.getAnnotation(FirebaseRepository.class);
         TypeName modelType = GenerationUtils.extractTypeName(annotation);
         ParameterizedTypeName superClass = ParameterizedTypeName.get(ClassName.bestGuess(element.asType().toString()), modelType);
         TypeSpec.Builder repositoryClass = TypeSpec.classBuilder(capitalizedRepoName)
@@ -46,7 +46,7 @@ public class RepositoryClassGenerator {
     }
 
     private AnnotationSpec generateRepositoryAnnotation(Element element) {
-        RespirationRepository annotation = element.getAnnotation(RespirationRepository.class);
+        FirebaseRepository annotation = element.getAnnotation(FirebaseRepository.class);
         AnnotationSpec.Builder annotationBuilder = AnnotationSpec.builder(annotation.annotationType());
         annotationBuilder
                 .addMember("dataSnapshotType", "$T.class", GenerationUtils.extractTypeName(annotation))
@@ -61,7 +61,7 @@ public class RepositoryClassGenerator {
     private MethodSpec generateRepositoryConstructor(Element element) {
         final ClassName configurationClass = ClassName.get("com.link184.respiration.repository.firebase", "Configuration");
         final String configurationParameterName = "configuration";
-        TypeName modelType = GenerationUtils.extractTypeName(element.getAnnotation(RespirationRepository.class));
+        TypeName modelType = GenerationUtils.extractTypeName(element.getAnnotation(FirebaseRepository.class));
         ParameterizedTypeName parametrizedConfigurationClass = ParameterizedTypeName.get(configurationClass, modelType);
         return MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)

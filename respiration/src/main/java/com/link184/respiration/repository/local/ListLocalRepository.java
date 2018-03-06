@@ -23,11 +23,11 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by eugeniu on 3/6/18.
  */
 
-public class LocalListRepository<M> extends LocalRepository<M>{
+public class ListLocalRepository<M> extends LocalRepository<M>{
     protected BehaviorSubject<Notification<Map<String, M>>> behaviorSubject;
     private JsonElement localElementRef;
 
-    public LocalListRepository(Context context, LocalConfiguration localConfiguration) {
+    public ListLocalRepository(Context context, LocalConfiguration localConfiguration) {
         super(context, localConfiguration);
     }
 

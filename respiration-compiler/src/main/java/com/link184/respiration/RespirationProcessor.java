@@ -42,7 +42,7 @@ public class RespirationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
+        for (Element element : roundEnvironment.getElementsAnnotatedWith(FirebaseRepository.class)) {
             Map<Element, String> repositoriesWithPackages = new HashMap<>();
             if (element.getKind() == ElementKind.FIELD) {
                 messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration field: " + element.getSimpleName());
@@ -60,7 +60,7 @@ public class RespirationProcessor extends AbstractProcessor {
             }
         }
 
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(RespirationRepository.class)) {
+        for (Element element : roundEnvironment.getElementsAnnotatedWith(FirebaseRepository.class)) {
             Map<TypeElement, String> repositoriesWithPackages = new HashMap<>();
             if (element.getKind() == ElementKind.CLASS) {
                 messager.printMessage(Diagnostic.Kind.NOTE, "Processing respiration repository: " + element.getSimpleName());
@@ -105,7 +105,7 @@ public class RespirationProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> types = new HashSet<>();
-        types.add(RespirationRepository.class.getCanonicalName());
+        types.add(FirebaseRepository.class.getCanonicalName());
         types.add(RespirationModule.class.getCanonicalName());
         return types;
     }

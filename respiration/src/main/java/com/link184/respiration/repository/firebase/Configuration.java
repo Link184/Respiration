@@ -1,7 +1,7 @@
 package com.link184.respiration.repository.firebase;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.link184.respiration.RespirationRepository;
+import com.link184.respiration.FirebaseRepository;
 
 import java.util.regex.Pattern;
 
@@ -40,9 +40,9 @@ public class Configuration<T> {
     public String getDatabaseChildren(FirebaseUser firebaseUser) {
         if (firebaseUser != null) {
             userId = firebaseUser.getUid();
-            databaseChildren = databaseChildren.replaceAll(Pattern.quote(RespirationRepository.USER_ID), userId);
+            databaseChildren = databaseChildren.replaceAll(Pattern.quote(com.link184.respiration.FirebaseRepository.USER_ID), userId);
         } else {
-            databaseChildren = databaseChildren.replaceAll(Pattern.quote(userId), RespirationRepository.USER_ID);
+            databaseChildren = databaseChildren.replaceAll(Pattern.quote(userId), FirebaseRepository.USER_ID);
         }
         return databaseChildren;
     }
@@ -52,7 +52,7 @@ public class Configuration<T> {
         for (String child : databaseChildren) {
             if (child != null) {
                 sb.append(child).append("/");
-                if (child.equals(RespirationRepository.USER_ID)) {
+                if (child.equals(FirebaseRepository.USER_ID)) {
                     childrenSensitive = true;
                     userId = child;
                 }

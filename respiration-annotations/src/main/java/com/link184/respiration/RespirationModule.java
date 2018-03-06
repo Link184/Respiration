@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 
 /**
- * Use to annotate classes which store {@link RespirationRepository} fields.
+ * Use to annotate classes which store {@link FirebaseRepository} fields.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
