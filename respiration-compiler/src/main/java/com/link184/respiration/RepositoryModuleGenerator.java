@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
-import javax.lang.model.element.TypeElement;
 
 /**
  * Created by jora on 11/25/17.
@@ -22,10 +21,10 @@ import javax.lang.model.element.TypeElement;
 public class RepositoryModuleGenerator {
     private static final String CLASS_NAME_PREFIX = "Respiration";
 
-    List<JavaFile> generateModule(Map<TypeElement, String> repositoriesWithPackages) {
+    List<JavaFile> generateModule(Map<Element, String> repositoriesWithPackages) {
         List<JavaFile> javaFiles = new ArrayList<>();
 
-        for (Map.Entry<TypeElement, String> entry : repositoriesWithPackages.entrySet()) {
+        for (Map.Entry<Element, String> entry : repositoriesWithPackages.entrySet()) {
             String repositoryName = entry.getKey().getSimpleName().toString();
             String packageName = entry.getValue();
 
@@ -40,7 +39,7 @@ public class RepositoryModuleGenerator {
         return javaFiles;
     }
 
-    private List<MethodSpec> generateGetters(Map.Entry<TypeElement, String> entry) {
+    private List<MethodSpec> generateGetters(Map.Entry<Element, String> entry) {
         List<MethodSpec> getters = new ArrayList<>();
         List<? extends Element> enclosedElements = entry.getKey().getEnclosedElements();
         for (Element element : enclosedElements) {
@@ -62,8 +61,8 @@ public class RepositoryModuleGenerator {
         return MethodSpec.methodBuilder("get" + capitalizedRepoName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(returnTypeClassName)
-                .addStatement("return $N.$N()", returnTypeClassName.simpleName() + RepositoryBuilderGenerator.CLASS_NAME_SUFFIX,
-                        RepositoryBuilderGenerator.METHOD_GET_INSTANCE)
+                .addStatement("return $N.$N()", returnTypeClassName.simpleName() + FirebaseRepositoryBuilderGenerator.CLASS_NAME_SUFFIX,
+                        FirebaseRepositoryBuilderGenerator.METHOD_GET_INSTANCE)
                 .build();
     }
 }

@@ -18,7 +18,7 @@ import javax.lang.model.element.Name;
  * Created by jora on 12/24/17.
  */
 
-public class RepositoryClassGenerator {
+public class FirebaseRepositoryClassGenerator {
 
     JavaFile generateRepositories(Map<Element, String> repositoriesWithPackages) {
         for (Map.Entry<Element, String> entry : repositoriesWithPackages.entrySet()) {
