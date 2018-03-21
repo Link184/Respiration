@@ -30,8 +30,14 @@ public @interface LocalRepository {
     String dataBaseAssetPath();
 
     /**
-     *  Database file name which will be stored to the android files dir. Leave it unset if you
-     *  want the name to be as asset name.
+     * Database file name which will be stored to the android files dir. Leave it unset if you
+     * want the name to be as asset name.
      */
     String dataBaseName() default "";
+
+
+    /**
+     * Local database reference children.
+     */
+    String[] children() default "";
 }

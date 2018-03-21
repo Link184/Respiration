@@ -50,4 +50,44 @@ public class GenerationUtils {
         }
         return TypeName.get(classModel);
     }
+
+    public static TypeName extractTypeName(LocalRepository annotation) {
+        TypeMirror classModel = null;
+        try {
+            annotation.dataSnapshotType();
+        } catch (MirroredTypeException mte) {
+            classModel = mte.getTypeMirror();
+        }
+        return TypeName.get(classModel);
+    }
+
+    public static CodeBlock generateChildrenArray(LocalRepository annotation) {
+        String[] children = annotation.children();
+        CodeBlock.Builder builder = CodeBlock.builder();
+        builder.add("new $T{", String[].class);
+        for (int i = 0; i < children.length; i++) {
+            if (i < children.length - 1) {
+                builder.add("$S,", children[i]);
+            } else {
+                builder.add("$S", children[i]);
+            }
+        }
+        builder.add("$N", "}");
+        return builder.build();
+    }
+
+    public static CodeBlock generateChildrenArrayForAnnotations(LocalRepository annotation) {
+        String[] children = annotation.children();
+        CodeBlock.Builder builder = CodeBlock.builder();
+        builder.add("$N", "{");
+        for (int i = 0; i < children.length; i++) {
+            if (i < children.length - 1) {
+                builder.add("$S,", children[i]);
+            } else {
+                builder.add("$S", children[i]);
+            }
+        }
+        builder.add("$N", "}");
+        return builder.build();
+    }
 }

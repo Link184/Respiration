@@ -20,7 +20,7 @@ public class LocalRepositoryBuilderGenerator extends BaseBuilderGenerator {
     public MethodSpec generateMethodSingleInit(Map.Entry<Element, String> entry) {
         ClassName configurationClass = ClassName.get("com.link184.respiration.repository.local", "LocalConfiguration");
 
-        FirebaseRepository annotation = entry.getKey().getAnnotation(FirebaseRepository.class);
+        LocalRepository annotation = entry.getKey().getAnnotation(LocalRepository.class);
         TypeName modelTypeName = GenerationUtils.extractTypeName(annotation);
         MethodSpec.Builder createMethod = MethodSpec
                 .methodBuilder(METHOD_CREATE_INSTANCE)
@@ -28,8 +28,8 @@ public class LocalRepositoryBuilderGenerator extends BaseBuilderGenerator {
                 .returns(TypeName.get(entry.getKey().asType()))
                 .addStatement("$T<$T> configuration = new $T<>($T.class)",
                         configurationClass, modelTypeName, configurationClass, modelTypeName)
-                .addStatement("configuration.setPersistence($L)", annotation.isAccessPrivate())
-                .addStatement("configuration.setAccessPrivate($L)", annotation.isAccessPrivate());
+                .addStatement("configuration.setDbName($L)", annotation.dataBaseName())
+                .addStatement("configuration.setAssetDbFilePath($L)", annotation.dataBaseAssetPath());
         if (annotation.children().length > 0 && !annotation.children()[0].isEmpty()) {
             createMethod.addStatement("configuration.setDatabaseChildren($L)", GenerationUtils.generateChildrenArray(annotation));
         }
