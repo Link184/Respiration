@@ -2,8 +2,13 @@ package com.link184.respiration.repository.local;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.link184.respiration.utils.Preconditions;
+
+import java.io.File;
 
 import io.reactivex.Notification;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Ryzen on 3/2/2018.
@@ -38,5 +43,31 @@ public class GeneralLocalRepository<M> extends LocalRepository<M> {
     @Override
     public void removeValue() {
         writeToFile(JsonNull.INSTANCE);
+    }
+
+    /**
+     * Reset local repository by a new configuration object.
+     * @param localConfiguration new configuration
+     */
+    public void resetRepository(LocalConfiguration<M> localConfiguration) {
+        resetRepository(localConfiguration, false);
+    }
+
+    /**
+     * Reset local repository by a new configuration object.
+     * @param localConfiguration new configuration
+     * @param removeCurrentDbFile pass true to remove current db file form android files dir.
+     */
+    public void resetRepository(LocalConfiguration<M> localConfiguration, boolean removeCurrentDbFile) {
+        if (removeCurrentDbFile) {
+            File dbFile = new File(Preconditions.checkNotNull(localConfiguration.getContext())
+                    .getFilesDir(), localConfiguration.getDbName());
+            if (dbFile.exists()) {
+                boolean deleted = dbFile.delete();
+                assertTrue("Failed to remove test db file", deleted);
+            }
+        }
+        initDBFile(localConfiguration);
+        initRepository();
     }
 }

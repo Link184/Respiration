@@ -7,7 +7,9 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.respiration.utils.IdGenerator;
+import com.link184.respiration.utils.Preconditions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+
+import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by eugeniu on 3/6/18.
@@ -131,5 +135,31 @@ public class ListLocalRepository<M> extends LocalRepository<M>{
      */
     public Observable<Notification<Map<String, M>>> asListObservable() {
         return behaviorSubject;
+    }
+
+    /**
+     * Reset local repository by a new configuration object.
+     * @param localConfiguration new configuration
+     */
+    public void resetRepository(LocalConfiguration<M> localConfiguration) {
+        resetRepository(localConfiguration, false);
+    }
+
+    /**
+     * Reset local repository by a new configuration object.
+     * @param localConfiguration new configuration
+     * @param removeCurrentDbFile pass true to remove current db file form android files dir.
+     */
+    public void resetRepository(LocalConfiguration<M> localConfiguration, boolean removeCurrentDbFile) {
+        if (removeCurrentDbFile) {
+            File dbFile = new File(Preconditions.checkNotNull(localConfiguration.getContext())
+                    .getFilesDir(), localConfiguration.getDbName());
+            if (dbFile.exists()) {
+                boolean deleted = dbFile.delete();
+                assertTrue("Failed to remove test db file", deleted);
+            }
+        }
+        initDBFile(localConfiguration);
+        initRepository();
     }
 }

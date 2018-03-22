@@ -29,7 +29,7 @@ import io.reactivex.Notification;
 abstract class LocalRepository<T> extends Repository<T> {
     protected final Gson gson;
     protected static JsonElement rawJsonElement;
-    protected final String[] databaseChildren;
+    protected String[] databaseChildren;
 
     private final File dbAndroidLocation;
     private final Lock writeLock;
@@ -37,6 +37,15 @@ abstract class LocalRepository<T> extends Repository<T> {
 
     LocalRepository(LocalConfiguration localConfiguration) {
         this.dbAndroidLocation = new File(localConfiguration.getContext().getFilesDir(), localConfiguration.getDbName());
+        this.gson = new Gson();
+        this.writeLock = new ReentrantReadWriteLock().writeLock();
+        this.writeHandler = new WriteHandler("RESPIRATION_IO_HANDLER");
+
+        initDBFile(localConfiguration);
+        initRepository();
+    }
+
+    void initDBFile(LocalConfiguration localConfiguration) {
         if (rawJsonElement == null) {
             if (dbAndroidLocation.exists()) {
                 rawJsonElement = loadJsonFile();
@@ -45,13 +54,8 @@ abstract class LocalRepository<T> extends Repository<T> {
                 rawJsonElement = loadJsonFile();
             }
         }
-        this.gson = new Gson();
         this.databaseChildren = Preconditions.checkNotNull(localConfiguration.getDatabaseChildren());
         this.dataSnapshotClass = localConfiguration.getDataSnapshotType();
-        this.writeLock = new ReentrantReadWriteLock().writeLock();
-        this.writeHandler = new WriteHandler("RESPIRATION_IO_HANDLER");
-
-        initRepository();
     }
 
     /**
@@ -75,6 +79,7 @@ abstract class LocalRepository<T> extends Repository<T> {
     @Nullable
     private JsonElement loadFromAssets(Context context, String filePath) {
         try {
+            writeLock.lock();
             InputStream inputStream = context.getAssets().open(filePath);
             FileOutputStream outputStream = new FileOutputStream(dbAndroidLocation);
             byte[] buf = new byte[1024];
@@ -84,9 +89,11 @@ abstract class LocalRepository<T> extends Repository<T> {
             }
             inputStream.close();
             outputStream.close();
+            writeLock.unlock();
             return loadJsonFile();
         } catch (IOException e) {
             e.printStackTrace();
+            writeLock.unlock();
             behaviorSubject.onNext(Notification.createOnError(e));
         }
         return null;

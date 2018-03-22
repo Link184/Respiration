@@ -11,12 +11,12 @@ import com.link184.sample.local.User;
 import com.link184.sample.main.SampleActivity;
 import com.link184.sample.modules.LocalUserRepositoryBuilder;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -25,7 +25,6 @@ import io.reactivex.observers.TestObserver;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Created by Ryzen on 3/2/2018.
@@ -42,12 +41,12 @@ public class LocalRepositoryTest {
 
     @Before
     public void prepareRepository() {
-//        LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
-//        localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
-//        localConfiguration.setDatabaseChildren("userData", "user");
-//        localConfiguration.setContext(activityTestRule.getActivity());
-//        generalLocalRepository = new GeneralLocalRepository<>(localConfiguration);
         generalLocalRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
+    }
+
+    @After
+    public void resetDb() {
+        resetRepositoryFormAssets();
     }
 
     private void resetRepositoryFormAssets() {
@@ -55,18 +54,11 @@ public class LocalRepositoryTest {
         localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
         localConfiguration.setDatabaseChildren("userData", "user");
         localConfiguration.setContext(activityTestRule.getActivity());
-        File dbFile = new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName());
-        if (dbFile.exists()) {
-            boolean deleted = dbFile.delete();
-            assertTrue("Failed to remove test db file", deleted);
-        }
-//        generalLocalRepository = new GeneralLocalRepository<>(localConfiguration);
-        generalLocalRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
+        generalLocalRepository.resetRepository(localConfiguration, true);
     }
 
     @Test
     public void localRepositoryTest() {
-        resetRepositoryFormAssets();
         TestObserver<User> userTestObserver = new TestObserver<User>() {
             @Override
             public void onNext(User user) {
@@ -91,7 +83,6 @@ public class LocalRepositoryTest {
 
     @Test
     public void dbWriteTest() throws InterruptedException {
-        resetRepositoryFormAssets();
         float testRandomHeight = new Random(System.nanoTime()).nextFloat();
         User user = generalLocalRepository.getValue();
         assertNotNull(user);
@@ -123,9 +114,8 @@ public class LocalRepositoryTest {
 
     @Test
     public void dbDeletionTest() throws InterruptedException, IOException {
-        resetRepositoryFormAssets();
         generalLocalRepository.removeValue();
-        Thread.sleep(1_000);
+        Thread.sleep(2_000);
 
         prepareRepository();
 
