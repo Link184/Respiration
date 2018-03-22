@@ -49,10 +49,12 @@ public class LocalRepositoryClassGenerator {
         AnnotationSpec.Builder annotationBuilder = AnnotationSpec.builder(annotation.annotationType());
         annotationBuilder
                 .addMember("dataSnapshotType", "$T.class", GenerationUtils.extractTypeName(annotation))
-                .addMember("dataBaseName", "$L", annotation.dataBaseName())
-                .addMember("dataBaseAssetPath", "$L", annotation.dataBaseAssetPath());
+                .addMember("dataBaseAssetPath", "$S", annotation.dataBaseAssetPath());
         if (annotation.children().length > 0 && !annotation.children()[0].isEmpty()) {
             annotationBuilder.addMember("children", "$L", GenerationUtils.generateChildrenArrayForAnnotations(annotation));
+        }
+        if (!annotation.dataBaseName().isEmpty()) {
+            annotationBuilder.addMember("dataBaseName", "$S", annotation.dataBaseName());
         }
         return annotationBuilder.build();
     }

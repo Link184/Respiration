@@ -1,6 +1,5 @@
 package com.link184.respiration.repository.local;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.google.gson.JsonElement;
@@ -27,8 +26,8 @@ public class ListLocalRepository<M> extends LocalRepository<M>{
     protected BehaviorSubject<Notification<Map<String, M>>> behaviorSubject;
     private JsonElement localElementRef;
 
-    public ListLocalRepository(Context context, LocalConfiguration localConfiguration) {
-        super(context, localConfiguration);
+    public ListLocalRepository(LocalConfiguration localConfiguration) {
+        super(localConfiguration);
     }
 
     @Override

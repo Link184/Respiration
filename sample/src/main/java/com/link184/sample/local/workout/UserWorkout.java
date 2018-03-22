@@ -1,4 +1,4 @@
-package com.link184.sample.model.local.workout;
+package com.link184.sample.local.workout;
 
 import android.graphics.Color;
 import android.support.annotation.ColorInt;

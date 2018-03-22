@@ -19,7 +19,7 @@ import javax.lang.model.element.Modifier;
  */
 
 public abstract class BaseBuilderGenerator implements BaseBuilder {
-    private String VARIABLE_INSTANCE = "INSTANCE";
+    protected String VARIABLE_INSTANCE = "INSTANCE";
 
     @Override
     public List<JavaFile> generateRepository(Map<Element, String> repositoriesWithPackages) {

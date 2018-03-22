@@ -1,4 +1,4 @@
-package com.link184.sample.model.local.workout;
+package com.link184.sample.local.workout;
 
 /**
  * Created by eugeniu on 7/17/17.

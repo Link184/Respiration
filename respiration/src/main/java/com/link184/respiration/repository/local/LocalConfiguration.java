@@ -1,5 +1,6 @@
 package com.link184.respiration.repository.local;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -11,9 +12,11 @@ import java.util.regex.Pattern;
  */
 
 public class LocalConfiguration<T> {
+    /** Android context to work with asset resources. */
+    private Context context;
     /** The name of a database file located in android files dir. */
     private String dbName = "respiration_db";
-    /** Path to asset db asset file where it needs to be loaded. */
+    /** Path to asset db asset file from where it needs to be loaded. */
     private String assetDbFilePath;
     /** A path to node which you want to work with */
     private String[] databaseChildren;
@@ -22,6 +25,14 @@ public class LocalConfiguration<T> {
 
     public LocalConfiguration(Class<T> dataSnapshotType) {
         this.dataSnapshotType = dataSnapshotType;
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     public String getDbName() {

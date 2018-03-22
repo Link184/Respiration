@@ -1,4 +1,4 @@
-package com.link184.sample.model.local;
+package com.link184.sample.local;
 
 /**
  * Created by eugeniu on 5/26/17.

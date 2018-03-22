@@ -1,4 +1,4 @@
-package com.link184.sample.model.local;
+package com.link184.sample.local;
 
 import android.os.Parcel;
 import android.os.Parcelable;

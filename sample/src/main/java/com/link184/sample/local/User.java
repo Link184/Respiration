@@ -1,4 +1,4 @@
-package com.link184.sample.model.local;
+package com.link184.sample.local;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;

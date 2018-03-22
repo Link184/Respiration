@@ -35,13 +35,13 @@ abstract class LocalRepository<T> extends Repository<T> {
     private final Lock writeLock;
     private final WriteHandler writeHandler;
 
-    LocalRepository(Context context, LocalConfiguration localConfiguration) {
-        this.dbAndroidLocation = new File(context.getFilesDir(), localConfiguration.getDbName());
+    LocalRepository(LocalConfiguration localConfiguration) {
+        this.dbAndroidLocation = new File(localConfiguration.getContext().getFilesDir(), localConfiguration.getDbName());
         if (rawJsonElement == null) {
             if (dbAndroidLocation.exists()) {
                 rawJsonElement = loadJsonFile();
             } else {
-                loadFromAssets(context, localConfiguration.getAssetDbFilePath());
+                loadFromAssets(localConfiguration.getContext(), localConfiguration.getAssetDbFilePath());
                 rawJsonElement = loadJsonFile();
             }
         }
@@ -86,6 +86,7 @@ abstract class LocalRepository<T> extends Repository<T> {
             outputStream.close();
             return loadJsonFile();
         } catch (IOException e) {
+            e.printStackTrace();
             behaviorSubject.onNext(Notification.createOnError(e));
         }
         return null;

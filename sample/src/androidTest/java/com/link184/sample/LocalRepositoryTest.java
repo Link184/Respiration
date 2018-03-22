@@ -7,8 +7,9 @@ import android.util.Log;
 import com.link184.respiration.repository.local.GeneralLocalRepository;
 import com.link184.respiration.repository.local.LocalConfiguration;
 import com.link184.respiration.subscribers.SubscriberRespiration;
+import com.link184.sample.local.User;
 import com.link184.sample.main.SampleActivity;
-import com.link184.sample.model.local.User;
+import com.link184.sample.modules.LocalUserRepositoryBuilder;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -41,22 +42,26 @@ public class LocalRepositoryTest {
 
     @Before
     public void prepareRepository() {
-        LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
-        localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
-        localConfiguration.setDatabaseChildren("userData", "user");
-        generalLocalRepository = new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
+//        LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
+//        localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
+//        localConfiguration.setDatabaseChildren("userData", "user");
+//        localConfiguration.setContext(activityTestRule.getActivity());
+//        generalLocalRepository = new GeneralLocalRepository<>(localConfiguration);
+        generalLocalRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
     }
 
     private void resetRepositoryFormAssets() {
         LocalConfiguration localConfiguration = new LocalConfiguration<>(User.class);
         localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
         localConfiguration.setDatabaseChildren("userData", "user");
+        localConfiguration.setContext(activityTestRule.getActivity());
         File dbFile = new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName());
         if (dbFile.exists()) {
             boolean deleted = dbFile.delete();
             assertTrue("Failed to remove test db file", deleted);
         }
-        generalLocalRepository = new GeneralLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
+//        generalLocalRepository = new GeneralLocalRepository<>(localConfiguration);
+        generalLocalRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
     }
 
     @Test

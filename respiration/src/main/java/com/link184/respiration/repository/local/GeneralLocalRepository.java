@@ -1,7 +1,5 @@
 package com.link184.respiration.repository.local;
 
-import android.content.Context;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 
@@ -14,8 +12,8 @@ import io.reactivex.Notification;
 public class GeneralLocalRepository<M> extends LocalRepository<M> {
     private JsonElement localElementRef;
 
-    public GeneralLocalRepository(Context context, LocalConfiguration localConfiguration) {
-        super(context, localConfiguration);
+    public GeneralLocalRepository(LocalConfiguration localConfiguration) {
+        super(localConfiguration);
     }
 
     @Override

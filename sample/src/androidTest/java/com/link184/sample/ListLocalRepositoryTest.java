@@ -8,9 +8,9 @@ import com.link184.respiration.repository.local.ListLocalRepository;
 import com.link184.respiration.repository.local.LocalConfiguration;
 import com.link184.respiration.repository.local.NotListableRepository;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
+import com.link184.sample.local.User;
+import com.link184.sample.local.workout.UserWorkout;
 import com.link184.sample.main.SampleActivity;
-import com.link184.sample.model.local.User;
-import com.link184.sample.model.local.workout.UserWorkout;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,19 +39,21 @@ public class ListLocalRepositoryTest {
         LocalConfiguration localConfiguration = new LocalConfiguration<>(dataSnapShotType);
         localConfiguration.setAssetDbFilePath(TEST_ASSET_USER_DB_NAME);
         localConfiguration.setDatabaseChildren("userData", "user");
-        return new ListLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
+        localConfiguration.setContext(activityTestRule.getActivity());
+        return new ListLocalRepository<>(localConfiguration);
     }
 
     private <T> ListLocalRepository<T> resetRepositoryFormAssets(Class<T> dataSnapShotType, String dbAssetPath) {
         LocalConfiguration localConfiguration = new LocalConfiguration<>(dataSnapShotType);
         localConfiguration.setAssetDbFilePath(dbAssetPath);
         localConfiguration.setDatabaseChildren("userData", "user");
+        localConfiguration.setContext(activityTestRule.getActivity());
         File dbFile = new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName());
         if (dbFile.exists()) {
             boolean deleted = dbFile.delete();
             assertTrue("Failed to remove test db file", deleted);
         }
-        return new ListLocalRepository<>(activityTestRule.getActivity(), localConfiguration);
+        return new ListLocalRepository<>(localConfiguration);
     }
 
     @Test
