@@ -42,29 +42,42 @@ public class RespirationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         roundEnvironment.getElementsAnnotatedWith(FirebaseRepository.class).forEach(element -> {
-            Map<Element, String> repositoriesWithPackages = processAnnotatedElements(element, ElementKind.FIELD);
-            JavaFile javaFiles = new FirebaseRepositoryClassGenerator()
+            Map<Element, String> repositoriesWithPackages =
+                    processAnnotatedElements(element, ElementKind.FIELD);
+            JavaFile javaFile = new FirebaseRepositoryClassGenerator()
                     .generateRepositories(repositoriesWithPackages);
-            writeJavaFile(javaFiles);
+            writeJavaFile(javaFile);
+        });
+
+        roundEnvironment.getElementsAnnotatedWith(LocalRepository.class).forEach(element -> {
+            Map<Element, String> repositoryWithPackages =
+                    processAnnotatedElements(element, ElementKind.FIELD);
+            JavaFile javaFile = new LocalRepositoryClassGenerator()
+                    .generateRepositories(repositoryWithPackages);
+            writeJavaFile(javaFile);
         });
 
         roundEnvironment.getElementsAnnotatedWith(FirebaseRepository.class).forEach(element -> {
-            Map<Element, String> repositoriesWithPackages = processAnnotatedElements(element, ElementKind.CLASS);
+            Map<Element, String> repositoriesWithPackages =
+                    processAnnotatedElements(element, ElementKind.CLASS);
             List<JavaFile> javaFiles = new FirebaseRepositoryBuilderGenerator()
                     .generateRepository(repositoriesWithPackages);
             writeJavaFiles(javaFiles);
         });
 
         roundEnvironment.getElementsAnnotatedWith(LocalRepository.class).forEach(element -> {
-            Map<Element, String> repositoriesWithPackages = processAnnotatedElements(element, ElementKind.CLASS);
+            Map<Element, String> repositoriesWithPackages =
+                    processAnnotatedElements(element, ElementKind.CLASS);
             List<JavaFile> javaFiles = new LocalRepositoryBuilderGenerator()
                     .generateRepository(repositoriesWithPackages);
             writeJavaFiles(javaFiles);
         });
 
         roundEnvironment.getElementsAnnotatedWith(RespirationModule.class).forEach(element -> {
-            Map<Element, String> repositoriesWithPackages = processAnnotatedElements(element, ElementKind.CLASS);
-            List<JavaFile> javaFiles = new RepositoryModuleGenerator().generateModule(repositoriesWithPackages);
+            Map<Element, String> repositoriesWithPackages =
+                    processAnnotatedElements(element, ElementKind.CLASS);
+            List<JavaFile> javaFiles = new RepositoryModuleGenerator()
+                    .generateModule(repositoriesWithPackages);
             writeJavaFiles(javaFiles);
         });
 
