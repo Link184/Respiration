@@ -1,14 +1,12 @@
 package com.link184.respiration;
 
-import com.link184.respiration.repository.local.LocalConfiguration;
+import com.link184.respiration.local.LocalConfiguration;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
-
-import static junit.framework.Assert.assertEquals;
 
 /**
  * Created by eugeniu on 3/6/18.

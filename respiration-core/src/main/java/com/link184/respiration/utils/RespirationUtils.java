@@ -1,7 +1,7 @@
 package com.link184.respiration.utils;
 
 
-import com.link184.respiration.repository.firebase.NullFirebaseDataSnapshot;
+import com.link184.respiration.exceptions.NullDataSnapshot;
 import com.link184.respiration.utils.mapper.Mapper;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class RespirationUtils {
         } else if (sourceMap.isOnError()) {
             return Notification.createOnError(sourceMap.getError());
         }
-        return Notification.createOnError(new NullFirebaseDataSnapshot());
+        return Notification.createOnError(new NullDataSnapshot());
     }
 
     /**
@@ -35,7 +35,7 @@ public class RespirationUtils {
         } else if (sourceList.isOnError()){
             return Notification.createOnError(sourceList.getError());
         }
-        return Notification.createOnError(new NullFirebaseDataSnapshot());
+        return Notification.createOnError(new NullDataSnapshot());
     }
     /**
      * Map from {@link List<S>} to {@link List<R>}

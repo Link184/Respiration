@@ -55,6 +55,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    implementation project(':respiration-core')
+    implementation project(':respiration-local')
     implementation project(':respiration-firebase')
     annotationProcessor project(':respiration-compiler')
 }

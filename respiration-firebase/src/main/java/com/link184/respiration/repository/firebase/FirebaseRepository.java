@@ -5,7 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
 import com.google.firebase.database.ValueEventListener;
-import com.link184.respiration.BuildConfig;
+import com.link184.respiration.firebase.BuildConfig;
 import com.link184.respiration.repository.base.Repository;
 
 abstract class FirebaseRepository<T> extends Repository<T>{
