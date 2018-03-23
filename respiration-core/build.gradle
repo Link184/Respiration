@@ -1,0 +1,45 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+ext {
+    bintrayRepo = 'Respiration'
+    bintrayName = 'Core'
+
+    publishedGroupId = 'com.link184'
+    libraryName = 'RespirationCore'
+    artifact = 'respiration-core'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+publishing {
+    publications {
+        releasePublication(MavenPublication) {
+            groupId publishedGroupId
+            artifactId artifact
+            version libraryVersion
+            artifact file("${rootDir}/respiration-core/build/libs/respiration-core-${libraryVersion}.jar")
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+
+                configurations.compile.allDependencies.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+        }
+    }
+}
+
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

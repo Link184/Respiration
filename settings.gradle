@@ -1,1 +1,1 @@
-include ':respiration', ':sample', ':respiration-annotations', ':respiration-compiler'
+include ':respiration-firebase', ':sample', ':respiration-annotations', ':respiration-compiler', ':respiration-local', ':respiration-core'
