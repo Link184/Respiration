@@ -1,6 +1,6 @@
 package com.link184.sample.main.fragments.registration;
 
-import com.link184.respiration.repository.firebase.GeneralRepository;
+import com.link184.respiration.repository.firebase.FirebaseGeneralRepository;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePublicModel;
 
@@ -10,7 +10,7 @@ public class RegistrationPresenter {
     private RegistrationView view;
 
     @Inject
-    GeneralRepository<SamplePublicModel> publicRepository;
+    FirebaseGeneralRepository<SamplePublicModel> publicRepository;
 
     RegistrationPresenter(RegistrationView registrationView) {
         this.view = registrationView;

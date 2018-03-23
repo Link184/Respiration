@@ -2,7 +2,7 @@ package com.link184.sample.modules;
 
 import com.link184.respiration.FirebaseRepository;
 import com.link184.respiration.RespirationModule;
-import com.link184.respiration.repository.firebase.GeneralRepository;
+import com.link184.respiration.repository.firebase.FirebaseGeneralRepository;
 import com.link184.sample.firebase.SamplePrivateModel;
 
 import java.util.Vector;
@@ -21,11 +21,11 @@ public class CustomModule {
             isAccessPrivate = true,
             children = {SAMPLE_PRIVATE_CHILD, FirebaseRepository.USER_ID},
             persistence = true)
-    public GeneralRepository samplePrivateRepository;
+    public FirebaseGeneralRepository samplePrivateRepository;
 
 
     @FirebaseRepository(dataSnapshotType = Vector.class)
-    public GeneralRepository lalala;
+    public FirebaseGeneralRepository lalala;
 
     public String ignoreeee;
 

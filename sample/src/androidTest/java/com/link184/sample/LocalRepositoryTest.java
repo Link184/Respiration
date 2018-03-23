@@ -4,8 +4,8 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
-import com.link184.respiration.repository.local.GeneralLocalRepository;
 import com.link184.respiration.repository.local.LocalConfiguration;
+import com.link184.respiration.repository.local.LocalGeneralRepository;
 import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.sample.local.User;
 import com.link184.sample.main.SampleActivity;
@@ -37,11 +37,11 @@ public class LocalRepositoryTest {
 
     @Rule
     public ActivityTestRule<SampleActivity> activityTestRule = new ActivityTestRule<>(SampleActivity.class);
-    private GeneralLocalRepository<User> generalLocalRepository;
+    private LocalGeneralRepository<User> localGeneralRepository;
 
     @Before
     public void prepareRepository() {
-        generalLocalRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
+        localGeneralRepository = LocalUserRepositoryBuilder.getInstance(activityTestRule.getActivity());
     }
 
     @After
@@ -54,7 +54,7 @@ public class LocalRepositoryTest {
         localConfiguration.setAssetDbFilePath(TEST_ASSET_DB_NAME);
         localConfiguration.setDatabaseChildren("userData", "user");
         localConfiguration.setContext(activityTestRule.getActivity());
-        generalLocalRepository.resetRepository(localConfiguration, true);
+        localGeneralRepository.resetRepository(localConfiguration, true);
     }
 
     @Test
@@ -75,19 +75,19 @@ public class LocalRepositoryTest {
                 super.onComplete();
             }
         };
-        generalLocalRepository.subscribe(userTestObserver::onNext, userTestObserver::onError, userTestObserver::onComplete);
+        localGeneralRepository.subscribe(userTestObserver::onNext, userTestObserver::onError, userTestObserver::onComplete);
 
-        User value = generalLocalRepository.getValue();
+        User value = localGeneralRepository.getValue();
         assertNotNull(value);
     }
 
     @Test
     public void dbWriteTest() throws InterruptedException {
         float testRandomHeight = new Random(System.nanoTime()).nextFloat();
-        User user = generalLocalRepository.getValue();
+        User user = localGeneralRepository.getValue();
         assertNotNull(user);
         user.setHeight(testRandomHeight);
-        generalLocalRepository.setValue(user);
+        localGeneralRepository.setValue(user);
         Thread.sleep(1_000);
 
         prepareRepository();
@@ -109,12 +109,12 @@ public class LocalRepositoryTest {
                 super.onComplete();
             }
         };
-        generalLocalRepository.subscribe(userTestObserver::onNext, userTestObserver::onError, userTestObserver::onComplete);
+        localGeneralRepository.subscribe(userTestObserver::onNext, userTestObserver::onError, userTestObserver::onComplete);
     }
 
     @Test
     public void dbDeletionTest() throws InterruptedException, IOException {
-        generalLocalRepository.removeValue();
+        localGeneralRepository.removeValue();
         Thread.sleep(2_000);
 
         prepareRepository();
@@ -136,7 +136,7 @@ public class LocalRepositoryTest {
                 super.onComplete();
             }
         };
-        generalLocalRepository.subscribe(new SubscriberRespiration<User>() {
+        localGeneralRepository.subscribe(new SubscriberRespiration<User>() {
             @Override
             public void onSuccess(User dataSnapShot) {
                 userTestObserver.onNext(dataSnapShot);

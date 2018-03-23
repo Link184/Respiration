@@ -22,7 +22,7 @@ public class ProfilePresenter {
     private SubscriberRespiration<SamplePrivateModel> privateRepositorySubscriber;
 
 //    @Inject
-//    GeneralRepository<SamplePrivateModel> privateRepository;
+//    FirebaseGeneralRepository<SamplePrivateModel> privateRepository;
     SamplePrivateRepository privateRepository = RespirationCustomModule.getSamplePrivateRepository();
     @Inject
     FirebaseListRepository<SampleFriendModel> firebaseListRepository;

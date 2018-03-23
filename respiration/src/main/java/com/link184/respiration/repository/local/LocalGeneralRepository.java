@@ -14,10 +14,10 @@ import static junit.framework.Assert.assertTrue;
  * Created by Ryzen on 3/2/2018.
  */
 
-public class GeneralLocalRepository<M> extends LocalRepository<M> {
+public class LocalGeneralRepository<M> extends LocalRepository<M> {
     private JsonElement localElementRef;
 
-    public GeneralLocalRepository(LocalConfiguration localConfiguration) {
+    public LocalGeneralRepository(LocalConfiguration localConfiguration) {
         super(localConfiguration);
     }
 

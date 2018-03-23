@@ -8,8 +8,8 @@ import com.link184.respiration.subscribers.SubscriberRespiration;
 
 import io.reactivex.Notification;
 
-public class GeneralRepository<M> extends FirebaseRepository<M> {
-    protected GeneralRepository(Configuration<M> repositoryConfig) {
+public class FirebaseGeneralRepository<M> extends FirebaseRepository<M> {
+    protected FirebaseGeneralRepository(Configuration<M> repositoryConfig) {
         super(repositoryConfig);
     }
 
@@ -121,8 +121,8 @@ public class GeneralRepository<M> extends FirebaseRepository<M> {
             return this;
         }
 
-        public GeneralRepository<M> build() {
-            return new GeneralRepository<>(configuration);
+        public FirebaseGeneralRepository<M> build() {
+            return new FirebaseGeneralRepository<>(configuration);
         }
     }
 }

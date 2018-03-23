@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.link184.respiration.FirebaseRepository;
 import com.link184.respiration.repository.firebase.Configuration;
-import com.link184.respiration.repository.firebase.GeneralRepository;
+import com.link184.respiration.repository.firebase.FirebaseGeneralRepository;
 import com.link184.sample.firebase.SamplePrivateModel;
 
 /**
@@ -13,8 +13,8 @@ import com.link184.sample.firebase.SamplePrivateModel;
 
 @FirebaseRepository(dataSnapshotType = SamplePrivateModel.class,
         children = {"children1", "child2", FirebaseRepository.USER_ID, "child3"})
-public class CustomRepository extends GeneralRepository<SamplePrivateModel> {
-    public CustomRepository(Configuration<SamplePrivateModel> repositoryConfig) {
+public class CustomRepositoryFirebase extends FirebaseGeneralRepository<SamplePrivateModel> {
+    public CustomRepositoryFirebase(Configuration<SamplePrivateModel> repositoryConfig) {
         super(repositoryConfig);
     }
 

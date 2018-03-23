@@ -1,7 +1,7 @@
 package com.link184.respiration;
 
 import com.link184.respiration.models.TestModel;
-import com.link184.respiration.repository.firebase.GeneralRepository;
+import com.link184.respiration.repository.firebase.FirebaseGeneralRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.mock;
 public class FirebaseRepositoryTest {
     @Test
     public void generalRepositoryTest() throws Exception {
-        GeneralRepository<TestModel> generalRepository = mock(GeneralRepository.class);
-        assertNotNull(generalRepository);
+        FirebaseGeneralRepository<TestModel> firebaseGeneralRepository = mock(FirebaseGeneralRepository.class);
+        assertNotNull(firebaseGeneralRepository);
     }
 }

@@ -2,7 +2,7 @@ package com.link184.sample.modules;
 
 import com.link184.respiration.LocalRepository;
 import com.link184.respiration.RespirationModule;
-import com.link184.respiration.repository.local.GeneralLocalRepository;
+import com.link184.respiration.repository.local.LocalGeneralRepository;
 import com.link184.sample.local.User;
 
 /**
@@ -16,5 +16,5 @@ public class LocalModule {
     @LocalRepository(dataSnapshotType = User.class,
             children = {"userData", "user"},
             dataBaseAssetPath = TEST_ASSET_DB_NAME)
-    private GeneralLocalRepository localUserRepository;
+    private LocalGeneralRepository localUserRepository;
 }

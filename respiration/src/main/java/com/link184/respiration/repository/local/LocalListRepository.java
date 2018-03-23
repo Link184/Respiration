@@ -26,11 +26,11 @@ import static junit.framework.Assert.assertTrue;
  * Created by eugeniu on 3/6/18.
  */
 
-public class ListLocalRepository<M> extends LocalRepository<M>{
+public class LocalListRepository<M> extends LocalRepository<M>{
     protected BehaviorSubject<Notification<Map<String, M>>> behaviorSubject;
     private JsonElement localElementRef;
 
-    public ListLocalRepository(LocalConfiguration localConfiguration) {
+    public LocalListRepository(LocalConfiguration localConfiguration) {
         super(localConfiguration);
     }
 

@@ -1,6 +1,6 @@
 package com.link184.sample;
 
-import com.link184.respiration.repository.local.ListLocalRepository;
+import com.link184.respiration.repository.local.LocalListRepository;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -10,6 +10,6 @@ import org.junit.runners.Suite;
  */
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({IdGeneratorTest.class, LocalRepositoryTest.class, ListLocalRepository.class})
+@Suite.SuiteClasses({IdGeneratorTest.class, LocalRepositoryTest.class, LocalListRepository.class})
 public class GeneralTestSuite {
 }

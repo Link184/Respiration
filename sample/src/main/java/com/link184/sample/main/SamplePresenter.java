@@ -4,7 +4,7 @@ package com.link184.sample.main;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.link184.respiration.repository.firebase.GeneralRepository;
+import com.link184.respiration.repository.firebase.FirebaseGeneralRepository;
 import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.sample.SampleApplication;
 import com.link184.sample.firebase.SamplePrivateModel;
@@ -19,9 +19,9 @@ public class SamplePresenter {
 
     private SampleView view;
     @Inject
-    GeneralRepository<SamplePrivateModel> privateRepository;
+    FirebaseGeneralRepository<SamplePrivateModel> privateRepository;
     @Inject
-    GeneralRepository<SamplePublicModel> publicRepository;
+    FirebaseGeneralRepository<SamplePublicModel> publicRepository;
     private SubscriberRespiration<SamplePublicModel> publicRepositorySubscriber;
     private FirebaseAuth.AuthStateListener authStateListener;
 
