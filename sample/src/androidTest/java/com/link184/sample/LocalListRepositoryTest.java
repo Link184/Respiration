@@ -11,12 +11,14 @@ import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.sample.local.User;
 import com.link184.sample.local.workout.UserWorkout;
 import com.link184.sample.main.SampleActivity;
+import com.link184.sample.modules.LocalUserListRepositoryBuilder;
+import com.link184.sample.modules.LocalWorkoutListRepositoryBuilder;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.File;
 
 import io.reactivex.observers.TestObserver;
 
@@ -34,6 +36,19 @@ public class LocalListRepositoryTest {
     private final String TEST_ASSET_WORKOUT_DB_NAME = "workout_db.json";
     @Rule
     public ActivityTestRule<SampleActivity> activityTestRule = new ActivityTestRule<>(SampleActivity.class);
+    private LocalListRepository<User> localUserListRepository;
+    private LocalListRepository<UserWorkout> localWorkoutListRepository;
+
+    @Before
+    public void prepareRepository() {
+        localUserListRepository = LocalUserListRepositoryBuilder.getInstance(activityTestRule.getActivity());
+        localWorkoutListRepository = LocalWorkoutListRepositoryBuilder.getInstance(activityTestRule.getActivity());
+    }
+
+    @After
+    public void resetDb() {
+        resetRepositoriesFormAssets();
+    }
 
     public <T> LocalListRepository<T> prepareRepository(Class<T> dataSnapShotType) {
         LocalConfiguration localConfiguration = new LocalConfiguration<>(dataSnapShotType);
@@ -43,22 +58,21 @@ public class LocalListRepositoryTest {
         return new LocalListRepository<>(localConfiguration);
     }
 
-    private <T> LocalListRepository<T> resetRepositoryFormAssets(Class<T> dataSnapShotType, String dbAssetPath) {
-        LocalConfiguration localConfiguration = new LocalConfiguration<>(dataSnapShotType);
-        localConfiguration.setAssetDbFilePath(dbAssetPath);
-        localConfiguration.setDatabaseChildren("userData", "user");
-        localConfiguration.setContext(activityTestRule.getActivity());
-        File dbFile = new File(activityTestRule.getActivity().getFilesDir(), localConfiguration.getDbName());
-        if (dbFile.exists()) {
-            boolean deleted = dbFile.delete();
-            assertTrue("Failed to remove test db file", deleted);
-        }
-        return new LocalListRepository<>(localConfiguration);
+    private void resetRepositoriesFormAssets() {
+        LocalConfiguration<User> localUserConfiguration = new LocalConfiguration<>(User.class);
+        localUserConfiguration.setAssetDbFilePath(TEST_ASSET_USER_DB_NAME);
+        localUserConfiguration.setDatabaseChildren("userData", "user");
+        localUserConfiguration.setContext(activityTestRule.getActivity());
+        localUserListRepository.resetRepository(localUserConfiguration, true);
+        LocalConfiguration<UserWorkout> localWorkoutConfiguration = new LocalConfiguration<>(UserWorkout.class);
+        localWorkoutConfiguration.setAssetDbFilePath(TEST_ASSET_WORKOUT_DB_NAME);
+        localWorkoutConfiguration.setDatabaseChildren("userData", "user");
+        localWorkoutConfiguration.setContext(activityTestRule.getActivity());
+        localWorkoutListRepository.resetRepository(localWorkoutConfiguration, true);
     }
 
     @Test
     public void testLocalListRepositoryWithWrongNonListableModel() throws Exception {
-        LocalListRepository<User> localListRepository = resetRepositoryFormAssets(User.class, TEST_ASSET_USER_DB_NAME);
         TestObserver<User> testObserver = new TestObserver<User>() {
             @Override
             public void onNext(User user) {
@@ -70,7 +84,7 @@ public class LocalListRepositoryTest {
                 assertTrue("There are another error instead of the expected one", t instanceof NotListableRepository);
             }
         };
-        localListRepository.subscribe(new ListSubscriberRespiration<User>() {
+        localUserListRepository.subscribe(new ListSubscriberRespiration<User>() {
             @Override
             public void onReceive(String key, User value) {
                 testObserver.onNext(value);
@@ -85,7 +99,6 @@ public class LocalListRepositoryTest {
 
     @Test
     public void testLocalListRepositoryWithRightModel() throws Exception {
-        LocalListRepository<UserWorkout> localListRepository = resetRepositoryFormAssets(UserWorkout.class, TEST_ASSET_WORKOUT_DB_NAME);
         TestObserver<UserWorkout> testObserver = new TestObserver<UserWorkout>() {
             @Override
             public void onNext(UserWorkout user) {
@@ -98,7 +111,7 @@ public class LocalListRepositoryTest {
                 Log.e(TAG, "onError: ", t);
             }
         };
-        localListRepository.subscribe(new ListSubscriberRespiration<UserWorkout>() {
+        localWorkoutListRepository.subscribe(new ListSubscriberRespiration<UserWorkout>() {
             @Override
             public void onReceive(String key, UserWorkout value) {
                 testObserver.onNext(value);
