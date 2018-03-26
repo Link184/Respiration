@@ -38,6 +38,10 @@ dependencies {
     api project(':respiration-core')
     debugApi project(':respiration-annotations')
 
+    // Rx
+    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    api 'io.reactivex.rxjava2:rxjava:2.1.10'
+
     // GSON
     api group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
 }
@@ -57,7 +61,7 @@ publishing {
             groupId publishedGroupId
             artifactId artifact
             version libraryVersion
-            artifact file("${rootDir}/respiration/build/outputs/aar/respiration-local-release.aar")
+            artifact file("${rootDir}/respiration-local/build/outputs/aar/respiration-local-release.aar")
             artifact sourcesJar
             artifact javadocJar
 

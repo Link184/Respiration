@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.stream.JsonReader;
 import com.link184.respiration.repository.base.Repository;
@@ -37,7 +38,9 @@ abstract class LocalRepository<T> extends Repository<T> {
 
     LocalRepository(LocalConfiguration localConfiguration) {
         this.dbAndroidLocation = new File(localConfiguration.getContext().getFilesDir(), localConfiguration.getDbName());
-        this.gson = new Gson();
+        this.gson = new GsonBuilder()
+                .setExclusionStrategies(new LocalFirebaseExclusionStrategy())
+                .create();
         this.writeLock = new ReentrantReadWriteLock().writeLock();
         this.writeHandler = new WriteHandler("RESPIRATION_IO_HANDLER");
 
