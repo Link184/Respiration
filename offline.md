@@ -16,6 +16,24 @@ some firebase data in local data base. But how to do that without major code cha
  
 How to use offline firebase
 ---
+
+Gradle:
+
+```gradle
+repositories {
+    jcenter()
+}
+ 
+dependencies {
+    implementation 'com.link184:respiration-core:0.6.2'
+    implementation 'com.link184:respiration-local:0.6.2'
+    annotationProcessor 'com.link184:respiration:0.6.0'
+    
+    //firebase and rxJava dependecies
+    ...
+}
+```
+
 Is the same api like in respiration firebase repositories bot is different initialization.
 
 Module initialization
