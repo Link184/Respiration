@@ -9,6 +9,7 @@ import com.link184.respiration.repository.local.LocalListRepository;
 import com.link184.respiration.repository.local.NotListableRepository;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.sample.local.User;
+import com.link184.sample.local.workout.Difficulty;
 import com.link184.sample.local.workout.UserWorkout;
 import com.link184.sample.main.SampleActivity;
 import com.link184.sample.modules.LocalUserListRepositoryBuilder;
@@ -20,9 +21,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.reactivex.observers.TestObserver;
 
-import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 /**
@@ -66,7 +71,7 @@ public class LocalListRepositoryTest {
         localUserListRepository.resetRepository(localUserConfiguration, true);
         LocalConfiguration<UserWorkout> localWorkoutConfiguration = new LocalConfiguration<>(UserWorkout.class);
         localWorkoutConfiguration.setAssetDbFilePath(TEST_ASSET_WORKOUT_DB_NAME);
-        localWorkoutConfiguration.setDatabaseChildren("userData", "user");
+        localWorkoutConfiguration.setDatabaseChildren("user_workouts", "1");
         localWorkoutConfiguration.setContext(activityTestRule.getActivity());
         localWorkoutListRepository.resetRepository(localWorkoutConfiguration, true);
     }
@@ -102,8 +107,7 @@ public class LocalListRepositoryTest {
         TestObserver<UserWorkout> testObserver = new TestObserver<UserWorkout>() {
             @Override
             public void onNext(UserWorkout user) {
-                Log.e(TAG, "onNext: " + user.toString());
-                assertNull(user);
+                assertNotNull(user);
             }
 
             @Override
@@ -112,6 +116,51 @@ public class LocalListRepositoryTest {
             }
         };
         localWorkoutListRepository.subscribe(new ListSubscriberRespiration<UserWorkout>() {
+            @Override
+            public void onReceive(String key, UserWorkout value) {
+                testObserver.onNext(value);
+            }
+
+            @Override
+            public void onFailure(Throwable error) {
+                testObserver.onError(error);
+            }
+        });
+    }
+
+
+    @Test
+    public void replaceListTest() throws Exception {
+        int workoutId = 1;
+        String workoutDescription = "testDescription";
+        Difficulty workoutDifficulty = Difficulty.BEGINNER;
+        String workoutStructure = "a structure";
+        String workoutTitle = "test title";
+        UserWorkout userWorkout = new UserWorkout(-workoutId, workoutDescription, workoutDifficulty, workoutStructure, workoutTitle);
+        Map<String, UserWorkout> testMapToReplace = new HashMap<>();
+
+        String testKey = "testKey";
+        testMapToReplace.put(testKey, userWorkout);
+
+        localWorkoutListRepository.setValue(testMapToReplace);
+        TestObserver<UserWorkout> testObserver = new TestObserver<UserWorkout>() {
+            @Override
+            public void onNext(UserWorkout user) {
+                Log.e(TAG, "onNext: " + user.toString());
+                assertEquals(user, userWorkout);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG, "onError: ", t);
+            }
+        };
+
+        localWorkoutListRepository.subscribe(new ListSubscriberRespiration<UserWorkout>() {
+            @Override
+            public void onSuccess(Map<String, UserWorkout> dataSnapShot) {
+            }
+
             @Override
             public void onReceive(String key, UserWorkout value) {
                 testObserver.onNext(value);

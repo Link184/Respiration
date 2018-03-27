@@ -29,7 +29,7 @@ import io.reactivex.Notification;
 
 abstract class LocalRepository<T> extends Repository<T> {
     protected final Gson gson;
-    protected static JsonElement rawJsonElement;
+    protected JsonElement rawJsonElement;
     protected String[] databaseChildren;
 
     private final File dbAndroidLocation;
@@ -49,13 +49,11 @@ abstract class LocalRepository<T> extends Repository<T> {
     }
 
     void initDBFile(LocalConfiguration localConfiguration) {
-        if (rawJsonElement == null) {
-            if (dbAndroidLocation.exists()) {
-                rawJsonElement = loadJsonFile();
-            } else {
-                loadFromAssets(localConfiguration.getContext(), localConfiguration.getAssetDbFilePath());
-                rawJsonElement = loadJsonFile();
-            }
+        if (dbAndroidLocation.exists()) {
+            rawJsonElement = loadJsonFile();
+        } else {
+            loadFromAssets(localConfiguration.getContext(), localConfiguration.getAssetDbFilePath());
+            rawJsonElement = loadJsonFile();
         }
         this.databaseChildren = Preconditions.checkNotNull(localConfiguration.getDatabaseChildren());
         this.dataSnapshotClass = localConfiguration.getDataSnapshotType();
@@ -104,6 +102,7 @@ abstract class LocalRepository<T> extends Repository<T> {
 
     /**
      * Write db changes to android files dir.
+     *
      * @param newContent new content which should be stored into db file.
      */
     protected void writeToFile(@NonNull JsonElement newContent) {

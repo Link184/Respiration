@@ -90,8 +90,6 @@ public class LocalRepositoryTest {
         localGeneralRepository.setValue(user);
         Thread.sleep(1_000);
 
-        prepareRepository();
-
         TestObserver<User> userTestObserver = new TestObserver<User>() {
             @Override
             public void onNext(User user) {
@@ -116,8 +114,6 @@ public class LocalRepositoryTest {
     public void dbDeletionTest() throws InterruptedException, IOException {
         localGeneralRepository.removeValue();
         Thread.sleep(2_000);
-
-        prepareRepository();
 
         TestObserver<User> userTestObserver = new TestObserver<User>() {
             @Override

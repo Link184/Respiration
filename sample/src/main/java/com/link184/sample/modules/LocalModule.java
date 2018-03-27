@@ -27,7 +27,7 @@ public class LocalModule {
     private LocalListRepository localUserListRepository;
 
     @LocalRepository(dataSnapshotType = UserWorkout.class,
-            children = {"userData", "user"},
+            children = {"user_workouts", "1"},
             dataBaseAssetPath = TEST_ASSET_WORKOUT_DB_NAME)
     private LocalListRepository localWorkoutListRepository;
 }

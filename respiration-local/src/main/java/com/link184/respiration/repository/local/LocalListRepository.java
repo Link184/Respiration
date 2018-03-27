@@ -107,6 +107,14 @@ public class LocalListRepository<M> extends LocalRepository<M>{
     }
 
     /**
+     * Replace the whole list in json node.
+     */
+    public void setValue(Map<String, M> newValue) {
+        localElementRef = gson.toJsonTree(newValue, newValue.getClass());
+        writeToFile(localElementRef);
+    }
+
+    /**
      * Get items directly form cache without subscription. Use carefully, response may be empty.
      */
     public List<M> getItems() {
