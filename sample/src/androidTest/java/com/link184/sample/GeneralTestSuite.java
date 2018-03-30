@@ -12,4 +12,5 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({IdGeneratorTest.class, LocalRepositoryTest.class, LocalListRepository.class})
 public class GeneralTestSuite {
+    public GeneralTestSuite() {}
 }

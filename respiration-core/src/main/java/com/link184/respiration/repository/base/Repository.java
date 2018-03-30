@@ -16,7 +16,7 @@ import io.reactivex.subjects.BehaviorSubject;
  */
 
 public abstract class Repository<T> {
-    protected BehaviorSubject<Notification<T>> behaviorSubject = BehaviorSubject.create();
+    private BehaviorSubject<Notification<T>> behaviorSubject = BehaviorSubject.create();
     protected Class<T> dataSnapshotClass;
 
     protected abstract void initRepository();
@@ -54,7 +54,7 @@ public abstract class Repository<T> {
      * @param value new fresh data.
      */
     protected void onNewDataReceived(T value) {
-
+        behaviorSubject.onNext(Notification.createOnNext(value));
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class Repository<T> {
      * access private is set as true or when internet connection is missing.
      */
     protected void onErrorReceived(Throwable error) {
-
+        behaviorSubject.onNext(Notification.createOnError(error));
     }
 
     protected abstract void setValue(T newValue);

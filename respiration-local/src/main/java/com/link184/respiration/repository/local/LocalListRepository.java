@@ -2,6 +2,7 @@ package com.link184.respiration.repository.local;
 
 import android.support.annotation.Nullable;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -26,7 +27,7 @@ import static junit.framework.Assert.assertTrue;
  * Created by eugeniu on 3/6/18.
  */
 
-public class LocalListRepository<M> extends LocalRepository<M>{
+public class LocalListRepository<M> extends LocalRepository<M> {
     protected BehaviorSubject<Notification<Map<String, M>>> behaviorSubject;
     private JsonElement localElementRef;
 
@@ -38,24 +39,45 @@ public class LocalListRepository<M> extends LocalRepository<M>{
     protected void initRepository() {
         behaviorSubject = BehaviorSubject.create();
         localElementRef = rawJsonElement;
-        for (String children: databaseChildren) {
+        for (String children : databaseChildren) {
             localElementRef = localElementRef.getAsJsonObject().get(children);
         }
         if (localElementRef != null && !localElementRef.isJsonNull()) {
             JsonObject asJsonObject = localElementRef.getAsJsonObject();
             Map<String, M> resultMap = new ConcurrentHashMap<>();
-            for (Map.Entry<String, JsonElement> entry: asJsonObject.entrySet()) {
+            for (Map.Entry<String, JsonElement> entry : asJsonObject.entrySet()) {
                 if (entry.getValue().isJsonObject()) {
                     resultMap.put(entry.getKey(), gson.fromJson(entry.getValue(), dataSnapshotClass));
                 } else {
-                    behaviorSubject.onNext(Notification.createOnError(new NotListableRepository()));
+                    onErrorReceived(new NotListableRepository());
                     return;
                 }
             }
-            behaviorSubject.onNext(Notification.createOnNext(resultMap));
+            onNewDataReceived(resultMap);
         } else {
-            behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
+            onErrorReceived(new NullLocalDataSnapshot());
         }
+    }
+
+    /**
+     * Method is called when new data is received form firebase.
+     *
+     * @param value new fresh data.
+     */
+    protected void onNewDataReceived(Map<String, M> value) {
+        behaviorSubject.onNext(Notification.createOnNext(value));
+    }
+
+    /**
+     * Method is called when something went wrong. For example user is not authenticated and
+     * access private is set as true or when internet connection is missing.
+     */
+    protected void onErrorReceived(Throwable error) {
+        behaviorSubject.onNext(Notification.createOnError(error));
+    }
+
+    @Override
+    protected final void onNewDataReceived(M value) {
     }
 
     public void subscribe(ListSubscriberRespiration<M> subscriber) {
@@ -69,7 +91,7 @@ public class LocalListRepository<M> extends LocalRepository<M>{
 
     @Override
     protected void removeValue() {
-        writeToFile(JsonNull.INSTANCE);
+        writeToFile(JsonNull.INSTANCE, Map.class, null);
     }
 
     /**
@@ -100,18 +122,29 @@ public class LocalListRepository<M> extends LocalRepository<M>{
         return new TreeMap<>(lastItem).lastEntry().getKey();
     }
 
-    public void setValue(String itemId, M newValue) {
+    public void setValue(String itemId, M newValue, DatabaseReference.CompletionListener completionListener) {
         JsonElement newJsonElement = gson.toJsonTree(newValue);
         localElementRef.getAsJsonObject().add(itemId, newJsonElement);
-        writeToFile(newJsonElement);
+        writeToFile(newJsonElement, Map.class, completionListener);
+    }
+
+    public void setValue(String itemId, M newValue) {
+        setValue(itemId, newValue, null);
+    }
+
+    /**
+     * Replace the whole list in json node.
+     */
+    public void setValue(Map<String, M> newValue, DatabaseReference.CompletionListener completionListener) {
+        localElementRef = gson.toJsonTree(newValue, newValue.getClass());
+        writeToFile(localElementRef, Map.class, completionListener);
     }
 
     /**
      * Replace the whole list in json node.
      */
     public void setValue(Map<String, M> newValue) {
-        localElementRef = gson.toJsonTree(newValue, newValue.getClass());
-        writeToFile(localElementRef);
+        setValue(newValue, null);
     }
 
     /**
@@ -134,8 +167,12 @@ public class LocalListRepository<M> extends LocalRepository<M>{
     }
 
     public void removeValue(String itemId) {
+        removeValue(itemId, null);
+    }
+
+    public void removeValue(String itemId, DatabaseReference.CompletionListener completionListener) {
         localElementRef.getAsJsonObject().remove(itemId);
-        writeToFile(localElementRef);
+        writeToFile(localElementRef, Map.class, completionListener);
     }
 
     /**
@@ -147,6 +184,7 @@ public class LocalListRepository<M> extends LocalRepository<M>{
 
     /**
      * Reset local repository by a new configuration object.
+     *
      * @param localConfiguration new configuration
      */
     public void resetRepository(LocalConfiguration<M> localConfiguration) {
@@ -155,7 +193,8 @@ public class LocalListRepository<M> extends LocalRepository<M>{
 
     /**
      * Reset local repository by a new configuration object.
-     * @param localConfiguration new configuration
+     *
+     * @param localConfiguration  new configuration
      * @param removeCurrentDbFile pass true to remove current db file form android files dir.
      */
     public void resetRepository(LocalConfiguration<M> localConfiguration, boolean removeCurrentDbFile) {

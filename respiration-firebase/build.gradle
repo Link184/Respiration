@@ -37,7 +37,7 @@ dependencies {
 //    compile "com.link184:respiration-core:$rootProject.libraryVersion"
 //    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
     api project(':respiration-core')
-    debugApi project(':respiration-annotations')
+    api project(':respiration-annotations')
 
     // Rx
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -46,7 +46,6 @@ dependencies {
     // "Firebase"
     api 'com.google.firebase:firebase-core:12.0.0'
     api 'com.google.firebase:firebase-auth:12.0.0'
-    api 'com.google.firebase:firebase-storage:12.0.0'
     api 'com.google.firebase:firebase-database:12.0.0'
     api 'com.google.android.gms:play-services-auth:12.0.0'
 }

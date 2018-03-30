@@ -8,12 +8,13 @@ This is a module which will simulate firebase on your device but will work total
  
 Main reason why I decided to write offline firebase module
 ---
-In a big production app I recevied a task to port the app for China market. The problem is that in
-China google services are forbidden(including firebase). And in my opinion best solutuion is to port
-some firebase data in local data base. But how to do that without major code changes? Of course best
- solution is to keep the existing firebase api but to force them to work with offline db instead of 
- remote. So with a little bit of gradle flavor and dimensions magic we can achive it :)
- 
+It works in China. If you have a big app which you want to launch in china markets
+you must remove all your firebase logic because almost all google services are forbidden out there.
+This module is a solution to keep your firebase code work without firebase services. So you will
+keep the same respiration api with the same functionality as with firebase but without it. The only thing
+you must to do is to declare differently respiration initializations(FirebaseRepository or LocalRepository) 
+
+
 How to use offline firebase
 ---
 
@@ -25,13 +26,21 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration-core:0.6.2'
-    implementation 'com.link184:respiration-local:0.6.2'
-    annotationProcessor 'com.link184:respiration:0.6.0'
-    
-    //firebase and rxJava dependecies
+    implementation 'com.link184:respiration-core:0.6.4'
+    implementation 'com.link184:respiration-local:0.6.4'
+    annotationProcessor 'com.link184:respiration-compier:0.6.4'
+
+    //gson and rxJava dependecies
     ...
 }
+```
+
+if you want to use respiration local and firebase modules together you must exclude some junk modules
+
+```gradle
+    implementation (com.link184:respiration-local:0.6.4) {
+        exclude module: 'respiration-firebase-junk'
+    })
 ```
 
 Is the same api like in respiration firebase repositories bot is different initialization.

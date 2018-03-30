@@ -28,9 +28,9 @@ public class LocalGeneralRepository<M> extends LocalRepository<M> {
             localElementRef = localElementRef.getAsJsonObject().get(children);
         }
         if (localElementRef != null && !localElementRef.isJsonNull()) {
-            behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(localElementRef, dataSnapshotClass)));
+            onNewDataReceived(gson.fromJson(localElementRef, dataSnapshotClass));
         } else {
-            behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
+            onErrorReceived(new NullLocalDataSnapshot());
         }
     }
 

@@ -32,11 +32,14 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support:support-annotations:27.1.0'
 
 //    compile "com.link184:respiration-core:$rootProject.libraryVersion"
 //    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
-    api project(':respiration-core')
-    debugApi project(':respiration-annotations')
+//    compile "com.link184:respiration-firebase-junk:0.6.3"
+    implementation project(':respiration-firebase-junk')
+    implementation project(':respiration-core')
+    implementation project(':respiration-annotations')
 
     // Rx
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'

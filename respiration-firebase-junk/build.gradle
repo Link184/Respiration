@@ -1,0 +1,22 @@
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+ext {
+    bintrayRepo = 'Respiration'
+    bintrayName = 'Firebase-Junk'
+
+    libraryVersion = '1.0.0'
+    publishedGroupId = 'com.link184'
+    libraryName = 'RespirationFirebaseJunk'
+    artifact = 'respiration-firebase-junk'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'

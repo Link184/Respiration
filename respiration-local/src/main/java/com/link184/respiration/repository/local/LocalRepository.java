@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -18,10 +19,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import io.reactivex.Notification;
+import io.reactivex.subjects.BehaviorSubject;
 
 /**
  * Created by eugeniu on 3/2/18.
@@ -95,7 +98,7 @@ abstract class LocalRepository<T> extends Repository<T> {
         } catch (IOException e) {
             e.printStackTrace();
             writeLock.unlock();
-            behaviorSubject.onNext(Notification.createOnError(e));
+            onErrorReceived(e);
         }
         return null;
     }
@@ -131,12 +134,60 @@ abstract class LocalRepository<T> extends Repository<T> {
                 inputStream.close();
                 outputStream.close();
                 if (!newContent.isJsonNull()) {
-                    behaviorSubject.onNext(Notification.createOnNext(gson.fromJson(newContent, dataSnapshotClass)));
+                    onNewDataReceived(gson.fromJson(newContent, dataSnapshotClass));
                 } else {
-                    behaviorSubject.onNext(Notification.createOnError(new NullLocalDataSnapshot()));
+                    onErrorReceived(new NullLocalDataSnapshot());
                 }
             } catch (IOException e) {
-                behaviorSubject.onNext(Notification.createOnError(e));
+                onErrorReceived(e);
+            }
+            writeLock.unlock();
+        });
+    }
+
+    /**
+     * Write db changes to android files dir. Designed for list repositories.
+     *
+     * @param newContent new content which should be stored into db file.
+     */
+    protected <M> void writeToFile(@NonNull JsonElement newContent,
+                                              @NonNull Class<M> dataSnapshotClass,
+                                              @Nullable DatabaseReference.CompletionListener completionListener) {
+        writeHandler.post(() -> {
+            writeLock.lock();
+            JsonElement[] elementsToUpdate = new JsonElement[databaseChildren.length - 1];
+            for (int i = 0; i < databaseChildren.length - 1; i++) {
+                elementsToUpdate[i] = rawJsonElement.getAsJsonObject().get(databaseChildren[i]);
+            }
+            elementsToUpdate[elementsToUpdate.length - 1].getAsJsonObject()
+                    .add(databaseChildren[databaseChildren.length - 1], newContent);
+            for (int i = elementsToUpdate.length - 2; i >= 0; i--) {
+                elementsToUpdate[i].getAsJsonObject().add(databaseChildren[i], elementsToUpdate[i]);
+            }
+            rawJsonElement.getAsJsonObject().add(databaseChildren[0], elementsToUpdate[0]);
+
+            try {
+                InputStream inputStream = new ByteArrayInputStream(new Gson().toJson(rawJsonElement)
+                        .getBytes("UTF-8"));
+                FileOutputStream outputStream = new FileOutputStream(dbAndroidLocation);
+                byte[] buf = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buf)) > 0) {
+                    outputStream.write(buf, 0, bytesRead);
+                }
+                inputStream.close();
+                outputStream.close();
+                if (completionListener != null) {
+                    if (!newContent.isJsonNull()) {
+                        completionListener.onComplete(null, gson.fromJson(newContent, dataSnapshotClass));
+                    } else {
+                        completionListener.onComplete(new NullLocalDataSnapshot(), null);
+                    }
+                }
+            } catch (IOException e) {
+                if (completionListener != null) {
+                    completionListener.onComplete(e, null);
+                }
             }
             writeLock.unlock();
         });

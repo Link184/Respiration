@@ -38,25 +38,10 @@ public class FirebaseGeneralRepository<M> extends FirebaseRepository<M> {
         }
     }
 
-    @Override
-    protected void onNewDataReceived(M value) {
-        behaviorSubject.onNext(Notification.createOnNext(value));
-    }
-
-    @Override
-    protected void onErrorReceived(Throwable error) {
-        behaviorSubject.onNext(Notification.createOnError(error));
-    }
-
     private void removeListener() {
         if (databaseReference != null && valueListener != null) {
             databaseReference.removeEventListener(valueListener);
         }
-    }
-
-    @Override
-    public void subscribe(SubscriberRespiration<M> subscriber) {
-        behaviorSubject.subscribe(subscriber);
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.link184.respiration.repository.local.LocalConfiguration;
 import com.link184.respiration.repository.local.LocalGeneralRepository;
-import com.link184.respiration.subscribers.SubscriberRespiration;
+import com.link184.respiration.subscribers.SingleSubscriberRespiration;
 import com.link184.sample.local.User;
 import com.link184.sample.main.SampleActivity;
 import com.link184.sample.modules.LocalUserRepositoryBuilder;
@@ -118,7 +118,7 @@ public class LocalRepositoryTest {
         TestObserver<User> userTestObserver = new TestObserver<User>() {
             @Override
             public void onNext(User user) {
-                assertNull("Repository emmit a null object", user);
+                assertNull("Repository emmit a not null object", user);
             }
 
             @Override
@@ -132,7 +132,7 @@ public class LocalRepositoryTest {
                 super.onComplete();
             }
         };
-        localGeneralRepository.subscribe(new SubscriberRespiration<User>() {
+        localGeneralRepository.subscribe(new SingleSubscriberRespiration<User>() {
             @Override
             public void onSuccess(User dataSnapShot) {
                 userTestObserver.onNext(dataSnapShot);

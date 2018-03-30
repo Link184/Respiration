@@ -27,9 +27,9 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration-core:0.6.2'
-    implementation 'com.link184:respiration-firebase:0.6.2'
-    annotationProcessor 'com.link184:respiration:0.6.0'
+    implementation 'com.link184:respiration-core:0.6.4'
+    implementation 'com.link184:respiration-firebase:0.6.4'
+    annotationProcessor 'com.link184:respiration-compiler:0.6.4'
     
     //firebase and rxJava dependecies
     ...

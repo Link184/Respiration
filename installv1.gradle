@@ -36,6 +36,13 @@ install {
                     url rootProject.ext.siteUrl
                 }
             }
+
+            whenConfigured {
+                p ->
+                    p.dependencies = p.dependencies.findAll {
+                        dep -> dep.scope != "test"
+                    }
+            }
         }
     }
 }
