@@ -3,6 +3,8 @@ package com.link184.respiration;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.TypeName;
 
+import java.lang.annotation.Annotation;
+
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
@@ -41,22 +43,18 @@ public class GenerationUtils {
         return builder.build();
     }
 
-    public static TypeName extractTypeName(FirebaseRepository annotation) {
+    public static TypeName extractTypeName(Annotation annotation) {
         TypeMirror classModel = null;
         try {
-            annotation.dataSnapshotType();
+            ((FirebaseRepository) annotation).dataSnapshotType();
         } catch (MirroredTypeException mte) {
             classModel = mte.getTypeMirror();
-        }
-        return TypeName.get(classModel);
-    }
-
-    public static TypeName extractTypeName(LocalRepository annotation) {
-        TypeMirror classModel = null;
-        try {
-            annotation.dataSnapshotType();
-        } catch (MirroredTypeException mte) {
-            classModel = mte.getTypeMirror();
+        } catch (ClassCastException ce) {
+            try {
+                ((LocalRepository) annotation).dataSnapshotType();
+            } catch (MirroredTypeException mte) {
+                classModel = mte.getTypeMirror();
+            }
         }
         return TypeName.get(classModel);
     }
