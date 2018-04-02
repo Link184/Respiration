@@ -26,9 +26,9 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration-core:0.6.4'
-    implementation 'com.link184:respiration-local:0.6.4'
-    annotationProcessor 'com.link184:respiration-compier:0.6.4'
+    implementation 'com.link184:respiration-core:0.6.7'
+    implementation 'com.link184:respiration-local:0.6.7'
+    annotationProcessor 'com.link184:respiration-compier:0.6.7'
 
     //gson and rxJava dependecies
     ...
@@ -38,7 +38,7 @@ dependencies {
 if you want to use respiration local and firebase modules together you must exclude some junk modules
 
 ```gradle
-    implementation (com.link184:respiration-local:0.6.4) {
+    implementation (com.link184:respiration-local:0.6.7) {
         exclude module: 'respiration-firebase-junk'
     })
 ```

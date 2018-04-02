@@ -24,10 +24,8 @@ import org.junit.runner.RunWith;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.reactivex.Notification;
 import io.reactivex.observers.TestObserver;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
@@ -143,7 +141,7 @@ public class LocalListRepositoryTest {
         String testKey = "testKey";
         testMapToReplace.put(testKey, userWorkout);
 
-        localWorkoutListRepository.setValue(testMapToReplace);
+        localWorkoutListRepository.replaceValue(testMapToReplace);
         TestObserver<Map<String, UserWorkout>> testObserver = new TestObserver<Map<String, UserWorkout>>() {
             @Override
             public void onNext(Map<String, UserWorkout> dataSnapShot) {

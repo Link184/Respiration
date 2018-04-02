@@ -2,11 +2,11 @@ package com.link184.respiration.repository.firebase;
 
 import android.support.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.link184.respiration.repository.base.ListRepository;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.respiration.subscribers.SubscriberRespiration;
 import com.link184.respiration.utils.RespirationUtils;
@@ -31,7 +31,7 @@ import io.reactivex.subjects.BehaviorSubject;
  * Created by erza on 9/23/17.
  */
 
-public class FirebaseListRepository<T> extends FirebaseRepository<T> {
+public class FirebaseListRepository<T> extends FirebaseRepository<T> implements ListRepository<T>{
     protected BehaviorSubject<Notification<Map<String, T>>> behaviorSubject;
 
     protected FirebaseListRepository(Configuration<T> configuration) {
@@ -68,12 +68,12 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
         }
     }
 
-    protected void onNewDataReceived(Map<String, T> value) {
+    public void onNewDataReceived(Map<String, T> value) {
         behaviorSubject.onNext(Notification.createOnNext(value));
     }
 
     @Override
-    protected void onErrorReceived(Throwable error) {
+    public void onErrorReceived(Throwable error) {
         behaviorSubject.onNext(Notification.createOnError(error));
     }
 
@@ -83,6 +83,7 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
         }
     }
 
+    @Override
     public void subscribe(ListSubscriberRespiration<T> subscriber) {
         behaviorSubject.subscribe(subscriber);
     }
@@ -92,37 +93,43 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
      *
      * @param itemId firebase object key to subscribe on.
      */
+    @Override
     public void subscribeToItem(String itemId, SubscriberRespiration<T> subscriber) {
         behaviorSubject
                 .flatMap(new Function<Notification<Map<String, T>>, ObservableSource<Notification<T>>>() {
                     @Override
-                    public ObservableSource<Notification<T>> apply(@NonNull Notification<Map<String, T>> mapNotification) throws Exception {
+                    public ObservableSource<Notification<T>> apply(@NonNull Notification<Map<String, T>> mapNotification) {
                         return Observable.create(e -> e.onNext(Notification.createOnNext(mapNotification.getValue().get(itemId))));
                     }
                 })
                 .subscribe(subscriber);
     }
 
+    @Override
     public void subscribeToList(SubscriberRespiration<List<T>> subscriber) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(subscriber);
     }
 
+    @Override
     public void subscribeToList(Consumer<? super List<T>> onNext) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(tNotification -> onNext.accept(tNotification.getValue()));
     }
 
+    @Override
     public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError);
     }
 
+    @Override
     public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError, Action onComplete) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete);
     }
 
+    @Override
     public void subscribeToList(Consumer<? super List<T>> onNext, Consumer<? super Throwable> onError, Action onComplete, Consumer<? super Disposable> onSubscribe) {
         behaviorSubject.map(RespirationUtils::mapToList)
                 .subscribe(tNotification -> onNext.accept(tNotification.getValue()), onError, onComplete, onSubscribe);
@@ -131,16 +138,18 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
     /**
      * Add new value to the list with firebase auto id.
      */
+    @Override
     public void addValue(T newValue) {
-        databaseReference.push().setValue(newValue);
+        addValue(newValue, null);
     }
 
+    @Override
     public final void addValue(T newValue, com.google.firebase.database.DatabaseReference.CompletionListener onCompleteListener) {
         databaseReference.push().setValue(newValue, onCompleteListener);
     }
 
     @Override
-    protected final void setValue(T newValue) {
+    public final void setValue(T newValue) {
 
     }
 
@@ -157,6 +166,7 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
      *
      * @param itemId firebase object key.
      */
+    @Override
     @Nullable
     public T getValue(String itemId) {
         return behaviorSubject.getValue().getValue().get(itemId);
@@ -165,6 +175,7 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
     /**
      * Get key of last element directly form cache.
      */
+    @Override
     public String getLastKey() {
         Map<String, T> lastItem = behaviorSubject.getValue().getValue();
         if (lastItem == null || lastItem.isEmpty()) {
@@ -173,10 +184,22 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
         return new TreeMap<>(lastItem).lastEntry().getKey();
     }
 
+    @Override
     public void setValue(String itemId, T newValue) {
         databaseReference.child(itemId).setValue(newValue);
     }
 
+    @Override
+    public void replaceValue(Map<String, T> newValue, DatabaseReference.CompletionListener completionListener) {
+        databaseReference.setValue(newValue, completionListener);
+    }
+
+    @Override
+    public void replaceValue(Map<String, T> newValue) {
+        replaceValue(newValue, null);
+    }
+
+    @Override
     public void setValue(String itemId, T newValue, DatabaseReference.CompletionListener completionListener) {
         databaseReference.child(itemId).setValue(newValue, completionListener);
     }
@@ -200,12 +223,14 @@ public class FirebaseListRepository<T> extends FirebaseRepository<T> {
         return null;
     }
 
+    @Override
     public void removeValue(String itemId) {
-        databaseReference.child(itemId).removeValue();
+        removeValue(itemId, null);
     }
 
-    public void removeValue(String itemId, @NonNull OnCompleteListener<Void> onCompeteListener) {
-        databaseReference.child(itemId).removeValue().addOnCompleteListener(onCompeteListener);
+    @Override
+    public void removeValue(String itemId, DatabaseReference.CompletionListener completionListener) {
+        databaseReference.child(itemId).removeValue(completionListener);
     }
 
     @Override

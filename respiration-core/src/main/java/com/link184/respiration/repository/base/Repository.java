@@ -53,7 +53,7 @@ public abstract class Repository<T> {
      * Method is called when new data is received form firebase.
      * @param value new fresh data.
      */
-    protected void onNewDataReceived(T value) {
+    public void onNewDataReceived(T value) {
         behaviorSubject.onNext(Notification.createOnNext(value));
     }
 
@@ -61,13 +61,13 @@ public abstract class Repository<T> {
      * Method is called when something went wrong. For example user is not authenticated and
      * access private is set as true or when internet connection is missing.
      */
-    protected void onErrorReceived(Throwable error) {
+    public void onErrorReceived(Throwable error) {
         behaviorSubject.onNext(Notification.createOnError(error));
     }
 
-    protected abstract void setValue(T newValue);
+    public abstract void setValue(T newValue);
 
-    protected abstract void removeValue();
+    public abstract void removeValue();
 
     /**
      * Return last cached value.

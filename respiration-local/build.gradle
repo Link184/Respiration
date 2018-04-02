@@ -36,7 +36,7 @@ dependencies {
 
 //    compile "com.link184:respiration-core:$rootProject.libraryVersion"
 //    compile "com.link184:respiration-annotations:$rootProject.libraryVersion"
-//    compile "com.link184:respiration-firebase-junk:0.6.3"
+//    compile "com.link184:respiration-firebase-junk:0.6.7"
     implementation project(':respiration-firebase-junk')
     implementation project(':respiration-core')
     implementation project(':respiration-annotations')
