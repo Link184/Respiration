@@ -42,9 +42,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:27.1.0'
-    compile 'com.android.support:design:27.1.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.1.0'
     testCompile 'junit:junit:4.12'
 
     // Dagger 2
@@ -56,11 +56,13 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation project(':respiration-core')
-    implementation (project(':respiration-local'), {
-        exclude module: 'respiration-firebase-junk'
-    })
+    implementation project(':respiration-local')
     implementation project(':respiration-firebase')
     annotationProcessor project(':respiration-compiler')
+}
+
+configurations {
+    all*.exclude group: 'com.link184', module: 'respiration-firebase-junk'
 }
 
 apply plugin: 'com.google.gms.google-services'

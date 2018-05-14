@@ -38,9 +38,9 @@ dependencies {
 if you want to use respiration local and firebase modules together you must exclude some junk modules
 
 ```gradle
-    implementation (com.link184:respiration-local:0.6.7) {
-        exclude module: 'respiration-firebase-junk'
-    })
+    configurations {
+        all*.exclude group: 'com.link184', module: 'respiration-firebase-junk'
+    }
 ```
 
 Is the same api like in respiration firebase repositories bot is different initialization.

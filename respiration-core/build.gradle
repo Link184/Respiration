@@ -3,11 +3,11 @@ apply plugin: 'maven-publish'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.android.support:support-annotations:27.1.0"
+    api "com.android.support:support-annotations:27.1.1"
     api project(':respiration-firebase-junk')
     // Rx
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    api 'io.reactivex.rxjava2:rxjava:2.1.10'
+    api 'io.reactivex.rxjava2:rxjava:2.1.12'
 }
 
 ext {
