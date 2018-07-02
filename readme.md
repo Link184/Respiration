@@ -9,7 +9,7 @@ Library is designed to work with POJO data models which simplify the code. No mo
 casts or HashMaps inside a business logic.
 
 
-Firebse offline mode [BETA]
+[Firebse offline mode [BETA]][5]
 ---
 The library also can work with offline database. The same respiration api but without firebase.
 Is a the same functionality as firebase realtime database but without firebase services =). 
@@ -17,7 +17,6 @@ You can learn how to integrate offline firebase [here][5]
 
 Gradle
 --------
-You can download a jar from GitHub's [releases page][3].
 
 Gradle:
 
@@ -27,9 +26,9 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration-core:0.6.7'
-    implementation 'com.link184:respiration-firebase:0.6.7'
-    annotationProcessor 'com.link184:respiration-compiler:0.6.7'
+    implementation 'com.link184:respiration-core:0.6.8'
+    implementation 'com.link184:respiration-firebase:0.6.8'
+    annotationProcessor 'com.link184:respiration-compiler:0.6.8'
     
     //firebase and rxJava dependecies
     ...
