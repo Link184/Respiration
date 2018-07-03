@@ -29,7 +29,7 @@ class FirebaseRepositoryBuilderGenerator extends BaseBuilderGenerator {
                 .returns(TypeName.get(entry.getKey().asType()))
                 .addStatement("$T<$T> configuration = new $T<>($T.class)",
                         configurationClass, modelTypeName, configurationClass, modelTypeName)
-                .addStatement("configuration.setPersistence($L)", annotation.isAccessPrivate())
+                .addStatement("configuration.setPersistence($L)", annotation.persistence())
                 .addStatement("configuration.setAccessPrivate($L)", annotation.isAccessPrivate());
         if (annotation.children().length > 0 && !annotation.children()[0].isEmpty()) {
             createMethod.addStatement("configuration.setDatabaseChildren($L)", GenerationUtils.generateChildrenArray(annotation));
