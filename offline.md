@@ -26,9 +26,9 @@ repositories {
 }
  
 dependencies {
-    implementation 'com.link184:respiration-core:0.6.8'
-    implementation 'com.link184:respiration-local:0.6.8'
-    annotationProcessor 'com.link184:respiration-compier:0.6.8'
+    implementation 'com.link184:respiration-core:0.6.9'
+    implementation 'com.link184:respiration-local:0.6.9'
+    annotationProcessor 'com.link184:respiration-compier:0.6.9'
 
     //gson and rxJava dependecies
     ...
