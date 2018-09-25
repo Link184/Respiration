@@ -1,8 +1,6 @@
 package com.link184.sample.main.fragments.authentication;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +10,8 @@ import com.link184.sample.R;
 import com.link184.sample.main.SampleActivity;
 import com.link184.sample.main.fragments.FragmentState;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

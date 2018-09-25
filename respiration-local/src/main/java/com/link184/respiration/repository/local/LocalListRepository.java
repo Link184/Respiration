@@ -1,7 +1,5 @@
 package com.link184.respiration.repository.local;
 
-import android.support.annotation.Nullable;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -20,6 +18,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

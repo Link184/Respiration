@@ -1,13 +1,14 @@
 package com.link184.sample.local.workout;
 
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.link184.sample.utils.ParserEnum;
 
 import java.util.Date;
+
+import androidx.annotation.ColorInt;
 
 /**
  * Created by eugeniu on 5/26/17.

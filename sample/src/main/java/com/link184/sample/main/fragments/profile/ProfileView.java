@@ -1,8 +1,8 @@
 package com.link184.sample.main.fragments.profile;
 
-import android.support.v4.app.Fragment;
-
 import com.link184.sample.firebase.SamplePrivateModel;
+
+import androidx.fragment.app.Fragment;
 
 interface ProfileView {
     void newDataReceived(SamplePrivateModel privateModel);

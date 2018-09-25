@@ -9,7 +9,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName rootProject.libraryVersion
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-    testImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     testImplementation 'org.mockito:mockito-core:2.19.0'
 
 //    compile "com.link184:respiration-core:$rootProject.libraryVersion"

@@ -1,8 +1,6 @@
 package com.link184.respiration.repository.local;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;
@@ -19,12 +17,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import io.reactivex.Notification;
-import io.reactivex.subjects.BehaviorSubject;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by eugeniu on 3/2/18.

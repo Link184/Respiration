@@ -1,7 +1,5 @@
 package com.link184.sample;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
 import com.link184.respiration.repository.local.LocalConfiguration;
@@ -24,6 +22,8 @@ import org.junit.runner.RunWith;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
 import io.reactivex.observers.TestObserver;
 
 import static junit.framework.Assert.assertNotNull;

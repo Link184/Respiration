@@ -1,9 +1,8 @@
 package com.link184.respiration.repository.base;
 
-import android.support.annotation.Nullable;
-
 import com.link184.respiration.subscribers.SubscriberRespiration;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;

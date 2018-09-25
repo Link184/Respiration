@@ -1,7 +1,7 @@
 package com.link184.respiration.utils;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Ryzen on 3/2/2018.

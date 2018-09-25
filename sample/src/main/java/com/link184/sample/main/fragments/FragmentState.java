@@ -1,11 +1,11 @@
 package com.link184.sample.main.fragments;
 
 
-import android.support.v4.app.Fragment;
-
 import com.link184.sample.main.fragments.authentication.AuthenticationFragment;
 import com.link184.sample.main.fragments.profile.ProfileFragment;
 import com.link184.sample.main.fragments.registration.RegistrationFragment;
+
+import androidx.fragment.app.Fragment;
 
 public enum FragmentState {
     PROFILE("Profile", new ProfileFragment()),

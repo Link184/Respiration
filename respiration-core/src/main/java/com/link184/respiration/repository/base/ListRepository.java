@@ -1,7 +1,5 @@
 package com.link184.respiration.repository.base;
 
-import android.support.annotation.Nullable;
-
 import com.google.firebase.database.DatabaseReference;
 import com.link184.respiration.subscribers.ListSubscriberRespiration;
 import com.link184.respiration.subscribers.SubscriberRespiration;
@@ -9,6 +7,7 @@ import com.link184.respiration.subscribers.SubscriberRespiration;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;

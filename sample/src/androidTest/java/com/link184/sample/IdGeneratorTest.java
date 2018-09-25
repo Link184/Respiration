@@ -1,8 +1,5 @@
 package com.link184.sample;
 
-import android.support.test.espresso.core.deps.guava.collect.Ordering;
-import android.support.test.runner.AndroidJUnit4;
-
 import com.link184.respiration.utils.IdGenerator;
 
 import org.junit.Test;
@@ -10,6 +7,9 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.test.espresso.core.deps.guava.collect.Ordering;
+import androidx.test.runner.AndroidJUnit4;
 
 import static junit.framework.Assert.assertTrue;
 
